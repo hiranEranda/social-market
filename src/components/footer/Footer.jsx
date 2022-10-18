@@ -19,7 +19,7 @@ function Footer() {
           <div className="row">
             <div className="col-lg-4 space-y-20">
               <div className="footer__logo">
-                <img src="/favicon.ico" alt="" />
+                <img src="/images/fire.gif" alt="" />
               </div>
               <p className="footer__text">
                 General knowledge is something that helps us to grow both on a

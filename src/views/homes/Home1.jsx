@@ -8,8 +8,7 @@ import Footer from "../../components/footer/Footer";
 const Home1 = () => {
   return (
     <div>
-      asd
-      {/* <Header /> */}
+      <Header />
       <Footer />
     </div>
   );
