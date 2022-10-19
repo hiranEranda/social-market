@@ -1,5 +1,4 @@
 import React from "react";
-import { useMoralis, useChain } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import MegaMenu from "./MegaMenu";
