@@ -206,25 +206,43 @@ function HotBids() {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 4,
+    slidesToShow: 5,
+    slidesToScroll: 1,
     prevArrow: <SlickArrowLeft />,
     nextArrow: <SlickArrowRight />,
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1430,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: 4,
+          slidesToScroll: 1,
           infinite: true,
           dots: true,
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 1360,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 1055,
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 760,
+        settings: {
+          slidesToShow: 1,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -240,12 +258,13 @@ function HotBids() {
   };
   return (
     <div style={{ padding: "3rem", backgroundColor: "#fff" }}>
-      HotBids
+      <div style={{ marginBottom: "5px" }}>
+        <h3>Hot Bids</h3>
+      </div>
+
       <Slider {...settings}>
-        {/* {console.log(val[0])} */}
         {val.map((val, i) => (
           <CardsPrice721 val={val} />
-          // <div className="aasd">adsasd</div>
         ))}
       </Slider>
     </div>
