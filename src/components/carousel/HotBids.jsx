@@ -259,7 +259,9 @@ function HotBids() {
   return (
     <div style={{ padding: "3rem", backgroundColor: "#fff" }}>
       <div style={{ marginBottom: "5px" }}>
-        <h3>Hot Bids</h3>
+        <h2>
+          <span style={{ color: "#c19a2e" }}>Hot </span> Bids 🔥
+        </h2>
       </div>
 
       <Slider {...settings}>

@@ -26,7 +26,7 @@ function Footer() {
               <div className="row">
                 <div className="col-lg-4 space-y-20">
                   <h3>Customer Service</h3>
-                  <span className="footer__text">: cs@nfter.one</span>
+                  <span className="footer__text">: cs@sm.one</span>
                 </div>
                 <div className="col-lg-4 col-6">
                   <p>
@@ -144,7 +144,9 @@ function Footer() {
                 marginTop: "1rem",
               }}
             >
-              <p style={{ color: "#fff" }}>© Copyright 2022 | Amble NFT</p>
+              <p style={{ color: "#fff" }}>
+                © Copyright 2022 | Social Market NFT
+              </p>
             </div>
           </footer>
         </div>

@@ -284,6 +284,22 @@ const Home1 = () => {
   return (
     <div>
       <Header />
+
+      <img style={{ maxHeight: "350px" }} src="images/back_01.png" alt="..." />
+
+      <div
+        style={{
+          padding: "3em 3.5rem 3em 3.5rem",
+          backgroundColor: "#fff",
+        }}
+      >
+        <h2 style={{ display: "flex", justifyContent: "center" }}>
+          Social Market
+          <span style={{ color: "#c19a2e" }}> &nbsp;All Categories</span>
+          ⚡️
+        </h2>
+      </div>
+
       <ResponsiveSlider />
       <div
         style={{
@@ -291,7 +307,40 @@ const Home1 = () => {
           backgroundColor: "#fff",
         }}
       >
-        <h3 style={{ marginBottom: "1rem" }}>Explore NFTs</h3>
+        <h2 style={{ paddingBottom: "1.5rem" }}>
+          <span style={{ color: "#c19a2e" }}>Top </span>Sellers
+        </h2>
+      </div>
+      <div
+        style={{
+          padding: "3em 3.5rem 3em 3.5rem",
+          backgroundColor: "#fff",
+        }}
+      >
+        <h2 style={{ paddingBottom: "1.5rem" }}>
+          <span style={{ color: "#c19a2e" }}>Live </span> Auctions 🏆
+        </h2>
+      </div>
+      <div
+        style={{
+          padding: "3em 3.5rem 3em 3.5rem",
+          backgroundColor: "#fff",
+        }}
+      >
+        <h2 style={{ paddingBottom: "1.5rem" }}>
+          <span style={{ color: "#c19a2e" }}>Top </span> Collections
+        </h2>
+      </div>
+
+      <div
+        style={{
+          padding: "3em 3.5rem 3em 3.5rem",
+          backgroundColor: "#fff",
+        }}
+      >
+        <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
+          Explore ⚡️
+        </h2>
         <ExploreSection val={val} />
       </div>
       <Footer />
