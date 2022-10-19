@@ -285,7 +285,11 @@ const Home1 = () => {
     <div>
       <Header />
 
-      <img style={{ maxHeight: "350px" }} src="images/back_01.png" alt="..." />
+      <img
+        style={{ maxWidth: " 100%", height: "auto" }}
+        src="images/back_01.png"
+        alt="..."
+      />
 
       <div
         style={{
