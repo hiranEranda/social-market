@@ -1,11 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useMoralis, useChain } from "react-moralis";
 import { Link, useNavigate } from "react-router-dom";
-// import MobileMenu from "./Menu/MobileMenu";
+import MobileMenu from "./Menu/MobileMenu";
 import MegaMenu from "./Menu/MegaMenu";
 import ProfileMenu from "./Menu/ProfileMenu";
-// import Avatar from "@mui/material/Avatar";
+import Avatar from "@mui/material/Avatar";
 
 const PagesMenu = [
   {
@@ -114,12 +113,62 @@ const Header = () => {
               </Link>
             </div>
 
+            {/* //////////////////////////////////////////////////////// */}
+
+            <div style={{ width: "200px" }} className="header__btns">
+              {/* <Link className="btn btn-grad btn-sm" to="#">
+                <i className="ri-wallet-3-line" />
+                Connect wallet
+              </Link> */}
+              {/* {!isAuthenticated ||
+              !user ||
+              user.attributes.username === undefined ? ( */}
+              <button
+                className="btn btn-sm btn-grad"
+                onClick={() => navigate("#")}
+              >
+                <i className="ri-wallet-3-line" />
+                Connect wallet
+              </button>
+              {/* ) : (
+                <li className="has_popup2 d-flex flex-row align-items-center">
+                  <div className="d-inline">
+                    <Avatar
+                      onClick={() => window.location.reload()}
+                      alt="avatar"
+                      src={
+                        user && !user.attributes.avatar
+                          ? "/images/avatar.png"
+                          : user.attributes.avatar._url
+                      }
+                      style={{ cursor: "pointer" }}
+                      sx={{ width: 50, height: 50 }}
+                    />
+                    <ul
+                      style={{ width: "180px" }}
+                      className="menu__popup2  border border-dark mt-3"
+                    >
+                      <ProfileMenu />
+                    </ul>
+                  </div>
+                  <div className="d-inline ml-3">
+                    {user.attributes.username.substring(0, 10)}...
+                  </div>
+                </li>
+              )} */}
+            </div>
+            <div
+              className="header__burger js-header-burger"
+              onClick={toggleClass}
+            />
+
+            {/* ///////////////////////////////////////////////////////// */}
             <div
               className={`header__mobile js-header-mobile  ${
                 isActive ? "visible" : null
               } `}
             >
-              {/* <MobileMenu /> */}
+              <MobileMenu />
             </div>
           </div>
         </div>

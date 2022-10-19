@@ -11,7 +11,6 @@ const _Routes = () => {
       <Router>
         <Routes>
           <Route exact path="/" element={<Home1 />} />
-
           {/* <Route path="/upload" element={<Upload />} />
           <Route path="/upload-type" element={<UploadType />} />
        
