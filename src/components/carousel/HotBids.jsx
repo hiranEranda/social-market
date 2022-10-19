@@ -213,7 +213,7 @@ function HotBids() {
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1430,
+        breakpoint: 1290,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 1,
@@ -222,7 +222,7 @@ function HotBids() {
         },
       },
       {
-        breakpoint: 1360,
+        breakpoint: 1090,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -231,7 +231,7 @@ function HotBids() {
         },
       },
       {
-        breakpoint: 1055,
+        breakpoint: 960,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
@@ -240,7 +240,7 @@ function HotBids() {
         },
       },
       {
-        breakpoint: 760,
+        breakpoint: 650,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 2,

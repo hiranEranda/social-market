@@ -12,14 +12,17 @@ function CardsPrice721({ val }) {
     <div style={{ padding: "0.5em" }}>
       {/* <ToastContainer position="bottom-right" />
       <Response open={open} loading={loading} title={title} message={message} /> */}
-      <div className="row mb-30_reset">
+      <div className="row ">
         {/* {val.map((val, i) => ( */}
         <div
           className="col-xl-3 col-lg-4 col-md-6 col-sm-6"
-          style={{ width: "320px", maxWidth: "320px", padding: "0.5em" }}
+          style={{
+            width: "280px",
+            maxWidth: "280px",
+            padding: "0.5em",
+          }}
           // key={i}
         >
-          {console.log(val[0])}
           <div className="card__item four" style={{ border: "1px solid gray" }}>
             <div className="card_body space-y-5">
               {/* =============== */}
@@ -27,13 +30,7 @@ function CardsPrice721({ val }) {
                 <div className="avatars space-x-3">
                   <Link to="#">
                     <img
-                      src={
-                        !val.sellerAvatar ||
-                        val.sellerAvatar === undefined ||
-                        val.sellerAvatar === null
-                          ? `/images/avatar.png`
-                          : val.sellerAvatar.url
-                      }
+                      src={`/images/avatar.png`}
                       alt="Avatar"
                       className="avatar avatar-sm"
                     />
@@ -51,7 +48,7 @@ function CardsPrice721({ val }) {
               <div className="card_head">
                 <Link to={`#`}>
                   <img
-                    style={{ width: "20", height: "80" }}
+                    style={{ width: "20", max: "80" }}
                     src={`${val.image}`}
                     alt={"nftImage"}
                   />

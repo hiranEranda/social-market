@@ -13,18 +13,17 @@ function ExploreSection({ val }) {
       {/* <ToastContainer position="bottom-right" />
       <Response open={open} loading={loading} title={title} message={message} /> */}
 
-      <div className="row ">
+      <div className="row">
         {val.map((val, i) => (
           <div
             className="col-xl-3 col-lg-4 col-md-6 col-sm-6"
             style={{
-              width: "320px",
-              maxWidth: "320px",
-              // padding: "0.5em",
+              width: "280px",
+              maxWidth: "280px",
+              padding: "0.5em",
             }}
             // key={i}
           >
-            {console.log(val[0])}
             <div
               className="card__item four"
               style={{ border: "1px solid gray" }}
@@ -35,13 +34,7 @@ function ExploreSection({ val }) {
                   <div className="avatars space-x-3">
                     <Link to="#">
                       <img
-                        src={
-                          !val.sellerAvatar ||
-                          val.sellerAvatar === undefined ||
-                          val.sellerAvatar === null
-                            ? `/images/avatar.png`
-                            : val.sellerAvatar.url
-                        }
+                        src={`/images/avatar.png`}
                         alt="Avatar"
                         className="avatar avatar-sm"
                       />
