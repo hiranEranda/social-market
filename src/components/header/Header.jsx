@@ -57,7 +57,7 @@ const Header = () => {
             </div>
             {/* ==================  */}
             <div className="header__menu">
-              <ul className="d-flex space-x-20">
+              <ul className="space-x-20 d-flex">
                 {PagesMenu.map((val, i) => (
                   <li key={i}>
                     <Link className="color_white" to={val.link}>
@@ -70,7 +70,7 @@ const Header = () => {
                   <Link className="color_white is_new hovered" to="#">
                     Customer Community <i className="ri-more-2-fill" />
                   </Link>
-                  <ul className="menu__popup2 space-y-20">
+                  <ul className="space-y-20 menu__popup2">
                     <MegaMenu />
                   </ul>
                 </li>
@@ -78,7 +78,7 @@ const Header = () => {
                   <Link className="color_white is_new hovered" to="#">
                     Creator Center <i className="ri-more-2-fill" />
                   </Link>
-                  <ul className="menu__popup2 space-y-20">
+                  <ul className="space-y-20 menu__popup2">
                     <MegaMenu />
                   </ul>
                 </li>
@@ -131,7 +131,7 @@ const Header = () => {
                 Connect wallet
               </button>
               {/* ) : (
-                <li className="has_popup2 d-flex flex-row align-items-center">
+                <li className="flex-row has_popup2 d-flex align-items-center">
                   <div className="d-inline">
                     <Avatar
                       onClick={() => window.location.reload()}
@@ -146,12 +146,12 @@ const Header = () => {
                     />
                     <ul
                       style={{ width: "180px" }}
-                      className="menu__popup2  border border-dark mt-3"
+                      className="mt-3 border menu__popup2 border-dark"
                     >
                       <ProfileMenu />
                     </ul>
                   </div>
-                  <div className="d-inline ml-3">
+                  <div className="ml-3 d-inline">
                     {user.attributes.username.substring(0, 10)}...
                   </div>
                 </li>

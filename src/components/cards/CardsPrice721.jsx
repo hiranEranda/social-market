@@ -20,10 +20,10 @@ function CardsPrice721({ val }) {
           }}
         >
           <div className="card__item four" style={{ border: "1px solid gray" }}>
-            <div className="card_body space-y-5">
+            <div className="space-y-5 card_body">
               {/* =============== */}
-              <div className="creators space-x-10">
-                <div className="avatars space-x-3">
+              <div className="space-x-10 creators">
+                <div className="space-x-3 avatars">
                   <Link to="#">
                     <img
                       src={`/images/avatar.png`}
@@ -42,7 +42,7 @@ function CardsPrice721({ val }) {
               </div>
 
               <div className="card_head">
-                <Link to={`#`}>
+                <Link to={`/viewItem`}>
                   <img
                     style={{ width: "20", max: "80" }}
                     src={`${val.image}`}
@@ -52,7 +52,7 @@ function CardsPrice721({ val }) {
               </div>
               {/* =============== */}
               <h6 className="card_title">{val.name}</h6>
-              <div className="card_footer d-block space-y-10">
+              <div className="space-y-10 card_footer d-block">
                 <div className="card_footer justify-content-between">
                   <div className="creators">
                     <p className="txt_sm"> 1 in stock</p>
@@ -61,8 +61,7 @@ function CardsPrice721({ val }) {
                     <p className="txt_sm">
                       Price:
                       <span
-                        className="color_green
-                                                  txt_sm"
+                        className="color_green txt_sm"
                       >
                         5 ETH
                       </span>
@@ -71,14 +70,10 @@ function CardsPrice721({ val }) {
                 </div>
                 <div className="hr" />
                 <div
-                  className="d-flex
-                                  align-items-center
-                                  space-x-10
-                                  justify-content-between"
+                  className="space-x-10 d-flex align-items-center justify-content-between"
                 >
                   <div
-                    className="d-flex align-items-center
-                                      space-x-5"
+                    className="space-x-5 d-flex align-items-center"
                   >
                     <i className="ri-history-line" />
                   </div>

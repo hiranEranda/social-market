@@ -22,7 +22,7 @@ function SingleItem() {
           </p>
         </div>
       </div>
-      <div className="max-w-[560px] md:max-w-[760px] lg:max-w-[1240px] flex justify-center items-center">
+      <div className="max-w-[560px] md:max-w-[760px] lg:max-w-[1240px] flex justify-center items-center mx-auto">
         <div className="p-4 m-4 border-gray-300 rounded-lg border-1">
           <div className="grid gap-2 lg:grid-cols-2">
             <div className="pt-3 ">
