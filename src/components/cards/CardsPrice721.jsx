@@ -42,7 +42,7 @@ function CardsPrice721({ val }) {
               </div>
 
               <div className="card_head">
-                <Link to={`/viewItem`}>
+                <Link to={`/view-item`}>
                   <img
                     style={{ width: "20", max: "80" }}
                     src={`${val.image}`}
@@ -60,21 +60,13 @@ function CardsPrice721({ val }) {
                   <Link to="#">
                     <p className="txt_sm">
                       Price:
-                      <span
-                        className="color_green txt_sm"
-                      >
-                        5 ETH
-                      </span>
+                      <span className="color_green txt_sm">5 ETH</span>
                     </p>
                   </Link>
                 </div>
                 <div className="hr" />
-                <div
-                  className="space-x-10 d-flex align-items-center justify-content-between"
-                >
-                  <div
-                    className="space-x-5 d-flex align-items-center"
-                  >
+                <div className="space-x-10 d-flex align-items-center justify-content-between">
+                  <div className="space-x-5 d-flex align-items-center">
                     <i className="ri-history-line" />
                   </div>
                   <button className="btn btn-sm btn-white">Buy Now</button>

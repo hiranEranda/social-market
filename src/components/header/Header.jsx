@@ -9,11 +9,11 @@ import Avatar from "@mui/material/Avatar";
 const PagesMenu = [
   {
     title: "Marketplace",
-    link: "#",
+    link: "/",
   },
   {
     title: "My page",
-    link: "#",
+    link: "/profile",
   },
 ];
 
