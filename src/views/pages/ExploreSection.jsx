@@ -28,10 +28,10 @@ function ExploreSection({ val }) {
               className="card__item four"
               style={{ border: "1px solid gray" }}
             >
-              <div className="card_body space-y-10">
+              <div className="space-y-10 card_body">
                 {/* =============== */}
-                <div className="creators space-x-10">
-                  <div className="avatars space-x-3">
+                <div className="space-x-10 creators">
+                  <div className="space-x-3 avatars">
                     <Link to="#">
                       <img
                         src={`/images/avatar.png`}
@@ -49,7 +49,7 @@ function ExploreSection({ val }) {
                   </div>
                 </div>
                 <div className="card_head">
-                  <Link to={`#`}>
+                  <Link to={`/view-item`}>
                     <img
                       width="10"
                       height="80"
@@ -61,7 +61,7 @@ function ExploreSection({ val }) {
                 {/* =============== */}
                 <h6 className="card_title">{val.name}</h6>
 
-                <div className="card_footer d-block space-y-10">
+                <div className="space-y-10 card_footer d-block">
                   <div className="card_footer justify-content-between">
                     <div className="creators">
                       <p className="txt_sm"> 1 in stock</p>
@@ -70,8 +70,7 @@ function ExploreSection({ val }) {
                       <p className="txt_sm">
                         Price:
                         <span
-                          className="color_green
-                                                  txt_sm"
+                          className="color_green txt_sm"
                         >
                           5 ETH
                         </span>
@@ -80,14 +79,10 @@ function ExploreSection({ val }) {
                   </div>
                   <div className="hr" />
                   <div
-                    className="d-flex
-                                  align-items-center
-                                  space-x-10
-                                  justify-content-between"
+                    className="space-x-10 d-flex align-items-center justify-content-between"
                   >
                     <div
-                      className="d-flex align-items-center
-                                      space-x-5"
+                      className="space-x-5 d-flex align-items-center"
                     >
                       <i className="ri-history-line" />
                       {/* <Popup
@@ -130,14 +125,14 @@ function ExploreSection({ val }) {
                                     overflowX: "hidden",
                                     maxHeight: "300px",
                                   }}
-                                  className="creator_item creator_card space-x-10"
+                                  className="space-x-10 creator_item creator_card"
                                 >
                                   {val[0].history.state === true ? (
                                     <div
                                       key={i}
-                                      className="creator_item creator_card space-x-10"
+                                      className="space-x-10 creator_item creator_card"
                                     >
-                                      <div className="avatars space-x-10">
+                                      <div className="space-x-10 avatars">
                                         <div className="media">
                                           <div className="badge">
                                             <img
