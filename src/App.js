@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 
 function App() {
   return (
-    <div className="App overflow-hidden">
+    <div className="overflow-hidden App">
       <_Routes />
     </div>
   );

@@ -257,18 +257,23 @@ function HotBids() {
     ],
   };
   return (
-    <div style={{ padding: "3rem", backgroundColor: "#fff" }}>
-      <div style={{ marginBottom: "5px" }}>
-        <h2>
-          <span style={{ color: "#c19a2e" }}>Hot </span> Bids 🔥
-        </h2>
-      </div>
+    <div className="justify-self-center">
+      <div
+        className="max-w-[2180px] "
+        style={{ padding: "3rem", backgroundColor: "#fff" }}
+      >
+        <div style={{ marginBottom: "5px" }}>
+          <h2>
+            <span style={{ color: "#c19a2e" }}>Hot </span> Bids 🔥
+          </h2>
+        </div>
 
-      <Slider {...settings}>
-        {val.map((val, i) => (
-          <CardsPrice721 val={val} />
-        ))}
-      </Slider>
+        <Slider {...settings}>
+          {val.map((val, i) => (
+            <CardsPrice721 key={i} val={val} />
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 }

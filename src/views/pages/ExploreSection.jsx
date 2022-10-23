@@ -22,7 +22,7 @@ function ExploreSection({ val }) {
               maxWidth: "280px",
               padding: "0.5em",
             }}
-            // key={i}
+            key={i}
           >
             <div
               className="card__item four"
