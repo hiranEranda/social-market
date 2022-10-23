@@ -22,7 +22,7 @@ function SingleItem() {
           </p>
         </div>
       </div>
-      <div className="max-w-[560px] md:max-w-[760px] lg:max-w-[1240px] flex justify-center items-center">
+      <div className="max-w-[560px] md:max-w-[760px] lg:max-w-[1240px] flex justify-center items-center mx-auto">
         <div className="p-4 m-4 border-gray-300 rounded-lg border-1">
           <div className="grid gap-2 lg:grid-cols-2">
             <div className="pt-3 ">
@@ -31,7 +31,7 @@ function SingleItem() {
                 src="/images/large.jpg"
                 alt=""
               />
-              <div className="flex items-center justify-center px-4 py-2 mt-4 bg-yellow-500 h-[40px] md:w-[200px] rounded-full gap-4">
+              <div className="flex items-center justify-center px-4 py-2 mt-4 bg-yellow-500 h-[40px] lg:w-[200px] rounded-full gap-4">
                 <AiFillInstagram className="text-xl text-white" />
                 <BsFacebook className="text-xl text-white" />
                 <AiFillTwitterCircle className="text-xl text-white" />
