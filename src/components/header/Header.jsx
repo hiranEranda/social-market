@@ -1,6 +1,10 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
+import { useMoralis } from "react-moralis";
+
 import MobileMenu from "./Menu/MobileMenu";
 import MegaMenu from "./Menu/MegaMenu";
 import ProfileMenu from "./Menu/ProfileMenu";
@@ -18,8 +22,14 @@ const PagesMenu = [
 ];
 
 const Header = () => {
-  let navigate = useNavigate();
+  const wallet = (flag) => {
+    flag
+      ? toast.success("Wallet connected successfully")
+      : toast.error("Try again");
+  };
 
+  let navigate = useNavigate();
+  const { user, isAuthenticated, authenticate } = useMoralis();
   const [isActive, setActive] = useState(false);
   const [text, setText] = useState(null);
 
@@ -75,12 +85,12 @@ const Header = () => {
                   </ul>
                 </li>
                 <li className="has_popup2">
-                  <Link className="color_white is_new hovered" to="#">
+                  <Link className="color_white is_new hovered" to="/create">
                     Creator Center <i className="ri-more-2-fill" />
                   </Link>
-                  <ul className="space-y-20 menu__popup2">
+                  {/* <ul className="space-y-20 menu__popup2">
                     <MegaMenu />
-                  </ul>
+                  </ul> */}
                 </li>
               </ul>
             </div>
@@ -92,11 +102,9 @@ const Header = () => {
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    {
-                      text === null || text === undefined || text.length === 0
-                        ? navigate(`/no-results`)
-                        : navigate(`/results/${text}`);
-                    }
+                    text === null || text === undefined || text.length === 0
+                      ? navigate(`/no-results`)
+                      : navigate(`/results/${text}`);
                   }
                 }}
               />
@@ -116,21 +124,43 @@ const Header = () => {
             {/* //////////////////////////////////////////////////////// */}
 
             <div style={{ width: "200px" }} className="header__btns">
-              {/* <Link className="btn btn-grad btn-sm" to="#">
-                <i className="ri-wallet-3-line" />
-                Connect wallet
-              </Link> */}
-              {/* {!isAuthenticated ||
+              {!isAuthenticated ||
               !user ||
-              user.attributes.username === undefined ? ( */}
-              <button
-                className="btn btn-sm btn-grad"
-                onClick={() => navigate("#")}
-              >
-                <i className="ri-wallet-3-line" />
-                Connect wallet
-              </button>
-              {/* ) : (
+              user.attributes.username === undefined ? (
+                <button
+                  className="btn btn-sm btn-grad"
+                  onClick={async () => {
+                    if (typeof window.ethereum !== "undefined") {
+                      try {
+                        await authenticate();
+                        wallet(true);
+                      } catch (e) {
+                        // //console.log(e);
+                      }
+                      // if (chainId === chain) {
+                      //   try {
+                      //     await authenticate();
+                      //   } catch (e) {
+                      //     // //console.log(e);
+                      //   }
+                      // } else {
+                      //   try {
+                      //     switchNetwork(chain);
+                      //     await authenticate();
+                      //   } catch (error) {
+                      //     // //console.log(error);
+                      //   }
+                      // }
+                      // navigate(-1);
+                    } else {
+                      wallet(false);
+                    }
+                  }}
+                >
+                  <i className="ri-wallet-3-line" />
+                  Connect wallet
+                </button>
+              ) : (
                 <li className="flex-row has_popup2 d-flex align-items-center">
                   <div className="d-inline">
                     <Avatar
@@ -141,7 +171,7 @@ const Header = () => {
                           ? "/images/avatar.png"
                           : user.attributes.avatar._url
                       }
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", border: "1px solid yellow" }}
                       sx={{ width: 50, height: 50 }}
                     />
                     <ul
@@ -151,11 +181,11 @@ const Header = () => {
                       <ProfileMenu />
                     </ul>
                   </div>
-                  <div className="ml-3 d-inline">
-                    {user.attributes.username.substring(0, 10)}...
+                  <div className="ml-3 text-white d-inline">
+                    {user.attributes.username.substring(0, 10)}
                   </div>
                 </li>
-              )} */}
+              )}
             </div>
             <div
               className="header__burger js-header-burger"
@@ -172,6 +202,7 @@ const Header = () => {
             </div>
           </div>
         </div>
+        <ToastContainer position="bottom-right" />
       </header>
     </div>
   );

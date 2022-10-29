@@ -7,6 +7,10 @@ import { AiFillInstagram } from "react-icons/ai";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaUserEdit } from "react-icons/fa";
 
+import { useMoralis } from "react-moralis";
+import { useNavigate } from "react-router-dom";
+const Moralis = require("moralis-v1");
+
 function Profile() {
   const person = {
     name: "john",
@@ -14,6 +18,38 @@ function Profile() {
     followers: 10,
     following: 10,
   };
+
+  const getData = async () => {
+    try {
+      const user = await Moralis.User.current();
+      const params = {
+        ethAddress: user.get("ethAddress").toString().toLowerCase(),
+      };
+      const data = await Moralis.Cloud.run("getUser", params);
+      return data.attributes;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const { isInitialized } = useMoralis();
+  let navigate = useNavigate();
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    async function redirectIfNotLoggedIn() {
+      const user = await Moralis.User.current();
+      if (!user) {
+        navigate(`/`);
+      } else {
+        getData().then((data) => {
+          console.log(data);
+          setData(data);
+        });
+      }
+    }
+    redirectIfNotLoggedIn();
+  }, [isInitialized, navigate]);
   return (
     <>
       <Header />
@@ -27,7 +63,11 @@ function Profile() {
         <div className="relative flex justify-center py-4">
           <img
             className="w-[120px] h-[120px] rounded-full object-cover border-[8px] border-white absolute -bottom-10 bg-white"
-            src="/images/Avatar.png"
+            src={
+              data === null || data.avatar === undefined
+                ? "/images/Avatar.png"
+                : data.avatar._url
+            }
             alt=""
           />
           <img
@@ -37,9 +77,11 @@ function Profile() {
           />
         </div>
         <div className="px-4 mt-[2rem] mx-auto">
-          <h2 className="flex justify-center pt-3 text-xl">{person.name}</h2>
+          <h2 className="flex justify-center pt-3 text-xl">
+            {data === null ? person.name : data.username}
+          </h2>
           <p className="flex justify-center pt-4 text-xl">
-            {person.ethAddress}
+            {data === null ? person.ethAddress : data.ethAddress}
           </p>
           <div className="grid grid-cols-2 gap-2 w-[400px] mx-auto mt-4 ">
             <p className="flex justify-center text-xl w-[100px] text-black">

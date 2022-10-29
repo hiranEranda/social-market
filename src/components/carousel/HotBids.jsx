@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Slider from "react-slick";
 import CardsPrice721 from "../cards/CardsPrice721";
 
@@ -206,23 +206,14 @@ function HotBids() {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     prevArrow: <SlickArrowLeft />,
     nextArrow: <SlickArrowRight />,
     initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1290,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1090,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -257,7 +248,7 @@ function HotBids() {
     ],
   };
   return (
-    <div className="justify-self-center">
+    <div className="justify-self-center mx-auto max-w-[1400px]">
       <div
         className="max-w-[2180px] "
         style={{ padding: "3rem", backgroundColor: "#fff" }}

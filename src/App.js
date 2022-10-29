@@ -1,12 +1,12 @@
 import "./assets/css/plugins/bootstrap.min.css";
-import _Routes from "./Router/routes";
+import ROUTES from "./Router/routes";
 import "./assets/scss/style.scss";
-import React, { useEffect } from "react";
+import React from "react";
 
 function App() {
   return (
-    <div className="overflow-hidden App">
-      <_Routes />
+    <div className="overflow-hidden App ">
+      <ROUTES />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useMoralis } from "react-moralis";
 
 const LeftMenu = [
   {
@@ -12,14 +13,16 @@ const LeftMenu = [
     title: "Edit Profile",
     link: "/edit-profile",
   },
-  {
-    icon: "gallery",
-    title: "My collections",
-    link: "/collections",
-  },
+  // {
+  //   icon: "gallery",
+  //   title: "My collections",
+  //   link: "/collections",
+  // },
 ];
 
 function ProfileMenu() {
+  const { logout } = useMoralis();
+
   let navigate = useNavigate();
   return (
     <div>
@@ -33,7 +36,7 @@ function ProfileMenu() {
           <Link
             to="#"
             onClick={async () => {
-              // await logout();
+              await logout();
               // window.location.href = "/";
               navigate(`/`);
             }}

@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import MegaMenu from "./MegaMenu";
-import ProfileMenu from "./ProfileMenu";
 import Avatar from "@mui/material/Avatar";
+import { useMoralis } from "react-moralis";
+import { toast } from "react-toastify";
 
 import { Link } from "react-router-dom";
 const Menu = [
@@ -18,10 +18,16 @@ const Menu = [
 ];
 function MobileMenu() {
   let navigate = useNavigate();
+  const { user, isAuthenticated, authenticate, logout } = useMoralis();
+  const wallet = (flag) => {
+    flag
+      ? toast.success("Wallet connected successfully")
+      : toast.error("Try again");
+  };
 
   return (
-    <div>
-      <div className="space-y-40 header__mobile__menu">
+    <div className="p-4 border-black border-1 rounded-3xl">
+      <div className="space-y-40 header__mobile__menu ">
         <ul className="space-y-20 d-flex">
           {Menu.map((val, i) => (
             <li key={i}>
@@ -34,7 +40,7 @@ function MobileMenu() {
             <Link className="color_black is_new hovered" to="#">
               Customer Community <i className="ri-more-2-fill" />
             </Link>
-            <ul className="menu__popup2 space-y-20">
+            <ul className="space-y-20 menu__popup2">
               <MegaMenu />
             </ul>
           </li>
@@ -42,11 +48,11 @@ function MobileMenu() {
             <Link className="color_black is_new hovered" to="#">
               Creator Center <i className="ri-more-2-fill" />
             </Link>
-            <ul className="menu__popup2 space-y-20">
+            <ul className="space-y-20 menu__popup2">
               <MegaMenu />
             </ul>
           </li>
-          {/* {isAuthenticated ? (
+          {isAuthenticated ? (
             <li>
               <Link
                 to="#"
@@ -59,7 +65,7 @@ function MobileMenu() {
                 Log out
               </Link>
             </li>
-          ) : null} */}
+          ) : null}
         </ul>
         <div className="space-y-20">
           <div className="w-full header__search in_mobile">
@@ -69,14 +75,43 @@ function MobileMenu() {
             </button>
           </div>
 
-          {/* {!isAuthenticated ||
+          {!isAuthenticated ||
           !user ||
-          user.attributes.username === undefined ? ( */}
-          <button className="btn btn-sm btn-grad" onClick={() => navigate("#")}>
-            <i className="ri-wallet-3-line" />
-            Connect wallet
-          </button>
-          {/* ) : (
+          user.attributes.username === undefined ? (
+            <button
+              className="btn btn-sm btn-grad"
+              onClick={async () => {
+                if (typeof window.ethereum !== "undefined") {
+                  try {
+                    await authenticate();
+                    wallet(true);
+                  } catch (e) {
+                    // //console.log(e);
+                  }
+                  // if (chainId === chain) {
+                  //   try {
+                  //     await authenticate();
+                  //   } catch (e) {
+                  //     // //console.log(e);
+                  //   }
+                  // } else {
+                  //   try {
+                  //     switchNetwork(chain);
+                  //     await authenticate();
+                  //   } catch (error) {
+                  //     // //console.log(error);
+                  //   }
+                  // }
+                  // navigate(-1);
+                } else {
+                  wallet(false);
+                }
+              }}
+            >
+              <i className="ri-wallet-3-line" />
+              Connect wallet
+            </button>
+          ) : (
             <li className="flex-row has_popup2 d-flex align-items-center">
               <div className="d-inline">
                 <Avatar
@@ -90,10 +125,10 @@ function MobileMenu() {
                 />
               </div>
               <div className="ml-3 d-inline">
-                {`${user.attributes.username.substring(0, 10)}...`}
+                {`${user.attributes.username.substring(0, 10)}`}
               </div>
             </li>
-          )} */}
+          )}
         </div>
       </div>
     </div>

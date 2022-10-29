@@ -1,11 +1,11 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import Footer from '../components/footer/Footer';
-import Header from '../components/header/Header';
-import useDocumentTitle from '../components/useDocumentTitle';
+import React from "react";
+import { Link } from "react-router-dom";
+import Footer from "../components/footer/Footer";
+import Header from "../components/header/Header";
+import useDocumentTitle from "../components/useDocumentTitle";
 
 const NotFound = () => {
-  useDocumentTitle(' Page Not Found ');
+  useDocumentTitle(" Page Not Found ");
   return (
     <div>
       <Header />
@@ -21,9 +21,7 @@ const NotFound = () => {
             </div>
             <div className="col-lg-6">
               <div className="space-y-30 content">
-                <div
-                  className="space-y-20 d-flex flex-column
-                        justify-content-center align-items-center">
+                <div className="space-y-20 d-flex flex-column justify-content-center align-items-center">
                   <img className="img" src={`img/bg/404.png`} alt="skull" />
                   <h2 className="text-center">whooops 🥺!Page not Found</h2>
                   <p className="text-center">

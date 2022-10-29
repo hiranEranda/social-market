@@ -1,26 +1,22 @@
-import React, { useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import Popup from "reactjs-popup";
+import React from "react";
+import { Link } from "react-router-dom";
+
 import "reactjs-popup/dist/index.css";
 
 function ExploreSection({ val }) {
-  const ref = useRef();
-  const closeTooltip = () => ref.current.close();
-
   return (
     <div>
       {/* <ToastContainer position="bottom-right" />
       <Response open={open} loading={loading} title={title} message={message} /> */}
 
-      <div className="row">
+      <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {val.map((val, i) => (
           <div
-            className="col-xl-3 col-lg-4 col-md-6 col-sm-6"
+            className="mx-auto"
             style={{
-              width: "280px",
-              maxWidth: "280px",
-              padding: "0.5em",
+              // width: "260px",
+              maxWidth: "260px",
+              // padding: "0.5em",
             }}
             key={i}
           >
@@ -69,21 +65,13 @@ function ExploreSection({ val }) {
                     <Link to="#">
                       <p className="txt_sm">
                         Price:
-                        <span
-                          className="color_green txt_sm"
-                        >
-                          5 ETH
-                        </span>
+                        <span className="color_green txt_sm">5 ETH</span>
                       </p>
                     </Link>
                   </div>
                   <div className="hr" />
-                  <div
-                    className="space-x-10 d-flex align-items-center justify-content-between"
-                  >
-                    <div
-                      className="space-x-5 d-flex align-items-center"
-                    >
+                  <div className="space-x-10 d-flex align-items-center justify-content-between">
+                    <div className="space-x-5 d-flex align-items-center">
                       <i className="ri-history-line" />
                       {/* <Popup
                         className="custom"

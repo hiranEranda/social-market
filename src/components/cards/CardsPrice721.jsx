@@ -1,13 +1,8 @@
-import React, { useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import Popup from "reactjs-popup";
+import React from "react";
+import { Link } from "react-router-dom";
 import "reactjs-popup/dist/index.css";
 
 function CardsPrice721({ val }) {
-  const ref = useRef();
-  const closeTooltip = () => ref.current.close();
-
   return (
     <div style={{ padding: "0.5em" }}>
       <div className="row ">

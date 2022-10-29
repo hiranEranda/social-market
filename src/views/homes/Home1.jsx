@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-import useDocumentTitle from "../../components/useDocumentTitle";
+// import useDocumentTitle from "../../components/useDocumentTitle";
 import Header from "../../components/header/Header";
 
 import Footer from "../../components/footer/Footer";
@@ -296,6 +296,7 @@ const Home1 = () => {
           padding: "3em 3.5rem 3em 3.5rem",
           backgroundColor: "#fff",
         }}
+        className="max-w-[1240px] mx-auto"
       >
         <h2 style={{ display: "flex", justifyContent: "center" }}>
           Social Market
@@ -306,6 +307,7 @@ const Home1 = () => {
 
       <ResponsiveSlider />
       <div
+        className="mx-auto max-w-[1400px]"
         style={{
           padding: "3em 3.5rem 3em 3.5rem",
           backgroundColor: "#fff",
@@ -316,6 +318,7 @@ const Home1 = () => {
         </h2>
       </div>
       <div
+        className="mx-auto max-w-[1400px]"
         style={{
           padding: "3em 3.5rem 3em 3.5rem",
           backgroundColor: "#fff",
@@ -326,6 +329,7 @@ const Home1 = () => {
         </h2>
       </div>
       <div
+        className="mx-auto max-w-[1400px]"
         style={{
           padding: "3em 3.5rem 3em 3.5rem",
           backgroundColor: "#fff",
@@ -337,6 +341,7 @@ const Home1 = () => {
       </div>
 
       <div
+        className="mx-auto max-w-[1400px]"
         style={{
           padding: "3em 3.5rem 3em 3.5rem",
           backgroundColor: "#fff",
