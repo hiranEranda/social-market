@@ -8,7 +8,7 @@ import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaUserEdit } from "react-icons/fa";
 
 import { useMoralis } from "react-moralis";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Moralis = require("moralis-v1");
 
 function Profile() {
@@ -50,6 +50,7 @@ function Profile() {
     }
     redirectIfNotLoggedIn();
   }, [isInitialized, navigate]);
+
   return (
     <>
       <Header />
@@ -98,9 +99,26 @@ function Profile() {
             </p>
           </div>
           <div className="flex justify-center gap-2 mx-auto mt-4">
-            <AiFillInstagram className="text-2xl" />
-            <BsFacebook className="text-2xl" />
-            <AiFillTwitterCircle className="text-2xl" />
+            <AiFillInstagram
+              onClick={() => {
+                window.location.href = `https://${data.instagram}`;
+              }}
+              className="text-2xl cursor-pointer"
+            />
+
+            <BsFacebook
+              onClick={() => {
+                window.location.href = `https://${data.facebook}`;
+              }}
+              className="text-2xl cursor-pointer"
+            />
+
+            <AiFillTwitterCircle
+              onClick={() => {
+                window.location.href = `https://${data.twitter}`;
+              }}
+              className="text-2xl cursor-pointer"
+            />
           </div>
           <p className="flex justify-center mt-4">This is my bio</p>
           <div className="flex mx-auto items-center justify-center mt-4 bg-yellow-500 rounded-2xl h-[40px] w-[350px] md:w-[200px]">

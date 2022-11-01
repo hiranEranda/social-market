@@ -25,7 +25,7 @@ function Collection(props) {
     setLoading(true);
     const user = await Moralis.User.current();
 
-    const query = new Moralis.Query("ContractOwners");
+    const query = new Moralis.Query("SM_ContractOwners");
     query.equalTo("userAddress", user.get("ethAddress").toLowerCase());
     if (!props.value.flag) {
       query.equalTo("collectionType", "erc721");

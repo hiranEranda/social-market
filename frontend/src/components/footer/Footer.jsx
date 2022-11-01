@@ -14,17 +14,17 @@ function Footer() {
         justifyContent: "flex-start",
       }}
     >
-      <div style={{ marginTop: "auto" }}>
+      <div className="border-black border-1">
         <div>
           <footer
-            className="footer__1"
+            className="border-black footer__1 border-1"
             style={{
               paddingBottom: "5rem",
             }}
           >
-            <div className="container">
+            <div className="container ">
               <div className="row">
-                <div className="col-lg-4 space-y-20">
+                <div className="space-y-20 col-lg-4">
                   <h3>Customer Service</h3>
                   <span className="footer__text">: cs@sm.one</span>
                 </div>
@@ -53,7 +53,7 @@ function Footer() {
           <footer className="footer__1" style={{ marginTop: "auto" }}>
             <div className="container">
               <div className="row">
-                <div className="col-lg-4 space-y-20">
+                <div className="space-y-20 col-lg-4">
                   <div className="footer__logo">
                     <img src="/images/fire.gif" alt="" />
                   </div>
@@ -96,7 +96,7 @@ function Footer() {
                 </div>
                 <div className="col-lg-2 col-6">
                   <h6 className="footer__title">Connect with us</h6>
-                  <ul className="footer__social space-x-10 mb-40">
+                  <ul className="mb-40 space-x-10 footer__social">
                     <li>
                       <a
                         href="https://www.facebook.com/"
