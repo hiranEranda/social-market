@@ -6,74 +6,76 @@ import "reactjs-popup/dist/index.css";
 function ExploreSection({ val }) {
   return (
     <div>
-      {/* <ToastContainer position="bottom-right" />
+      <div>
+        {console.log(val)}
+        {/* <ToastContainer position="bottom-right" />
       <Response open={open} loading={loading} title={title} message={message} /> */}
 
-      <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {val.map((val, i) => (
-          <div
-            className="mx-auto"
-            style={{
-              // width: "260px",
-              maxWidth: "260px",
-              // padding: "0.5em",
-            }}
-            key={i}
-          >
+        <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {val.map((val, i) => (
             <div
-              className="card__item four"
-              style={{ border: "1px solid gray" }}
+              className="mx-auto"
+              style={{
+                // width: "260px",
+                maxWidth: "260px",
+                // padding: "0.5em",
+              }}
+              key={i}
             >
-              <div className="space-y-10 card_body">
-                {/* =============== */}
-                <div className="space-x-10 creators">
-                  <div className="space-x-3 avatars">
-                    <Link to="#">
+              <div
+                className="card__item four"
+                style={{ border: "1px solid gray" }}
+              >
+                <div className="space-y-10 card_body">
+                  {/* =============== */}
+                  <div className="space-x-10 creators">
+                    <div className="space-x-3 avatars">
+                      <Link to="#">
+                        <img
+                          src={`/images/avatar.png`}
+                          alt="Avatar"
+                          className="avatar avatar-sm"
+                        />
+                      </Link>
+                      <Link to={`#`}>
+                        <p className="avatars_name txt_xs">
+                          {val.sellerUsername.length > 10
+                            ? `@${val.sellerUsername.substring(0, 10)}....`
+                            : `@${val.sellerUsername}....`}
+                        </p>
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="card_head">
+                    <Link to={`/view-item`}>
                       <img
-                        src={`/images/avatar.png`}
-                        alt="Avatar"
-                        className="avatar avatar-sm"
+                        width="10"
+                        height="80"
+                        src={`${val.image}`}
+                        alt={"nftImage"}
                       />
                     </Link>
-                    <Link to={`#`}>
-                      <p className="avatars_name txt_xs">
-                        {val.sellerUsername.length > 10
-                          ? `@${val.sellerUsername.substring(0, 10)}....`
-                          : `@${val.sellerUsername}....`}
-                      </p>
-                    </Link>
                   </div>
-                </div>
-                <div className="card_head">
-                  <Link to={`/view-item`}>
-                    <img
-                      width="10"
-                      height="80"
-                      src={`${val.image}`}
-                      alt={"nftImage"}
-                    />
-                  </Link>
-                </div>
-                {/* =============== */}
-                <h6 className="card_title">{val.name}</h6>
+                  {/* =============== */}
+                  <h6 className="card_title">{val.name}</h6>
 
-                <div className="space-y-10 card_footer d-block">
-                  <div className="card_footer justify-content-between">
-                    <div className="creators">
-                      <p className="txt_sm"> 1 in stock</p>
+                  <div className="space-y-10 card_footer d-block">
+                    <div className="card_footer justify-content-between">
+                      <div className="creators">
+                        <p className="txt_sm"> 1 in stock</p>
+                      </div>
+                      <Link to="#">
+                        <p className="txt_sm">
+                          Price:
+                          <span className="color_green txt_sm">5 ETH</span>
+                        </p>
+                      </Link>
                     </div>
-                    <Link to="#">
-                      <p className="txt_sm">
-                        Price:
-                        <span className="color_green txt_sm">5 ETH</span>
-                      </p>
-                    </Link>
-                  </div>
-                  <div className="hr" />
-                  <div className="space-x-10 d-flex align-items-center justify-content-between">
-                    <div className="space-x-5 d-flex align-items-center">
-                      <i className="ri-history-line" />
-                      {/* <Popup
+                    <div className="hr" />
+                    <div className="space-x-10 d-flex align-items-center justify-content-between">
+                      <div className="space-x-5 d-flex align-items-center">
+                        <i className="ri-history-line" />
+                        {/* <Popup
                         className="custom"
                         trigger={
                           <button className="popup_btn">
@@ -175,43 +177,44 @@ function ExploreSection({ val }) {
                           </div>
                         </div>
                       </Popup> */}
-                    </div>
-                    <button
-                      // onClick={async () => {
-                      //   const user = await Moralis.User.current();
-                      //   if (!user) {
-                      //     navigate("/connect-wallet");
-                      //   } else {
-                      //     setOpen(true);
-                      //     setTitle("Buy Item");
-                      //     setMessage("Sign the transaction to buy item");
-                      //     let res = await contract.buyItem(val, authenticate);
-                      //     if (res.status) {
-                      //       setLoading(false);
-                      //       bought(res.message);
+                      </div>
+                      <button
+                        // onClick={async () => {
+                        //   const user = await Moralis.User.current();
+                        //   if (!user) {
+                        //     navigate("/connect-wallet");
+                        //   } else {
+                        //     setOpen(true);
+                        //     setTitle("Buy Item");
+                        //     setMessage("Sign the transaction to buy item");
+                        //     let res = await contract.buyItem(val, authenticate);
+                        //     if (res.status) {
+                        //       setLoading(false);
+                        //       bought(res.message);
 
-                      //       setTimeout(() => {
-                      //         setOpen(false);
-                      //         setLoading(true);
-                      //         navigate("/profile");
-                      //       }, 1000);
-                      //     } else {
-                      //       setOpen(false);
-                      //       setLoading(true);
-                      //       boughtError(res.message);
-                      //     }
-                      //   }
-                      // }}
-                      className="btn btn-sm btn-white"
-                    >
-                      Buy Now
-                    </button>
+                        //       setTimeout(() => {
+                        //         setOpen(false);
+                        //         setLoading(true);
+                        //         navigate("/profile");
+                        //       }, 1000);
+                        //     } else {
+                        //       setOpen(false);
+                        //       setLoading(true);
+                        //       boughtError(res.message);
+                        //     }
+                        //   }
+                        // }}
+                        className="btn btn-sm btn-white"
+                      >
+                        Buy Now
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

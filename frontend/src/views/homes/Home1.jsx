@@ -7,280 +7,103 @@ import Footer from "../../components/footer/Footer";
 import ResponsiveSlider from "../../components/carousel/HotBids";
 import ExploreSection from "../pages/ExploreSection";
 
-const val = [
-  {
-    transaction:
-      "0xe87fc719718fe7848231f8157edcfc494cf1f5b32cd73ce1e0b0f7fd4c105bba",
-    timestamp: "2022-09-08T12:45:22.000Z",
-    uid: "5",
-    tokenId: "6",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmPkNhhf3pmvXmqgMUemeVYnabwMUocAvDhQj8pnF3gnq5",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Headphones",
-    category: "Art",
-    description: "phone description",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmb9Y6954vmfCvPDwmhpeaHtV8aKjrT1U8pPqxZ97dpwsG",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0xe87fc719718fe7848231f8157edcfc494cf1f5b32cd73ce1e0b0f7fd4c105bba",
-    timestamp: "2022-09-08T12:45:22.000Z",
-    uid: "5",
-    tokenId: "6",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmPkNhhf3pmvXmqgMUemeVYnabwMUocAvDhQj8pnF3gnq5",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Headphones",
-    category: "Art",
-    description: "phone description",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmb9Y6954vmfCvPDwmhpeaHtV8aKjrT1U8pPqxZ97dpwsG",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0xe87fc719718fe7848231f8157edcfc494cf1f5b32cd73ce1e0b0f7fd4c105bba",
-    timestamp: "2022-09-08T12:45:22.000Z",
-    uid: "5",
-    tokenId: "6",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmPkNhhf3pmvXmqgMUemeVYnabwMUocAvDhQj8pnF3gnq5",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Headphones",
-    category: "Art",
-    description: "phone description",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmb9Y6954vmfCvPDwmhpeaHtV8aKjrT1U8pPqxZ97dpwsG",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0xe87fc719718fe7848231f8157edcfc494cf1f5b32cd73ce1e0b0f7fd4c105bba",
-    timestamp: "2022-09-08T12:45:22.000Z",
-    uid: "5",
-    tokenId: "6",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmPkNhhf3pmvXmqgMUemeVYnabwMUocAvDhQj8pnF3gnq5",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Headphones",
-    category: "Art",
-    description: "phone description",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmb9Y6954vmfCvPDwmhpeaHtV8aKjrT1U8pPqxZ97dpwsG",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0x805df4392f7f17d4bd7ff6afaa5a93d202145680c6952c3ee244db4d23dcc1d3",
-    timestamp: "2022-09-08T12:40:52.000Z",
-    uid: "4",
-    tokenId: "5",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmSNNVnE23iQvveDXqX92H3MWT1A9UGWcRB9RkLfKct9ym",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Snowman",
-    category: "Art",
-    description: "Snowman with led",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/QmU1aNuRTKrgzuyAWJgmFeHtu6puydjEstc47GgqbTXt13",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0xb52aa0f9b27aa8cf78500f88d7ee8186773b5f842c9b27c50d27413e483b9ba7",
-    timestamp: "2022-08-29T13:53:07.000Z",
-    uid: "3",
-    tokenId: "4",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmNWwMSjLNwGi35sRE9n4nUZq9Sk5JAzfuFPwt93NBkHdk",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Pac man NFT",
-    category: "Art",
-    description: "This is a unique logo",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/QmUMqvkjv8nS75CgCMyYf6CCwpcULEDht1e3FPsf5xZpNx",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0x66811065d2a3714803d9cf2a976b3958ef85b20feb92288c30af39d4e25f486e",
-    timestamp: "2022-07-12T07:15:21.000Z",
-    uid: "2",
-    tokenId: "3",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "400000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmZ4Pav2EbkAqKrcKbroymvzSuvF4gZDNvMhEtqDBZRrep",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Jim NFT",
-    category: "Memes",
-    description: "test",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmf5zV18RVRjq1Y1nCaFCtFFHgrJ2MrNnFs8kQbRWCmJ2d",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0xb52aa0f9b27aa8cf78500f88d7ee8186773b5f842c9b27c50d27413e483b9ba7",
-    timestamp: "2022-08-29T13:53:07.000Z",
-    uid: "3",
-    tokenId: "4",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "500000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmNWwMSjLNwGi35sRE9n4nUZq9Sk5JAzfuFPwt93NBkHdk",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Pac man NFT",
-    category: "Art",
-    description: "This is a unique logo",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/QmUMqvkjv8nS75CgCMyYf6CCwpcULEDht1e3FPsf5xZpNx",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0x66811065d2a3714803d9cf2a976b3958ef85b20feb92288c30af39d4e25f486e",
-    timestamp: "2022-07-12T07:15:21.000Z",
-    uid: "2",
-    tokenId: "3",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "400000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmZ4Pav2EbkAqKrcKbroymvzSuvF4gZDNvMhEtqDBZRrep",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Jim NFT",
-    category: "Memes",
-    description: "test",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmf5zV18RVRjq1Y1nCaFCtFFHgrJ2MrNnFs8kQbRWCmJ2d",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-  {
-    transaction:
-      "0x66811065d2a3714803d9cf2a976b3958ef85b20feb92288c30af39d4e25f486e",
-    timestamp: "2022-07-12T07:15:21.000Z",
-    uid: "2",
-    tokenId: "3",
-    tokenAddress: "0x646f1f51d63ecc510ce13d460f74e9bf590a7f81",
-    askingPrice: "400000000000000",
-    tokenUri:
-      "https://ipfs.moralis.io:2053/ipfs/QmZ4Pav2EbkAqKrcKbroymvzSuvF4gZDNvMhEtqDBZRrep",
-    ownerOf: "0xcd709915f64bd216cc0c62c847c73639e2c33391",
-    sellerUsername: "JimmyPro",
-    sellerAvatar: {
-      __type: "File",
-      name: "a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-      url: "https://dxtsyokzek7o.usemoralis.com:2053/server/files/vTAzWPDgVbIkiLLnBG0ZVs7rBwl7WTpIrqoevRq6/a777b7c9a7e9dd310be219083fde21f2_photo.jpg",
-    },
-    name: "Jim NFT",
-    category: "Memes",
-    description: "test",
-    image:
-      "https://ipfs.moralis.io:2053/ipfs/Qmf5zV18RVRjq1Y1nCaFCtFFHgrJ2MrNnFs8kQbRWCmJ2d",
-    history: {
-      state: false,
-      data: "Just minted",
-    },
-  },
-];
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Backdrop from "@mui/material/Backdrop/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+
+import { useMoralis } from "react-moralis";
+
+const Moralis = require("moralis-v1");
 
 const Home1 = () => {
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const { isInitialized } = useMoralis();
+
+  const getData = async () => {
+    setLoading(true);
+    // //console.log("getting data");
+    try {
+      let prefix = "https://gateway.moralisipfs.com/ipfs/";
+      let data = [];
+
+      const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
+      // console.log(result1);
+      const data1 = await Promise.all(
+        result1.map(async (item) => {
+          if (item) {
+            const params = {
+              tokenId: item.tokenId,
+              tokenAddress: item.tokenAddress,
+            };
+            const history = await Moralis.Cloud.run("SM_getHistory721", params);
+            let uri =
+              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            const result = await fetch(uri);
+            // console.log(await result.json());
+            return { ...item, ...(await result.json()), ...history };
+          }
+        })
+      );
+      console.log(data1);
+
+      const res = await Moralis.Cloud.run("SM_getItemsBatch");
+      console.log(res);
+      const result2 = await Promise.all(
+        res.map(async (val, i) => {
+          let params = {
+            owner: val.ownerOf.toLowerCase(),
+            uid: val.uid,
+          };
+
+          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+          console.log(res);
+          return {
+            ...val,
+            sellerUsername: res[0].attributes.ownerObject.attributes.username,
+            sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
+          };
+        })
+      );
+      const data2 = await Promise.all(
+        result2.map(async (item) => {
+          if (item) {
+            let uri =
+              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            const result = await fetch(uri);
+            return { ...item, ...(await result.json()) };
+          }
+        })
+      );
+      //  //console.log(data2);
+      data.push(data1);
+      data.push(data2);
+
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      //  //console.log(error.message);
+      return null;
+    }
+  };
+
+  React.useEffect(() => {
+    if (isInitialized) {
+      getData().then((data) => {
+        console.log(data);
+        setData(data);
+      });
+    }
+  }, [isInitialized]);
+
+  const [alignment, setAlignment] = React.useState("ERC-721");
+  const [type, setType] = React.useState("ERC-721");
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
   return (
     <div>
       <Header />
@@ -303,6 +126,7 @@ const Home1 = () => {
           <span style={{ color: "#c19a2e" }}> &nbsp;All Categories</span>
           ⚡️
         </h2>
+        {console.log(alignment)}
       </div>
 
       <ResponsiveSlider />
@@ -350,7 +174,47 @@ const Home1 = () => {
         <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
           Explore ⚡️
         </h2>
-        <ExploreSection val={val} />
+        <div className="mb-3">
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
+              ERC-721
+            </ToggleButton>
+            <ToggleButton onClick={() => setType("ERC-1155")} value="ERC-1155">
+              ERC-1155
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+
+        {loading ? (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        ) : (!loading && data === null) || data === undefined ? (
+          <div>Check your connectivity</div>
+        ) : !loading && data.length === 0 ? (
+          <div>No Items yet</div>
+        ) : (
+          <>
+            {data[0].length > 0 && type === "ERC-721" ? (
+              <ExploreSection val={data[0]} />
+            ) : data[1].length > 0 && type === "ERC-1155" ? (
+              <ExploreSection val={data[1]} />
+            ) : (
+              <div className="flex items-center justify-center">
+                No items found
+              </div>
+            )}
+          </>
+        )}
       </div>
       <Footer />
     </div>

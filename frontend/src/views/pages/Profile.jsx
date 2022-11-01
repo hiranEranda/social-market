@@ -8,7 +8,7 @@ import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaUserEdit } from "react-icons/fa";
 
 import { useMoralis } from "react-moralis";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Moralis = require("moralis-v1");
 
 function Profile() {
