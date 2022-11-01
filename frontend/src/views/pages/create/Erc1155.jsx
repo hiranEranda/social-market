@@ -15,6 +15,7 @@ import TextError from "../../../components/errors/TextError";
 import Collection from "./Collection";
 import create1155 from "../../../contract/functions/erc1155/create";
 import Modal from "./Modal";
+const Moralis = require("moralis-v1");
 
 function Erc1155() {
   let tooltip = "Here type the tooltip message";
@@ -79,49 +80,51 @@ function Erc1155() {
   const [collectionAddress, setCollectionAddress] = React.useState(null);
 
   const handleSubmit = async (values) => {
-    if (picture === null || picture.length === 0) {
-      createdWarn("Please select picture");
-      return;
-    }
-    if (collectionAddress === null || collectionAddress.length === 0) {
-      createdWarn("Please choose a collection");
-    } else {
-      // setBackDrop(true);
-      let status = null;
-      setOpen(true);
-      status = await create1155(
-        values,
-        picture,
-        collectionAddress,
-        selected,
-        setLoading1,
-        setLoading2,
-        setLoading3,
-        setLoading4
-      );
-      setTimeout(() => {
-        setOpen(false);
-      }, 1000);
-      if (status.state) {
-        setBackDrop(false);
-        created(status.message);
-        setTimeout(() => {
-          // navigate("/profile");
-        }, 1000);
-      } else {
-        setBackDrop(false);
-        setLoading1(true);
-        setLoading2(true);
-        setLoading3(true);
-        setLoading4(true);
-        createdError(status.message);
+    const user = await Moralis.User.current();
+    if (user) {
+      if (picture === null || picture.length === 0) {
+        createdWarn("Please select picture");
+        return;
       }
+      if (collectionAddress === null || collectionAddress.length === 0) {
+        createdWarn("Please choose a collection");
+      } else {
+        // setBackDrop(true);
+        let status = null;
+        setOpen(true);
+        status = await create1155(
+          values,
+          picture,
+          collectionAddress,
+          selected,
+          setLoading1,
+          setLoading2,
+          setLoading3,
+          setLoading4
+        );
+        setTimeout(() => {
+          setOpen(false);
+        }, 1000);
+        if (status.state) {
+          setBackDrop(false);
+          created(status.message);
+          setTimeout(() => {
+            // navigate("/profile");
+          }, 1000);
+        } else {
+          setBackDrop(false);
+          setLoading1(true);
+          setLoading2(true);
+          setLoading3(true);
+          setLoading4(true);
+          createdError(status.message);
+        }
+      }
+    } else {
+      createdError("Please connect your wallet before proceeding...");
     }
   };
 
-  React.useEffect(() => {
-    setTimeout(() => {}, 2000);
-  }, []);
   return (
     <>
       <Header />

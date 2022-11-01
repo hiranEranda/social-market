@@ -14,7 +14,9 @@ import Header from "../../../components/header/Header";
 import TextError from "../../../components/errors/TextError";
 import Collection from "./Collection";
 import create721 from "../../../contract/functions/erc721/create";
+
 import Modal from "./Modal";
+const Moralis = require("moralis-v1");
 
 function Erc721() {
   let tooltip = "Here type the tooltip message";
@@ -73,50 +75,52 @@ function Erc721() {
   const [collectionAddress, setCollectionAddress] = React.useState(null);
 
   const handleSubmit = async (values) => {
-    let state = null;
-    if (picture === null || picture.length === 0) {
-      createdWarn("Please select picture");
-      return;
-    }
-    if (collectionAddress === null || collectionAddress.length === 0) {
-      createdWarn("Please choose a collection");
-    } else {
-      // setBackDrop(true);
+    const user = await Moralis.User.current();
+    if (user) {
+      let state = null;
+      if (picture === null || picture.length === 0) {
+        createdWarn("Please select picture");
+        return;
+      }
+      if (collectionAddress === null || collectionAddress.length === 0) {
+        createdWarn("Please choose a collection");
+      } else {
+        // setBackDrop(true);
 
-      setOpen(true);
-      state = await create721(
-        values,
-        picture,
-        collectionAddress,
-        selected,
-        setLoading1,
-        setLoading2,
-        setLoading3,
-        setLoading4
-      );
-      setTimeout(() => {
-        setOpen(false);
-      }, 1000);
-    }
-    if (state.state) {
-      setBackDrop(false);
-      created(state.message);
-      setTimeout(() => {
-        // navigate("/profile");
-      }, 1000);
+        setOpen(true);
+        state = await create721(
+          values,
+          picture,
+          collectionAddress,
+          selected,
+          setLoading1,
+          setLoading2,
+          setLoading3,
+          setLoading4
+        );
+        setTimeout(() => {
+          setOpen(false);
+        }, 1000);
+      }
+      if (state.state) {
+        setBackDrop(false);
+        created(state.message);
+        setTimeout(() => {
+          // navigate("/profile");
+        }, 1000);
+      } else {
+        setBackDrop(false);
+        setLoading1(true);
+        setLoading2(true);
+        setLoading3(true);
+        setLoading4(true);
+        createdError(state.message);
+      }
     } else {
-      setBackDrop(false);
-      setLoading1(true);
-      setLoading2(true);
-      setLoading3(true);
-      setLoading4(true);
-      createdError(state.message);
+      createdError("Please connect your wallet before proceeding...");
     }
   };
 
-  React.useEffect(() => {
-    setTimeout(() => {}, 2000);
-  }, []);
   return (
     <>
       <Header />
