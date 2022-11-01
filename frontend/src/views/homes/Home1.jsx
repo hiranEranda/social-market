@@ -28,7 +28,7 @@ const Home1 = () => {
       let prefix = "https://gateway.moralisipfs.com/ipfs/";
       let data = [];
 
-      const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
+      const result1 = await Moralis.Cloud.run("getItemsSingle");
       // console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
@@ -37,7 +37,7 @@ const Home1 = () => {
               tokenId: item.tokenId,
               tokenAddress: item.tokenAddress,
             };
-            const history = await Moralis.Cloud.run("SM_getHistory721", params);
+            const history = await Moralis.Cloud.run("getHistory721", params);
             let uri =
               prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await fetch(uri);
@@ -46,10 +46,10 @@ const Home1 = () => {
           }
         })
       );
-      console.log(data1);
+      // console.log(data1);
 
-      const res = await Moralis.Cloud.run("SM_getItemsBatch");
-      console.log(res);
+      const res = await Moralis.Cloud.run("getItemsBatch");
+      // console.log(res);
       const result2 = await Promise.all(
         res.map(async (val, i) => {
           let params = {
@@ -57,8 +57,8 @@ const Home1 = () => {
             uid: val.uid,
           };
 
-          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
-          console.log(res);
+          const res = await Moralis.Cloud.run("getUserDetails", params);
+          // console.log(res);
           return {
             ...val,
             sellerUsername: res[0].attributes.ownerObject.attributes.username,
@@ -92,7 +92,7 @@ const Home1 = () => {
   React.useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
-        console.log(data);
+        // console.log(data);
         setData(data);
       });
     }
@@ -126,7 +126,6 @@ const Home1 = () => {
           <span style={{ color: "#c19a2e" }}> &nbsp;All Categories</span>
           ⚡️
         </h2>
-        {console.log(alignment)}
       </div>
 
       <ResponsiveSlider />
@@ -165,30 +164,35 @@ const Home1 = () => {
       </div>
 
       <div
-        className="mx-auto max-w-[1400px]"
+        className="w-full mx-auto"
         style={{
           padding: "3em 3.5rem 3em 3.5rem",
           backgroundColor: "#fff",
         }}
       >
-        <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
-          Explore ⚡️
-        </h2>
-        <div className="mb-3">
-          <ToggleButtonGroup
-            color="primary"
-            value={alignment}
-            exclusive
-            onChange={handleChange}
-            aria-label="Platform"
-          >
-            <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
-              ERC-721
-            </ToggleButton>
-            <ToggleButton onClick={() => setType("ERC-1155")} value="ERC-1155">
-              ERC-1155
-            </ToggleButton>
-          </ToggleButtonGroup>
+        <div className="mx-auto max-w-[1280px]">
+          <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
+            Explore ⚡️
+          </h2>
+          <div className="mb-3">
+            <ToggleButtonGroup
+              color="primary"
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform"
+            >
+              <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
+                ERC-721
+              </ToggleButton>
+              <ToggleButton
+                onClick={() => setType("ERC-1155")}
+                value="ERC-1155"
+              >
+                ERC-1155
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
         </div>
 
         {loading ? (
@@ -203,7 +207,7 @@ const Home1 = () => {
         ) : !loading && data.length === 0 ? (
           <div>No Items yet</div>
         ) : (
-          <>
+          <div className="mx-auto">
             {data[0].length > 0 && type === "ERC-721" ? (
               <ExploreSection val={data[0]} />
             ) : data[1].length > 0 && type === "ERC-1155" ? (
@@ -213,7 +217,7 @@ const Home1 = () => {
                 No items found
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
       <Footer />
