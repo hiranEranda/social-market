@@ -28,7 +28,7 @@ const Home1 = () => {
       let prefix = "https://gateway.moralisipfs.com/ipfs/";
       let data = [];
 
-      const result1 = await Moralis.Cloud.run("getItemsSingle");
+      const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
       // console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
@@ -37,18 +37,19 @@ const Home1 = () => {
               tokenId: item.tokenId,
               tokenAddress: item.tokenAddress,
             };
-            const history = await Moralis.Cloud.run("getHistory721", params);
+            const history = await Moralis.Cloud.run("SM_getHistory721", params);
             let uri =
               prefix + item.tokenUri.substring(34, item.tokenUri.length);
-            const result = await fetch(uri);
-            // console.log(await result.json());
-            return { ...item, ...(await result.json()), ...history };
+            // const result = await fetch(uri);
+            const result = await Moralis.Cloud.run("FetchJson", { url: uri });
+            // console.log(result);
+
+            return { ...item, ...result.data, ...history };
           }
         })
       );
-      // console.log(data1);
 
-      const res = await Moralis.Cloud.run("getItemsBatch");
+      const res = await Moralis.Cloud.run("SM_getItemsBatch");
       // console.log(res);
       const result2 = await Promise.all(
         res.map(async (val, i) => {
@@ -57,8 +58,8 @@ const Home1 = () => {
             uid: val.uid,
           };
 
-          const res = await Moralis.Cloud.run("getUserDetails", params);
-          // console.log(res);
+          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+          console.log(res);
           return {
             ...val,
             sellerUsername: res[0].attributes.ownerObject.attributes.username,
@@ -71,8 +72,10 @@ const Home1 = () => {
           if (item) {
             let uri =
               prefix + item.tokenUri.substring(34, item.tokenUri.length);
-            const result = await fetch(uri);
-            return { ...item, ...(await result.json()) };
+            const result = await Moralis.Cloud.run("FetchJson", {
+              url: uri,
+            });
+            return { ...item, ...result.data };
           }
         })
       );
