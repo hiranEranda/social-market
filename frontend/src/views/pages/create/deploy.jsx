@@ -16,14 +16,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { MdOutlineAdd } from "react-icons/md";
 import TextError from "../../../components/errors/TextError";
 
-// import deploy721 from "../../../contract/functions/erc721/deploy";
-// import deploy1155 from "../../../contract/functions/erc1155/deploy";
+import deploy721 from "../../../contract/functions/erc721/deploy";
+import deploy1155 from "../../../contract/functions/erc1155/deploy";
 import Response from "./Response1";
 
 export default function FormDialog(props) {
   let contractAddress = null;
   const deployed = () =>
     toast.success("Your Contract is deployed to: " + contractAddress);
+  const deployError = (msg) => toast.error(msg);
 
   const [backDrop, setBackDrop] = useState(false);
   const [open, setOpen] = useState(false);
@@ -59,52 +60,57 @@ export default function FormDialog(props) {
   };
 
   const handleDeploy = async (values, e) => {
-    //   // setBackDrop(true);
-    //   setOpen(false);
-    //   if (picture === null || picture.length === 0) {
-    //     setBackDrop(false);
-    //     alert("Please select picture");
-    //     return false;
-    //   } else if (!props.isBatch) {
-    //     try {
-    //       _setOpen(true);
-    //       contractAddress = await deploy721(picture, values);
-    //       setBackDrop(false);
-    //       setLoading(false);
-    //       deployed();
-    //       setTimeout(() => {
-    //         _setOpen(true);
-    //         setLoading(true);
-    //         setAvatarData(null);
-    //         window.location.reload();
-    //       }, 1000);
-    //     } catch (error) {
-    //       // //console.log(error);
-    //       setAvatarData(null);
-    //       setBackDrop(false);
-    //       _setOpen(false);
-    //     }
-    //   } else {
-    //     try {
-    //       // //console.log("deploying 1155");
-    //       contractAddress = await deploy1155(picture, values);
-    //       _setOpen(true);
-    //       setBackDrop(false);
-    //       setLoading(false);
-    //       deployed();
-    //       setTimeout(() => {
-    //         _setOpen(true);
-    //         setLoading(true);
-    //         setAvatarData(null);
-    //         window.location.reload();
-    //       }, 1000);
-    //     } catch (error) {
-    //       // //console.log(error);
-    //       _setOpen(false);
-    //       setAvatarData(null);
-    //       setBackDrop(false);
-    //     }
-    //   }
+    // setBackDrop(true);
+    if (picture === null || picture.length === 0) {
+      setBackDrop(false);
+      deployError("Please select picture");
+      return false;
+    } else if (!props.isBatch) {
+      setOpen(false);
+      try {
+        _setOpen(true);
+        contractAddress = await deploy721(picture, values);
+        setBackDrop(false);
+        setLoading(false);
+        deployed();
+        setTimeout(() => {
+          _setOpen(true);
+          setLoading(true);
+          setAvatarData(null);
+          window.location.reload();
+        }, 1000);
+      } catch (error) {
+        // deployError(error.error.message);
+        // console.log(error.error.message);
+
+        setOpen(false);
+        setAvatarData(null);
+        setBackDrop(false);
+        _setOpen(false);
+      }
+    } else {
+      setOpen(false);
+      try {
+        // //console.log("deploying 1155");
+        contractAddress = await deploy1155(picture, values);
+        _setOpen(true);
+        setBackDrop(false);
+        setLoading(false);
+        deployed();
+        setTimeout(() => {
+          _setOpen(true);
+          setLoading(true);
+          setAvatarData(null);
+          window.location.reload();
+        }, 1000);
+      } catch (error) {
+        // deployError(error.error.message);
+        setOpen(false);
+        _setOpen(false);
+        setAvatarData(null);
+        setBackDrop(false);
+      }
+    }
   };
 
   const initialValues = {
