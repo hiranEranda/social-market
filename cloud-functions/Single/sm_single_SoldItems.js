@@ -1,5 +1,5 @@
-Moralis.Cloud.beforeSave("SoldItemsSingle", async (request) => {
-  logger.info("cloud before save SoldItemsSingle");
+Moralis.Cloud.beforeSave("SM_SoldItemsSingle", async (request) => {
+  logger.info("cloud before save SM_SoldItemsSingle");
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");
   query.equalTo("uid", request.object.get("uid"));

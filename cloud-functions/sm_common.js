@@ -1,5 +1,5 @@
-Moralis.Cloud.define("getContractAvatar", async (request) => {
-  const query = new Moralis.Query("ContractOwners");
+Moralis.Cloud.define("SM_getContractAvatar", async (request) => {
+  const query = new Moralis.Query("SM_ContractOwners");
   logger.info("getAvatar");
   logger.info(request.params.tokenAddress);
   query.equalTo("collectionAddress", request.params.tokenAddress);
@@ -9,8 +9,8 @@ Moralis.Cloud.define("getContractAvatar", async (request) => {
   return queryResults;
 });
 
-Moralis.Cloud.define("getCreatorAndRoyalty", async (request) => {
-  const query = new Moralis.Query("Creator");
+Moralis.Cloud.define("SM_getCreatorAndRoyalty", async (request) => {
+  const query = new Moralis.Query("SM_Creator");
   query.equalTo("tokenId", request.params.tokenId);
   query.equalTo("tokenAddress", request.params.tokenAddress);
   query.select("tokenAddress", "tokenId", "royalty", "ethAddress");
@@ -19,10 +19,10 @@ Moralis.Cloud.define("getCreatorAndRoyalty", async (request) => {
   return queryResults;
 });
 
-Moralis.Cloud.define("setCreators", async (request) => {
+Moralis.Cloud.define("SM_setCreators", async (request) => {
   logger.info(request.params);
   logger.info("setCreators");
-  const Creator = Moralis.Object.extend("Creator");
+  const Creator = Moralis.Object.extend("SM_Creator");
   const creator = new Creator();
   creator.set("ethAddress", request.params.userAddress);
   creator.set("nftName", request.params.title);
@@ -36,10 +36,10 @@ Moralis.Cloud.define("setCreators", async (request) => {
   await creator.save();
 });
 
-Moralis.Cloud.define("setContractOwners", async (request) => {
+Moralis.Cloud.define("SM_setContractOwners", async (request) => {
   logger.info(request.params);
   logger.info("setContractOwners");
-  const ContractOwners = Moralis.Object.extend("ContractOwners");
+  const ContractOwners = Moralis.Object.extend("SM_ContractOwners");
   const contractOwners = new ContractOwners();
   contractOwners.set("userAddress", request.params.userAddress);
   contractOwners.set("collectionAddress", request.params.collectionAddress);
@@ -52,8 +52,8 @@ Moralis.Cloud.define("setContractOwners", async (request) => {
 });
 
 // Getting nft creator data
-Moralis.Cloud.define("getCreator", async (request) => {
-  const query = new Moralis.Query("Creator");
+Moralis.Cloud.define("SM_getCreator", async (request) => {
+  const query = new Moralis.Query("SM_Creator");
   logger.info(request.params.tokenId);
   logger.info(request.params.tokenAddress);
 
@@ -67,11 +67,11 @@ Moralis.Cloud.define("getCreator", async (request) => {
 });
 
 // get user's created items
-Moralis.Cloud.define("getUserDesignedItems", async (request) => {
+Moralis.Cloud.define("SM_getUserDesignedItems", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get user designed items..user's created items");
 
-  const query = new Moralis.Query("Creator");
+  const query = new Moralis.Query("SM_Creator");
   query.equalTo("ethAddress", request.params.ethAddress);
   query.select(
     "nftName",
@@ -99,8 +99,8 @@ Moralis.Cloud.define("getUserDesignedItems", async (request) => {
   return results;
 });
 
-Moralis.Cloud.define("popularCreators", async (request) => {
-  const query = new Moralis.Query("SoldItemsSingle");
+Moralis.Cloud.define("SM_popularCreators", async (request) => {
+  const query = new Moralis.Query("SM_SoldItemsSingle");
   query.select("seller", "askingPrice");
   const queryResults = await query.find({ useMasterKey: true });
 

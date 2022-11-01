@@ -69,7 +69,7 @@ Moralis.Cloud.define("SM_getItemsSingle", async (request) => {
 });
 
 // filter collections single
-Moralis.Cloud.define("filterCollections", async (request) => {
+Moralis.Cloud.define("SM_filterCollections", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("collection filters");
 
@@ -114,7 +114,7 @@ Moralis.Cloud.define("filterCollections", async (request) => {
 });
 
 // view an item from the market
-Moralis.Cloud.define("viewItem", async (request) => {
+Moralis.Cloud.define("SM_viewItem", async (request) => {
   logger.info("view item called");
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");
@@ -161,7 +161,7 @@ Moralis.Cloud.define("viewItem", async (request) => {
 });
 
 // view an item from profile
-Moralis.Cloud.define("viewItemInfo", async (request) => {
+Moralis.Cloud.define("SM_viewItemInfo", async (request) => {
   logger.info("view item called");
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");
@@ -206,7 +206,7 @@ Moralis.Cloud.define("viewItemInfo", async (request) => {
 });
 
 // view an item from profile removed721
-Moralis.Cloud.define("viewItemInfo1", async (request) => {
+Moralis.Cloud.define("SM_viewItemInfo1", async (request) => {
   logger.info("view item called");
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");
@@ -251,7 +251,7 @@ Moralis.Cloud.define("viewItemInfo1", async (request) => {
 });
 
 // Getting user
-Moralis.Cloud.define("getUser", async (request) => {
+Moralis.Cloud.define("SM_getUser", async (request) => {
   const query = new Moralis.Query(Moralis.User);
   query.equalTo("ethAddress", request.params.ethAddress);
   const user = await query.first({ useMasterKey: true });
@@ -259,7 +259,7 @@ Moralis.Cloud.define("getUser", async (request) => {
 });
 
 // Getting user
-Moralis.Cloud.define("getUser2", async (request) => {
+Moralis.Cloud.define("SM_getUser2", async (request) => {
   const query = new Moralis.Query("SM_NFTOwners721");
   query.equalTo("tokenId", request.params.tokenId);
   query.equalTo("tokenAddress", request.params.tokenAddress);
@@ -269,11 +269,11 @@ Moralis.Cloud.define("getUser2", async (request) => {
 
 ///////////////////////////////// For Internal Profile View ///////////////////////////////////////////////////
 // get sold items
-Moralis.Cloud.define("getSoldItems", async (request) => {
+Moralis.Cloud.define("SM_getSoldItems", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get sold items");
 
-  const query = new Moralis.Query("SoldItemsSingle");
+  const query = new Moralis.Query("SM_SoldItemsSingle");
   query.equalTo("seller", request.params.ethAddress);
   query.equalTo("confirmed", true);
   query.descending("block_timestamp");
@@ -304,7 +304,7 @@ Moralis.Cloud.define("getSoldItems", async (request) => {
 });
 
 // get sold items data
-Moralis.Cloud.define("getSoldItemsData", async (request) => {
+Moralis.Cloud.define("SM_getSoldItemsData", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get sold items");
 
@@ -334,7 +334,7 @@ Moralis.Cloud.define("getSoldItemsData", async (request) => {
 });
 
 // get user's items in marketplace
-Moralis.Cloud.define("getUserItems", async (request) => {
+Moralis.Cloud.define("SM_getUserItems", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get user items..user items in marketplace");
 
@@ -379,7 +379,7 @@ Moralis.Cloud.define("getUserItems", async (request) => {
 });
 
 // get user's created items
-Moralis.Cloud.define("getUserBoughtItems", async (request) => {
+Moralis.Cloud.define("SM_getUserBoughtItems", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get user bought items..user's bought items");
 
@@ -415,7 +415,7 @@ Moralis.Cloud.define("getUserBoughtItems", async (request) => {
 });
 
 // get user's removed items
-Moralis.Cloud.define("getUserRemovedItems", async (request) => {
+Moralis.Cloud.define("SM_getUserRemovedItems", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get user removed items");
 
@@ -464,8 +464,8 @@ Moralis.Cloud.define("getUserRemovedItems", async (request) => {
 ///////////////////////////////// For Internal Profile View ///////////////////////////////////////////////////
 
 // getting transaction history
-Moralis.Cloud.define("getHistory721", async (request) => {
-  const query = new Moralis.Query("SoldItemsSingle");
+Moralis.Cloud.define("SM_getHistory721", async (request) => {
+  const query = new Moralis.Query("SM_SoldItemsSingle");
   logger.info("get history");
   logger.info(request.params.tokenId.toString());
   query.equalTo("tokenId", request.params.tokenId.toString());
@@ -501,7 +501,7 @@ Moralis.Cloud.define("getHistory721", async (request) => {
 });
 
 // get user's created items
-Moralis.Cloud.define("getUserCreatedItems721", async (request) => {
+Moralis.Cloud.define("SM_getUserCreatedItems721", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get user created items..user's created items");
 
@@ -516,7 +516,7 @@ Moralis.Cloud.define("getUserCreatedItems721", async (request) => {
 });
 
 // view user's created items
-Moralis.Cloud.define("viewUserCreatedItems721", async (request) => {
+Moralis.Cloud.define("SM_viewUserCreatedItems721", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   logger.info("get user created items..user's created items");
 
@@ -532,9 +532,9 @@ Moralis.Cloud.define("viewUserCreatedItems721", async (request) => {
 });
 
 // remove item from market
-Moralis.Cloud.define("removeItem721", async (request) => {
+Moralis.Cloud.define("SM_removeItem721", async (request) => {
   const logger = Moralis.Cloud.getLogger();
-  logger.info("removeItem721");
+  logger.info("SM_removeItem721");
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");
   query.equalTo("objectId", request.params.id);
@@ -546,9 +546,9 @@ Moralis.Cloud.define("removeItem721", async (request) => {
 });
 
 // add removed item to market
-Moralis.Cloud.define("addItem721", async (request) => {
+Moralis.Cloud.define("SM_addItem721", async (request) => {
   const logger = Moralis.Cloud.getLogger();
-  logger.info("addItem721");
+  logger.info("SM_addItem721");
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");
   query.equalTo("objectId", request.params.objectId);
@@ -560,9 +560,9 @@ Moralis.Cloud.define("addItem721", async (request) => {
 });
 
 // add removed item to market
-Moralis.Cloud.define("burn721", async (request) => {
+Moralis.Cloud.define("SM_burn721", async (request) => {
   const logger = Moralis.Cloud.getLogger();
-  logger.info("burn721");
+  logger.info("SM_burn721");
   logger.info(request.params.uid);
 
   const query = new Moralis.Query("SM_ItemsForSaleSingle");

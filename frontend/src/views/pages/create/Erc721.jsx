@@ -13,6 +13,8 @@ import Footer from "../../../components/footer/Footer";
 import Header from "../../../components/header/Header";
 import TextError from "../../../components/errors/TextError";
 import Collection from "./Collection";
+import create721 from "../../../contract/functions/erc721/create";
+import Modal from "./Modal";
 
 function Erc721() {
   let tooltip = "Here type the tooltip message";
@@ -55,16 +57,61 @@ function Erc721() {
   });
 
   /// handle form//////////////////////////////////////////////////////////////////////////////////////////////
-  // const [backDrop, setBackDrop] = useState(false);
+  const [backDrop, setBackDrop] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [loading1, setLoading1] = React.useState(true);
+  const [loading2, setLoading2] = React.useState(true);
+  const [loading3, setLoading3] = React.useState(true);
+  const [loading4, setLoading4] = React.useState(true);
 
   /// toast containers
-  const update = () => toast.success("Your Profile updated");
-  const error = (error) => toast.error(error);
+  const created = (msg) => toast.success(msg);
+  const createdError = (msg) => toast.error(msg);
+  const createdWarn = (msg) => toast.warn(msg);
 
   const [selected, setSelected] = React.useState(false);
+  const [collectionAddress, setCollectionAddress] = React.useState(null);
 
   const handleSubmit = async (values) => {
-    return 0;
+    let state = null;
+    if (picture === null || picture.length === 0) {
+      createdWarn("Please select picture");
+      return;
+    }
+    if (collectionAddress === null || collectionAddress.length === 0) {
+      createdWarn("Please choose a collection");
+    } else {
+      // setBackDrop(true);
+
+      setOpen(true);
+      state = await create721(
+        values,
+        picture,
+        collectionAddress,
+        selected,
+        setLoading1,
+        setLoading2,
+        setLoading3,
+        setLoading4
+      );
+      setTimeout(() => {
+        setOpen(false);
+      }, 1000);
+    }
+    if (state.state) {
+      setBackDrop(false);
+      created(state.message);
+      setTimeout(() => {
+        // navigate("/profile");
+      }, 1000);
+    } else {
+      setBackDrop(false);
+      setLoading1(true);
+      setLoading2(true);
+      setLoading3(true);
+      setLoading4(true);
+      createdError(state.message);
+    }
   };
 
   React.useEffect(() => {
@@ -74,6 +121,14 @@ function Erc721() {
     <>
       <Header />
       <div className="container mt-4">
+        <Modal
+          open={open}
+          loading1={loading1}
+          loading2={loading2}
+          loading3={loading3}
+          loading4={loading4}
+          selected={selected}
+        />
         <div className="p-4 border-gray-300 rounded-lg m- border-1">
           <div className="grid gap-2 lg:grid-cols-2">
             <div className="pt-3 pr-3 mr-3 overflow-auto border-r border-black">
@@ -161,7 +216,10 @@ function Erc721() {
                       />
                       <ErrorMessage name="royalty" component={TextError} />
                     </div>
-                    <Collection value={{ flag: false }} />
+                    <Collection
+                      value={{ flag: false }}
+                      setCollectionAddress={setCollectionAddress}
+                    />
 
                     <div className="mt-3 d-flex align-items-center">
                       <span className="mr-3">Add Items to marketplace</span>
@@ -198,6 +256,9 @@ function Erc721() {
                       </div>
                     ) : null}
                   </>
+                  <button className="mt-2 btn btn-grad" type="submit">
+                    Create NFT
+                  </button>
                 </Form>
               </Formik>
             </div>

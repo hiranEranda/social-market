@@ -12,7 +12,6 @@ function Collection(props) {
 
   const { isInitialized, isAuthenticated, user } = useMoralis();
 
-  const [collectionAddress, setCollectionAddress] = React.useState(null);
   const [items, setItems] = React.useState([]);
 
   const [loading, setLoading] = React.useState(false);
@@ -30,7 +29,7 @@ function Collection(props) {
     query.equalTo("userAddress", user.get("ethAddress").toLowerCase());
     if (!props.value.flag) {
       query.equalTo("collectionType", "erc721");
-      //  //console.log("erc721 contracts");
+      //    console.log("erc721 contracts");
     } else {
       //  //console.log("erc1155 contracts");
       query.equalTo("collectionType", "erc1155");
@@ -80,21 +79,15 @@ function Collection(props) {
           }
           onClick={() => {
             if (!props.value.flag) {
-              setCollectionAddress(
+              props.setCollectionAddress(
                 process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721
               );
-              // console.log(
-              //   process.env
-              //     .REACT_APP_TOKEN_CONTRACT_ADDRESS_721
-              // );
+              console.log(process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721);
             } else {
-              setCollectionAddress(
+              props.setCollectionAddress(
                 process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_1155
               );
-              // console.log(
-              //   process.env
-              //     .REACT_APP_TOKEN_CONTRACT_ADDRESS_1155
-              // );
+              console.log(process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_1155);
             }
 
             setSt(true);
@@ -123,7 +116,7 @@ function Collection(props) {
                 }
                 onClick={() => {
                   handler(i);
-                  setCollectionAddress(val.attributes.collectionAddress);
+                  props.setCollectionAddress(val.attributes.collectionAddress);
                   setId(i);
                   setSt(false);
                   // console.log(
