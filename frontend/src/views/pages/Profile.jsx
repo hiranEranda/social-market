@@ -13,6 +13,10 @@ import { useNavigate } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+import OnSale from "../profile/OnSale";
+import Created from "../profile/Created";
+import Owned from "../profile/Owned";
+
 const Moralis = require("moralis-v1");
 
 function Profile() {
@@ -25,7 +29,7 @@ function Profile() {
 
   const [filter, setFilter] = useState("On sale");
   const [alignment, setAlignment] = React.useState("ERC-721");
-  const [type, setType] = React.useState("ERC-721");
+  const [type, setType] = React.useState(false);
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -201,45 +205,22 @@ function Profile() {
             onChange={handleChange}
             aria-label="Platform"
           >
-            <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
+            <ToggleButton onClick={() => setType(false)} value="ERC-721">
               ERC-721
             </ToggleButton>
-            <ToggleButton onClick={() => setType("ERC-1155")} value="ERC-1155">
+            <ToggleButton onClick={() => setType(true)} value="ERC-1155">
               ERC-1155
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <div className="grid justify-center gap-4 mx-auto mt-4 md:grid-cols-4">
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>{" "}
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
-            Following
-          </div>
+        <div className="mt-4">
+          {filter === "On sale" ? (
+            <OnSale isMultiple={type} />
+          ) : filter === "Created" ? (
+            <Created />
+          ) : filter === "Owned" ? (
+            <Owned />
+          ) : null}
         </div>
       </div>
 
