@@ -212,9 +212,9 @@ const Home1 = () => {
         ) : (
           <div className="mx-auto">
             {data[0].length > 0 && type === "ERC-721" ? (
-              <ExploreSection val={data[0]} />
+              <ExploreSection val={data[0]} isMultiple={false} />
             ) : data[1].length > 0 && type === "ERC-1155" ? (
-              <ExploreSection val={data[1]} />
+              <ExploreSection val={data[1]} isMultiple={true} />
             ) : (
               <div className="flex items-center justify-center">
                 No items found

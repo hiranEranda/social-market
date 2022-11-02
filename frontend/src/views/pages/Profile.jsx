@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 
@@ -9,6 +9,10 @@ import { FaUserEdit } from "react-icons/fa";
 
 import { useMoralis } from "react-moralis";
 import { useNavigate } from "react-router-dom";
+
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
 const Moralis = require("moralis-v1");
 
 function Profile() {
@@ -17,6 +21,14 @@ function Profile() {
     ethAddress: "0xf5Cca8165459917B7db1c3d56f16Fa3A9c8A8B2c",
     followers: 10,
     following: 10,
+  };
+
+  const [filter, setFilter] = useState("On sale");
+  const [alignment, setAlignment] = React.useState("ERC-721");
+  const [type, setType] = React.useState("ERC-721");
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
   };
 
   const getData = async () => {
@@ -43,7 +55,7 @@ function Profile() {
         navigate(`/`);
       } else {
         getData().then((data) => {
-          console.log(data);
+          // console.log(data);
           setData(data);
         });
       }
@@ -56,6 +68,7 @@ function Profile() {
       <Header />
 
       <div className="flex items-center justify-center w-full">
+        {console.log(filter)}
         <div className="w-full bg-slate-900 h-[200px] flex justify-center items-center text-white text-4xl font-bold">
           My page
         </div>
@@ -131,28 +144,100 @@ function Profile() {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 mx-auto mt-4 md:grid-cols-8 h-[40px]">
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("On sale")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             On sale
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("Owned")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             Owned
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("Created")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             Created
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("My collection")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             My collection
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("Liked NFTs")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             Liked NFTs
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("Activity")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             Activity
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("Follower")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
             Follower
           </div>
-          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 border-1 rounded-3xl">
+          <div
+            onClick={() => setFilter("Following")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
+            Following
+          </div>
+        </div>
+        <div className="my-4">
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
+              ERC-721
+            </ToggleButton>
+            <ToggleButton onClick={() => setType("ERC-1155")} value="ERC-1155">
+              ERC-1155
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <div className="grid justify-center gap-4 mx-auto mt-4 md:grid-cols-4">
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
+            Following
+          </div>{" "}
+          <div className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl">
             Following
           </div>
         </div>

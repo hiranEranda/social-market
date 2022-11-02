@@ -135,7 +135,7 @@ const getCreatorAndRoyalty = async (item) => {
     tokenAddress: item.tokenAddress,
   };
   try {
-    const data = await Moralis.Cloud.run("getCreatorAndRoyalty", params);
+    const data = await Moralis.Cloud.run("SM_getCreatorAndRoyalty", params);
     return data[0];
   } catch (error) {
     // //console.log("from getCreatorAndRoyalty");

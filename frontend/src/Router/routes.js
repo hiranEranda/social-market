@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Create from "../views/pages/create/Create";
 import Erc1155 from "../views/pages/create/Erc1155";
 import Erc721 from "../views/pages/create/Erc721";
+import BatchItem from "../views/pages/BatchItem";
 
 const ROUTES = () => {
   return (
@@ -17,7 +18,14 @@ const ROUTES = () => {
       <Router>
         <Routes>
           <Route exact path="/" element={<Home1 />} />
-          <Route path="/view-item" element={<SingleItem />} />
+          <Route
+            path="/view-item/:tokenAddress/:tokenId"
+            element={<SingleItem />}
+          />
+          <Route
+            path="/view-item/:tokenAddress/:tokenId/:uid"
+            element={<BatchItem />}
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/create" element={<Create />} />

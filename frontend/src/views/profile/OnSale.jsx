@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import "reactjs-popup/dist/index.css";
 const Moralis = require("moralis-v1");
 
-function ExploreSection({ val, isMultiple }) {
+function OnSale() {
   return (
-    <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+    <div className="grid gap-4 mx-auto  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
       {val.map((val, i) => (
         <div
           className="mx-auto"
@@ -238,4 +238,4 @@ function ExploreSection({ val, isMultiple }) {
   );
 }
 
-export default ExploreSection;
+export default OnSale;

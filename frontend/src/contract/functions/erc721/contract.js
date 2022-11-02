@@ -162,13 +162,13 @@ const addItemToMarket = async (
 };
 
 const getCreatorAndRoyalty = async (item) => {
-  //  //console.log(item);
+  // console.log(item);
   const params = {
     tokenId: parseInt(item.tokenId),
     tokenAddress: item.tokenAddress,
   };
   try {
-    const data = await Moralis.Cloud.run("getCreatorAndRoyalty", params);
+    const data = await Moralis.Cloud.run("SM_getCreatorAndRoyalty", params);
     return data[0];
   } catch (error) {
     // //console.log("from getCreatorAndRoyalty");
@@ -189,6 +189,7 @@ const buyItem = async (item, authenticate) => {
   }
 
   let data = await getCreatorAndRoyalty(item);
+  // console.log(data);
 
   if (!user.attributes.accounts.includes(item.ownerOf)) {
     try {
@@ -211,7 +212,7 @@ const buyItem = async (item, authenticate) => {
         message: "Transaction successful",
       };
     } catch (error) {
-      //console.log(error.code);
+      console.log(error);
       return {
         status: false,
         message: "Transaction failed",

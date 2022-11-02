@@ -12,7 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { ToastContainer, toast } from "react-toastify";
 
 const Moralis = require("moralis-v1");
-const contract = require("../../../src/contract/functions/erc721/contract");
+const contract = require("../../../src/contract/functions/erc1155/contract");
 
 const nft = {
   id: "3213154654",
@@ -20,62 +20,100 @@ const nft = {
   price: "120",
 };
 
-function SingleItem() {
+function BatchItem() {
   const bought = (msg) => toast.success(msg);
   const boughtError = (msg) => toast.error(msg);
 
-  let { tokenId, tokenAddress } = useParams();
+  let { tokenId, tokenAddress, uid } = useParams();
   // Get data from db
   const [data, setData] = useState(null);
-  const [history, setHistory] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [balance, setBalance] = useState(null);
   const [royalty, setRoyalty] = useState(null);
   const [_tokenId, setTokenId] = useState(null);
   const [_tokenAddress, setTokenAddress] = useState(null);
-  const [_loading, _setLoading] = useState(false);
+  const [_uid, setUid] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] = React.useState(true);
+  const [_loading, _setLoading] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [message, setMessage] = React.useState("");
 
   const { isInitialized, authenticate, user } = useMoralis();
   let navigate = useNavigate();
-
   useEffect(() => {
     setTokenId(tokenId);
     setTokenAddress(tokenAddress);
-  }, [setTokenAddress, setTokenId, tokenAddress, tokenId]);
+    setUid(uid);
+  }, [setTokenAddress, setTokenId, setUid, tokenAddress, tokenId]);
 
   const getData = async () => {
-    _setLoading(true);
-    // //console.log("getting data");
+    setLoading(true);
+    // console.log("getting data");
     try {
-      const params = {
+      //   console.log(state);
+      var params = {
         tokenId: _tokenId,
         tokenAddress: _tokenAddress,
+        uid: _uid,
       };
-      const result = await Moralis.Cloud.run("SM_viewItem", params);
-      const history = await Moralis.Cloud.run("SM_getHistory721", params);
-      const royalty = await contract.getCreatorAndRoyalty(result[0]);
-      setRoyalty(royalty);
 
-      const creatorObject = await Moralis.Cloud.run("SM_getCreator", params);
-      //  //console.log("creatorObject: ", creatorObject);
+      const res = await Moralis.Cloud.run("SM_viewItem1155", params);
+      const owner = await Moralis.Cloud.run("SM_getOwners", params);
+
+      var params = {
+        tokenId: parseInt(res[0].tokenId),
+        tokenAddress: res[0].tokenAddress,
+      };
+
+      const royalty = await Moralis.Cloud.run(
+        "SM_getCreatorAndRoyalty",
+        params
+      );
+      setRoyalty(royalty[0]);
+
+      const balance = await contract.getBalance(
+        _tokenAddress,
+        res[0].ownerOf,
+        _tokenId
+      );
+      setBalance(balance);
+
+      //   console.log(royalty);
+
+      const result = await Promise.all(
+        res.map(async (val, i) => {
+          const params = {
+            owner: val.ownerOf.toLowerCase(),
+            uid: val.uid,
+          };
+          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+          return {
+            ...val,
+            sellerUsername: res[0].attributes.ownerObject.attributes.username,
+            sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
+          };
+        })
+      );
+      // //console.log(result);
+
+      const userObject = await Moralis.Cloud.run("SM_getCreator", params);
+
       var contractAvatar = await Moralis.Cloud.run(
         "SM_getContractAvatar",
         params
       );
 
-      //  //console.log("contractAvatar: ", contractAvatar);
       if (contractAvatar === undefined) {
         contractAvatar = [];
       } else {
-        //  //console.log(contractAvatar);
+        // //console.log(contractAvatar);
       }
       const contractDetails = await contract.getNameAndSymbol(
         result[0].tokenAddress
       );
-      //  //console.log("got data");
+
       let prefix = "https://gateway.moralisipfs.com/ipfs/";
       const data = await Promise.all(
         result.map(async (item) => {
@@ -86,21 +124,23 @@ function SingleItem() {
             const res = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            //  //console.log(res);
             return {
               ...item,
               ...res.data,
-              creatorObject,
+              userObject,
               contractDetails,
               contractAvatar,
             };
           }
         })
       );
+      //   console.log("data fetch completed");
 
-      _setLoading(false);
-      return { history, data };
+      setLoading(false);
+      return { owner, data };
     } catch (error) {
-      _setLoading(false);
+      setLoading(false);
       // //console.log(error);
       return null;
     }
@@ -110,12 +150,13 @@ function SingleItem() {
     if (isInitialized) {
       getData().then((info) => {
         if (info !== null && info !== undefined) {
+          //   console.log(info.data);
           setData(info.data);
-          setHistory(info.history.history);
+          setOwner(info.owner);
         }
       });
     }
-  }, [isInitialized, _tokenId, _tokenAddress]);
+  }, [isInitialized, _tokenAddress, _tokenId, _uid]);
 
   return (
     <>
@@ -212,7 +253,7 @@ function SingleItem() {
                       onClick={async () => {
                         const user = await Moralis.User.current();
                         if (!user) {
-                          // navigate(`/connect-wallet`);
+                          //   navigate(`/connect-wallet`);
                           boughtError("Please connect wallet");
                         } else {
                           setOpen(true);
@@ -228,13 +269,12 @@ function SingleItem() {
                             setTimeout(() => {
                               setOpen(false);
                               setLoading(true);
-                              // navigate("/profile");
+                              navigate("/profile");
                             }, 1000);
                           } else {
                             setOpen(false);
                             setLoading(true);
                             boughtError(res.message);
-                            console.log(res);
                           }
                         }
                       }}
@@ -249,7 +289,7 @@ function SingleItem() {
                     </p>
                     <p>0.0007 SMKT</p>
                   </div> */}
-                  <div className="mt-4">
+                  {/* <div className="mt-4">
                     <p className="text-black">Item History</p>
                     <div className="overflow-auto scroll-y scroll-smooth h-[6rem] border- border-gray-300 rounded-lg py-2">
                       {history !== null && history.state === true ? (
@@ -305,7 +345,7 @@ function SingleItem() {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -318,4 +358,4 @@ function SingleItem() {
   );
 }
 
-export default SingleItem;
+export default BatchItem;
