@@ -197,9 +197,9 @@ function Profile() {
             Following
           </div>
         </div>
-        <div className="my-4">
+        <div className="my-8 lg:my-4">
           <ToggleButtonGroup
-            color="primary"
+            color="warning"
             value={alignment}
             exclusive
             onChange={handleChange}

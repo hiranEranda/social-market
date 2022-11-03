@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import "reactjs-popup/dist/index.css";
+import Backdrop from "@mui/material/Backdrop/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+
 import { useMoralis } from "react-moralis";
 import CardsPrice721 from "../../components/cards/CardsPrice721";
 
@@ -88,9 +91,14 @@ function OnSale({ isMultiple }) {
   }, [isInitialized]);
   return (
     <>
-      {loading ? //   <CircularProgress color="inherit" /> // > //   open //   sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} // <Backdrop
-      // </Backdrop>
-      null : (!loading && data === null) || data === undefined ? (
+      {loading ? (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : (!loading && data === null) || data === undefined ? (
         <div>Check your connectivity</div>
       ) : !loading && data.length === 0 ? (
         <div>No Items yet</div>
@@ -331,8 +339,22 @@ function OnSale({ isMultiple }) {
             //         {/* <ToastContainer position="bottom-right" />
             // <Response open={open} loading={loading} title={title} message={message} /> */}
             //       </div>
-            <CardsPrice721 val={data[1]} isMultiple={isMultiple} />
+            <>
+              {data[1].map((val, i) => (
+                <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+                  <CardsPrice721 val={val} isMultiple={isMultiple} />
+                </div>
+              ))}
+            </>
           ) : (
+            <>
+              {data[0].map((val, i) => (
+                <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+                  <CardsPrice721 val={val} isMultiple={isMultiple} />
+                </div>
+              ))}
+            </>
+            // <CardsPrice721 val={data[1]} isMultiple={isMultiple} />
             //       <div className="grid gap-4 mx-auto  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
             //         {data[0].map((val, i) => (
             //           <div
@@ -567,7 +589,6 @@ function OnSale({ isMultiple }) {
             //         {/* <ToastContainer position="bottom-right" />
             // <Response open={open} loading={loading} title={title} message={message} /> */}
             //       </div>
-            <CardsPrice721 val={data[0]} isMultiple={isMultiple} />
           )}
         </>
       )}

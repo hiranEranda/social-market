@@ -261,8 +261,14 @@ function HotBids() {
 
         <Slider {...settings}>
           {val.map((val, i) => (
-            <CardsPrice721 key={i} val={val} />
+            <div
+              key={i}
+              className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] "
+            >
+              <CardsPrice721 val={val} />
+            </div>
           ))}
+          {/* <CardsPrice721 val={val} /> */}
         </Slider>
       </div>
     </div>
