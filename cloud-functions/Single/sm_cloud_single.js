@@ -13,6 +13,8 @@ Moralis.Cloud.define("SM_initNftTables721", async (request) => {
   nftOwner721.set("owner", request.params.ownerOf);
   nftOwner721.set("tokenId", request.params.tokenId);
   nftOwner721.set("tokenAddress", request.params.tokenAddress);
+  nftOwner721.set("createdId", request.params.createdId);
+  nftOwner721.set("askingPrice", request.params.askingPrice.toString());
   nftOwner721.set("created", true);
   nftOwner721.set("uri", request.params.uri);
   await nftOwner721.save();

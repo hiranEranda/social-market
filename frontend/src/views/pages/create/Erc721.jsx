@@ -20,6 +20,7 @@ const Moralis = require("moralis-v1");
 
 function Erc721() {
   let tooltip = "Here type the tooltip message";
+  let isLazy = true;
 
   /// testing image upload//////////////////////////////////////////////////////////////////////
   const [picture, setPicture] = React.useState(null);
@@ -93,6 +94,7 @@ function Erc721() {
           picture,
           collectionAddress,
           selected,
+          isLazy,
           setLoading1,
           setLoading2,
           setLoading3,

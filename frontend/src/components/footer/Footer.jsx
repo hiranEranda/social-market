@@ -25,18 +25,18 @@ function Footer() {
             }}
           >
             <div className="container ">
-              <div className="row">
-                <div className="space-y-20 col-lg-4">
+              <div className="grid md:grid-cols-3 ">
+                <div className="pt-3 space-y-20 md:pt-0">
                   <h3>Customer Service</h3>
                   <span className="footer__text">: cs@sm.one</span>
                 </div>
-                <div className="col-lg-4 col-6">
+                <div className="pt-3 md:pt-0">
                   <p>
                     Receive NFT news! You can receive the latest domestic NFT
                     news and newsletters by e-mail.
                   </p>
                 </div>
-                <div className="col-lg-4 col-6">
+                <div className="pt-3 md:pt-0">
                   <h6 className="footer__title">Join the news subscription </h6>
                   <p>
                     Get up-to-date information about your shelves and get

@@ -3,8 +3,8 @@ pragma solidity ^0.8.4;
 
 import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../node_modules/hardhat/console.sol";
-
 contract MarketContract721 is ERC721, Ownable {
 
     uint96 private serviceFee = 500;
@@ -106,5 +106,38 @@ contract MarketContract721 is ERC721, Ownable {
         IERC721(itemsForSale[id].tokenAddress).safeTransferFrom(itemsForSale[id].seller, msg.sender, itemsForSale[id].tokenId);
 
         emit itemSold(id, msg.sender,itemsForSale[id].seller,itemsForSale[id].tokenId, itemsForSale[id].askingPrice);
+    }
+
+    function buyItemWithTokens(uint256 id, address creator, uint256 royalty, address payToken) payable external ItemExists(id) IsForSale(id) HasTransferApproval(itemsForSale[id].tokenAddress, itemsForSale[id].tokenId) {
+        require(msg.value >= itemsForSale[id].askingPrice, "Not enough funds sent");
+        // require(msg.sender != itemsForSale[id].seller, "Owner can't buy the item");
+
+        IERC20 paymentToken = IERC20(payToken);
+        uint256 price = itemsForSale[id].askingPrice;
+        address itemSeller = itemsForSale[id].seller;
+        uint256 itemTokenId = itemsForSale[id].tokenId;
+        address itemTokenAddress = itemsForSale[id].tokenAddress;
+
+
+        // require(paymentToken.allowance(msg.sender, address(this)) >= itemsForSale[id].askingPrice,"Insuficient Allowance");
+        // require(paymentToken.transferFrom(msg.sender,address(this),itemsForSale[id].askingPrice),"transfer Failed");
+
+
+        itemsForSale[id].isSold = true;
+        activeItems[itemTokenAddress][itemTokenId] = false; 
+       
+        // transfer funds to seller
+        paymentToken.transfer(itemSeller, price - ((price * serviceFee / 10000) + royalty));
+
+        // transfer funds to contract owner
+        paymentToken.transfer(payable(owner()), price * serviceFee / 10000);
+
+        // transfer royalty finds to creator
+        paymentToken.transfer(payable(creator), royalty);
+
+        // Transfer the NFT to new owner
+        IERC721(itemTokenAddress).safeTransferFrom(itemSeller, msg.sender, itemTokenId);
+
+        emit itemSold(id, msg.sender,itemSeller,itemTokenId, price);
     }
 }

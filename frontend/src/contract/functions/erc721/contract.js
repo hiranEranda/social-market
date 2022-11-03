@@ -47,30 +47,45 @@ const getNameAndSymbol = async (address = null) => {
 };
 
 // mint function
-const mintNft = async (metadataUrl, address = null) => {
+const mintNft = async (metadataUrl, askingPrice, isLazy, address = null) => {
   // configure the required contract address
   let contractAddress = null;
   address === null
     ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
     : (contractAddress = address);
 
-  try {
-    const contract = await tokenContractInstance(contractAddress);
-    // //console.log(contract);
+  if (!isLazy) {
+    try {
+      const contract = await tokenContractInstance(contractAddress);
 
-    var tx = await contract.createItem(metadataUrl);
-    let receipt = await tx.wait(2);
-    // //console.log(receipt);
-    let sumEvent = receipt.events.pop();
-    var hexString = sumEvent.args.tokenId._hex;
+      var tx = await contract.createItem(metadataUrl, askingPrice, isLazy);
+      let receipt = await tx.wait(2);
+      let sumEvent = receipt.events.pop();
+      var hexString = sumEvent.args.tokenId._hex;
+      var nftId = parseInt(hexString, 16);
+      console.log("nftId: ", nftId);
 
-    var yourNumber = parseInt(hexString, 16);
-    // //console.log(yourNumber);
-  } catch (error) {
-    // //console.log(error);
+      var id = await contract.getId();
+      var createdId = parseInt(id, 16);
+      console.log("id: ", createdId);
+    } catch (error) {
+      console.log(error);
+    }
+    return { nftId, createdId };
+  } else {
+    try {
+      const contract = await tokenContractInstance(contractAddress);
+
+      var tx = await contract.createItem(metadataUrl, askingPrice, isLazy);
+      var nftId = null;
+
+      var id = await contract.getId();
+      var createdId = parseInt(id, 16);
+    } catch (error) {
+      console.log(error);
+    }
+    return { nftId, createdId };
   }
-  // //console.log(yourNumber);
-  return yourNumber;
 };
 
 //marketplace interactions
@@ -81,24 +96,37 @@ const ensureMarketplaceIsApproved = async (tokenId, address = null) => {
     ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
     : (contractAddress = address);
 
-  const contract = await tokenContractInstance(contractAddress);
-  let receipt = null;
-  const user = await Moralis.User.current();
+  try {
+    const contract = await tokenContractInstance(contractAddress);
+    let receipt = null;
+    const user = await Moralis.User.current();
+    try {
+      var approvedAddress = await contract.getApproved(tokenId.toString());
+    } catch (error) {
+      console.log(error);
+    }
 
-  const approvedAddress = await contract.getApproved(tokenId);
-  if (
-    approvedAddress != process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721
-  ) {
-    var tx = await contract.approve(
-      process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721,
-      tokenId,
-      {
-        from: user.get("ethAddress"),
+    if (
+      approvedAddress != process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721
+    ) {
+      try {
+        var tx = await contract.approve(
+          process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721,
+          tokenId,
+          {
+            from: user.get("ethAddress"),
+          }
+        );
+      } catch (error) {
+        console.log(error);
       }
-    );
-    receipt = await tx.wait(2);
+
+      receipt = await tx.wait(2);
+    }
+    return receipt;
+  } catch (error) {
+    console.log(error);
   }
-  return receipt;
 };
 
 const changePrice = async (uid, tokenId, tokenAddress, newPrice) => {

@@ -14,6 +14,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
 import { useMoralis } from "react-moralis";
 import { useNavigate } from "react-router-dom";
+import { useMoralisWeb3ApiCall, useMoralisWeb3Api } from "react-moralis";
 
 const Moralis = require("moralis-v1");
 
