@@ -136,3 +136,16 @@ Moralis.Cloud.define("SM_popularCreators", async (request) => {
 
   return results;
 });
+Moralis.Cloud.define("FetchJson", async (request) => {
+  return Moralis.Cloud.httpRequest({
+    method: "GET",
+    url: request.params.url,
+  });
+});
+
+Moralis.Cloud.define("SM_getUser", async (request) => {
+  const query2 = new Moralis.Query(Moralis.User);
+  query2.equalTo("ethAddress", request.params.ethAddress);
+  const user = await query2.find({ useMasterKey: true });
+  return user;
+});

@@ -13,11 +13,15 @@ import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
 import { useMoralis } from "react-moralis";
+import { useNavigate } from "react-router-dom";
 
 const Moralis = require("moralis-v1");
 
 const Home1 = () => {
+  let navigate = useNavigate();
+
   const [data, setData] = React.useState(null);
+  const [collectionData, setCollectionData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const { isInitialized } = useMoralis();
 
@@ -59,7 +63,7 @@ const Home1 = () => {
           };
 
           const res = await Moralis.Cloud.run("SM_getUserDetails", params);
-          console.log(res);
+
           return {
             ...val,
             sellerUsername: res[0].attributes.ownerObject.attributes.username,
@@ -92,11 +96,65 @@ const Home1 = () => {
     }
   };
 
+  const getCollectionData = async () => {
+    setLoading(true);
+    try {
+      // const user = await Moralis.User.current();
+      const query1 = new Moralis.Query("SM_ContractOwners");
+
+      query1.equalTo("collectionType", "erc1155");
+      const collection = await query1.find();
+
+      const data = await Promise.all(
+        collection.map(async (item) => {
+          let params = {
+            // ethAddress: user.get("ethAddress").toLowerCase(),
+            tokenAddress: item.attributes.collectionAddress,
+            isAll: true,
+          };
+          const user = await Moralis.Cloud.run("SM_getUser", {
+            ethAddress: item.attributes.userAddress,
+          });
+          //   console.log(user);
+
+          const items = await Moralis.Cloud.run("SM_getCollectionData", params);
+          const nfts = await Promise.all(
+            items.map(async (item) => {
+              let prefix = "https://gateway.moralisipfs.com/ipfs/";
+              let uri =
+                prefix + item.tokenUri.substring(34, item.tokenUri.length);
+              //   const result = await fetch(uri);
+              const result = await Moralis.Cloud.run("FetchJson", {
+                url: uri,
+              });
+
+              //   return { ...item, ...(await result.json()) };
+              return { ...item, ...result.data };
+            })
+          );
+
+          return { ...item.attributes, nfts, user };
+        })
+      );
+
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      //  //console.log(error.message);
+      return null;
+    }
+  };
+
   React.useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
         // console.log(data);
         setData(data);
+      });
+      getCollectionData().then((data) => {
+        console.log(data);
+        setCollectionData(data);
       });
     }
   }, [isInitialized]);
@@ -130,8 +188,20 @@ const Home1 = () => {
           ⚡️
         </h2>
       </div>
-
-      <ResponsiveSlider />
+      {loading ? (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : (!loading && data === null) || data === undefined ? (
+        <div>Check your connectivity</div>
+      ) : !loading && data.length === 0 ? (
+        <div>No Items yet</div>
+      ) : (
+        <ResponsiveSlider data={data[0]} />
+      )}
       <div
         className="mx-auto max-w-[1400px]"
         style={{
@@ -164,6 +234,49 @@ const Home1 = () => {
         <h2 style={{ paddingBottom: "1.5rem" }}>
           <span style={{ color: "#c19a2e" }}>Top </span> Collections
         </h2>
+
+        {loading ? (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        ) : (!loading && collectionData === null) ||
+          collectionData === undefined ? (
+          <div>Check your connectivity</div>
+        ) : !loading && collectionData.length === 0 ? (
+          <div>No Items yet</div>
+        ) : (
+          <div className="flex">
+            {collectionData.slice(0, 5).map((val, i) => (
+              <div
+                key={i}
+                className="h-[54px] max-w-[300px] mb-10 mr-3 choose_collection mb-md-0 mr-md-3 border-1 border-gray-300"
+                type="button"
+                onClick={() => {
+                  navigate(`/all-collections`);
+                }}
+              >
+                <div className="flex items-center">
+                  <img
+                    className="object-cover w-10 h-10 rounded-full"
+                    src={
+                      val === null ||
+                      val.user[0].attributes.avatar === undefined
+                        ? "/images/avatar.png"
+                        : val.user[0].attributes.avatar._url
+                    }
+                    alt=""
+                  />
+                  <span className="flex items-center px-3 text-sm">
+                    {val.name}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div

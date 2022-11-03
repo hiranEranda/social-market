@@ -201,7 +201,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
 const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
   <img src="/images/right-arrow.svg" alt="nextArrow" {...props} />
 );
-function HotBids() {
+function HotBids({ data }) {
   const settings = {
     dots: true,
     infinite: false,
@@ -260,10 +260,10 @@ function HotBids() {
         </div>
 
         <Slider {...settings}>
-          {val.map((val, i) => (
+          {data.map((val, i) => (
             <div
               key={i}
-              className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] "
+              className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] pt-2"
             >
               <CardsPrice721 val={val} />
             </div>

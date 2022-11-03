@@ -12,14 +12,16 @@ function Footer() {
         // minHeight: "100vh",
         flexDirection: "column",
         justifyContent: "flex-start",
+        marginTop: "2rem",
       }}
     >
       <div className="border-black border-1">
         <div>
           <footer
-            className="border-black footer__1 border-1"
+            className="border-t border-black footer__1 border-1"
             style={{
               paddingBottom: "5rem",
+              marginTop: "auto",
             }}
           >
             <div className="container ">
@@ -45,11 +47,7 @@ function Footer() {
             </div>
           </footer>
         </div>
-        <div
-          style={{
-            border: "1px solid #000",
-          }}
-        >
+        <div>
           <footer className="footer__1" style={{ marginTop: "auto" }}>
             <div className="container">
               <div className="row">

@@ -104,6 +104,10 @@ function Erc721() {
       }
       if (state.state) {
         setBackDrop(false);
+        setLoading1(true);
+        setLoading2(true);
+        setLoading3(true);
+        setLoading4(true);
         created(state.message);
         setTimeout(() => {
           // navigate("/profile");
