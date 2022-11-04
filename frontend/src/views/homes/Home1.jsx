@@ -14,7 +14,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
 import { useMoralis } from "react-moralis";
 import { useNavigate } from "react-router-dom";
-import { useMoralisWeb3ApiCall, useMoralisWeb3Api } from "react-moralis";
+import CardsMint721 from "../../components/cards/CardsMint721";
 
 const Moralis = require("moralis-v1");
 
@@ -22,6 +22,7 @@ const Home1 = () => {
   let navigate = useNavigate();
 
   const [data, setData] = React.useState(null);
+  const [lazyData, setLazyData] = React.useState(null);
   const [collectionData, setCollectionData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const { isInitialized } = useMoralis();
@@ -97,6 +98,40 @@ const Home1 = () => {
     }
   };
 
+  const getLazyData = async () => {
+    setLoading(true);
+    // //console.log("getting data");
+    try {
+      let prefix = "https://gateway.moralisipfs.com/ipfs/";
+
+      const result1 = await Moralis.Cloud.run("SM_getLazySingle");
+
+      const data1 = await Promise.all(
+        result1.map(async (item) => {
+          if (item) {
+            let uri =
+              prefix +
+              item.attributes.uri.substring(34, item.attributes.uri.length);
+            // const result = await fetch(uri);
+            const result = await Moralis.Cloud.run("FetchJson", { url: uri });
+
+            return { ...item.attributes, ...result.data };
+          }
+        })
+      );
+
+      //  //console.log(data2);
+      // data.push(data1);
+
+      setLoading(false);
+      return data1;
+    } catch (error) {
+      setLoading(false);
+      //  //console.log(error.message);
+      return null;
+    }
+  };
+
   const getCollectionData = async () => {
     setLoading(true);
     try {
@@ -156,6 +191,10 @@ const Home1 = () => {
       getCollectionData().then((data) => {
         console.log(data);
         setCollectionData(data);
+      });
+      getLazyData().then((data) => {
+        console.log(data);
+        setLazyData(data);
       });
     }
   }, [isInitialized]);
@@ -336,6 +375,45 @@ const Home1 = () => {
             )}
           </div>
         )}
+      </div>
+      <div
+        className="w-full mx-auto"
+        style={{
+          padding: "3em 3.5rem 3em 3.5rem",
+          backgroundColor: "#fff",
+        }}
+      >
+        <div className="mx-auto max-w-[1280px]">
+          <h2 style={{ paddingBottom: "1.5rem" }}>
+            <span style={{ color: "#c19a2e" }}>Mint </span> now 🏆
+          </h2>
+        </div>
+        <div className="max-w-[1400px] mx-auto">
+          {loading ? (
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          ) : (!loading && data === null) || data === undefined ? (
+            <div>Check your connectivity</div>
+          ) : !loading && data.length === 0 ? (
+            <div>No Items yet</div>
+          ) : (
+            <div className="mx-auto">
+              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+                {lazyData.map((val, i) => (
+                  <>
+                    {/* {console.log(val)} */}
+
+                    <CardsMint721 val={val} isMultiple={false} />
+                  </>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <Footer />
     </div>

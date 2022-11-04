@@ -88,7 +88,11 @@ const create = async (
         };
       }
       try {
-        await Moralis.Cloud.run("SM_initNftTables721", params2);
+        if (!isLazy) {
+          await Moralis.Cloud.run("SM_initNftTables721", params2);
+        } else {
+          await Moralis.Cloud.run("SM_initLazyNftTables721", params2);
+        }
       } catch (error) {
         console.log(error.message);
         return { state: true, message: error.message };

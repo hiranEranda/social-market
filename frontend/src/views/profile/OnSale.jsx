@@ -340,19 +340,21 @@ function OnSale({ isMultiple }) {
             // <Response open={open} loading={loading} title={title} message={message} /> */}
             //       </div>
             <>
-              {data[1].map((val, i) => (
-                <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-                  <CardsPrice721 val={val} isMultiple={isMultiple} />
-                </div>
-              ))}
+              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+                {data[1].map((val, i) => (
+                  <>
+                    <CardsPrice721 val={val} isMultiple={isMultiple} />
+                  </>
+                ))}
+              </div>
             </>
           ) : (
             <>
-              {data[0].map((val, i) => (
-                <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+                {data[0].map((val, i) => (
                   <CardsPrice721 val={val} isMultiple={isMultiple} />
-                </div>
-              ))}
+                ))}
+              </div>
             </>
             // <CardsPrice721 val={data[1]} isMultiple={isMultiple} />
             //       <div className="grid gap-4 mx-auto  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
