@@ -12,9 +12,7 @@ function CardsMint721({ val, isMultiple }) {
     <div
       className="mx-auto"
       style={{
-        // width: "260px",
         maxWidth: "260px",
-        // padding: "0.5em",
       }}
       // key={i}
     >
