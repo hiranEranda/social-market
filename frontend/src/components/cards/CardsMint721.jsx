@@ -8,10 +8,7 @@ import lazyMint1155 from "../../contract/functions/erc1155/lazymint";
 const Moralis = require("moralis-v1");
 
 function CardsMint721({ val, isMultiple }) {
-  // console.log(val);
   return (
-    // <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-    // {val.map((val, i) => (
     <div
       className="mx-auto"
       style={{

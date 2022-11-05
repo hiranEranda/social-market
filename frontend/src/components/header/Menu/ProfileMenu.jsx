@@ -38,7 +38,7 @@ function ProfileMenu() {
             onClick={async () => {
               await logout();
               // window.location.href = "/";
-              navigate(`/`);
+              // navigate(`/`);
             }}
           >
             Log out
