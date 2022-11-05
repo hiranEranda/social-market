@@ -55,7 +55,9 @@ function Collection(props) {
 
   return (
     <div className="mt-3 space-y-10">
-      <span className="variationInput">Choose collection</span>
+      <span className="text-lg text-black variationInput">
+        Choose collection
+      </span>
 
       <div
         className="pt-1 pb-1 d-flex flex-column flex-md-row"

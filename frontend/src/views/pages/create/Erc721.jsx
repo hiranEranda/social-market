@@ -20,7 +20,6 @@ const Moralis = require("moralis-v1");
 
 function Erc721() {
   let tooltip = "Here type the tooltip message";
-  let isLazy = true;
 
   /// testing image upload//////////////////////////////////////////////////////////////////////
   const [picture, setPicture] = React.useState(null);
@@ -72,7 +71,8 @@ function Erc721() {
   const createdError = (msg) => toast.error(msg);
   const createdWarn = (msg) => toast.warn(msg);
 
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = React.useState(true);
+  const [isLazy, setIsLazy] = React.useState(false);
   const [collectionAddress, setCollectionAddress] = React.useState(null);
 
   const handleSubmit = async (values) => {
@@ -102,7 +102,7 @@ function Erc721() {
         );
         setTimeout(() => {
           setOpen(false);
-        }, 1000);
+        }, 2000);
       }
       if (state.state) {
         setBackDrop(false);
@@ -138,6 +138,7 @@ function Erc721() {
           loading3={loading3}
           loading4={loading4}
           selected={selected}
+          isLazy={isLazy}
         />
         <div className="p-4 border-gray-300 rounded-lg m- border-1">
           <div className="grid gap-2 lg:grid-cols-2">
@@ -175,17 +176,19 @@ function Erc721() {
               >
                 <Form>
                   <div className="space-y-10">
-                    <span className="nameInput">Title</span>
+                    <span className="text-lg text-black nameInput">Title</span>
                     <Field
                       name="title"
                       type="text"
                       className="form-control"
-                      placeholder="e. g. `vault design art`"
+                      placeholder="e. g. `Design art`"
                     />
                     <ErrorMessage name="title" component={TextError} />
                   </div>
                   <div className="mt-3 space-y-10">
-                    <span className="nameInput">Category</span>
+                    <span className="text-lg text-black nameInput">
+                      Category
+                    </span>
 
                     <Field
                       as="select"
@@ -202,7 +205,7 @@ function Erc721() {
                     <ErrorMessage name="collection" component={TextError} />
                   </div>
                   <div className="mt-3 space-y-10">
-                    <span className="nameInput">
+                    <span className="text-lg text-black nameInput">
                       Description
                       <span className="color_text">(optional) </span>
                     </span>
@@ -217,7 +220,9 @@ function Erc721() {
 
                   <>
                     <div className="mt-3 space-y-10">
-                      <span className="nameInput">Royalty</span>
+                      <span className="text-lg text-black nameInput">
+                        Royalty
+                      </span>
                       <Field
                         name="royalty"
                         type="number"
@@ -230,41 +235,70 @@ function Erc721() {
                       value={{ flag: false }}
                       setCollectionAddress={setCollectionAddress}
                     />
-
-                    <div className="mt-3 d-flex align-items-center">
-                      <span className="mr-3">Add Items to marketplace</span>
-                      <ToggleButton
-                        value="check"
-                        selected={selected}
-                        onChange={() => {
-                          setSelected(!selected);
-                        }}
-                        style={
-                          selected ? { color: "green" } : { color: "black" }
-                        }
-                      >
-                        <CheckIcon />
-                      </ToggleButton>
-                    </div>
-                    {selected ? (
-                      <div className="space-y-10">
-                        <span className="nameInput">Price</span>
-                        <Tooltip title={tooltip}>
-                          <i className="float-right ri-information-line d-flex"></i>
-                        </Tooltip>
-                        <div className="d-flex align-items-center">
-                          <FaEthereum size={25} />
-                          <span className="mx-2">ETH</span>
-                          <Field
-                            name="price"
-                            type="number"
-                            className="form-control"
-                            placeholder="Price"
-                          />
+                    <div className="flex mb-3">
+                      <div className="mt-3 d-flex align-items-center">
+                        <div className="mr-5">
+                          <span className="mr-3 text-lg text-black">
+                            Free minting
+                          </span>
+                          <p className="mr-3 text-sm">
+                            Buyer will pay gas fees for minting
+                          </p>
                         </div>
-                        <ErrorMessage name="price" component={TextError} />
+
+                        <ToggleButton
+                          value="check"
+                          selected={isLazy}
+                          onChange={() => {
+                            setIsLazy(!isLazy);
+                          }}
+                          style={
+                            isLazy
+                              ? { color: "black", backgroundColor: "#90EE90" }
+                              : { color: "black" }
+                          }
+                        >
+                          <CheckIcon />
+                        </ToggleButton>
                       </div>
-                    ) : null}
+                      {/* {!isLazy ? (
+                        <div className="mt-3 ml-3 d-flex align-items-center">
+                          <span className="mr-3">Add Items to marketplace</span>
+                          <ToggleButton
+                            value="check"
+                            selected={selected}
+                            onChange={() => {
+                              setSelected(!selected);
+                            }}
+                            style={
+                              selected ? { color: "green" } : { color: "black" }
+                            }
+                          >
+                            <CheckIcon />
+                          </ToggleButton>
+                        </div>
+                      ) : null} */}
+                    </div>
+
+                    <div className="space-y-10">
+                      <span className="text-lg text-black nameInput">
+                        Price
+                      </span>
+                      <Tooltip title={tooltip}>
+                        <i className="float-right ri-information-line d-flex"></i>
+                      </Tooltip>
+                      <div className="d-flex align-items-center">
+                        <FaEthereum size={25} />
+                        <span className="mx-2">ETH</span>
+                        <Field
+                          name="price"
+                          type="number"
+                          className="form-control"
+                          placeholder="Price"
+                        />
+                      </div>
+                      <ErrorMessage name="price" component={TextError} />
+                    </div>
                   </>
                   <button className="mt-2 btn btn-grad" type="submit">
                     Create NFT

@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import "reactjs-popup/dist/index.css";
+import lazyMint721 from "../../contract/functions/erc721/lazymint";
+import lazyMint1155 from "../../contract/functions/erc1155/lazymint";
+
 const Moralis = require("moralis-v1");
 
 function CardsMint721({ val, isMultiple }) {
@@ -27,6 +30,7 @@ function CardsMint721({ val, isMultiple }) {
                 <img
                   // src={`/images/avatar.png`}
                   src={
+                    val === undefined ||
                     !val.ownerObject.attributes.Avatar ||
                     !val.ownerObject.attributes.Avatar === undefined ||
                     !val.ownerObject.attributes.Avatar === null
@@ -39,7 +43,8 @@ function CardsMint721({ val, isMultiple }) {
               </Link>
               <Link to={`#`}>
                 <p className="avatars_name txt_xs">
-                  {!val.ownerObject.attributes.username.length > 10
+                  {val === undefined ||
+                  !val.ownerObject.attributes.username.length > 10
                     ? `@${!val.ownerObject.attributes.username.substring(
                         0,
                         10
@@ -202,31 +207,49 @@ function CardsMint721({ val, isMultiple }) {
                       </Popup> */}
               </div>
               <button
-                // onClick={async () => {
-                //   const user = await Moralis.User.current();
-                //   if (!user) {
-                //     navigate("/connect-wallet");
-                //   } else {
-                //     setOpen(true);
-                //     setTitle("Buy Item");
-                //     setMessage("Sign the transaction to buy item");
-                //     let res = await contract.buyItem(val, authenticate);
-                //     if (res.status) {
-                //       setLoading(false);
-                //       bought(res.message);
+                onClick={async () => {
+                  const user = await Moralis.User.current();
+                  if (!user) {
+                    alert("connect wallet");
+                  } else {
+                    if (!isMultiple) {
+                      // setOpen(true);
+                      // setTitle("Buy Item");
+                      // setMessage("Sign the transaction to buy item");
+                      // console.log(val);
+                      let res = await lazyMint721(
+                        val.uri,
+                        val.tokenAddress,
+                        val.askingPrice,
+                        val.id,
+                        val.owner
+                      );
+                      //     if (res.status) {
+                      //       setLoading(false);
+                      //       bought(res.message);
 
-                //       setTimeout(() => {
-                //         setOpen(false);
-                //         setLoading(true);
-                //         navigate("/profile");
-                //       }, 1000);
-                //     } else {
-                //       setOpen(false);
-                //       setLoading(true);
-                //       boughtError(res.message);
-                //     }
-                //   }
-                // }}
+                      //       setTimeout(() => {
+                      //         setOpen(false);
+                      //         setLoading(true);
+                      //         navigate("/profile");
+                      //       }, 1000);
+                      //     } else {
+                      //       setOpen(false);
+                      //       setLoading(true);
+                      //       boughtError(res.message);
+                      //     }
+                    } else {
+                      let res = await lazyMint1155(
+                        val.uri,
+                        val.tokenAddress,
+                        val.askingPrice,
+                        val.id,
+                        val.owner,
+                        val.amount
+                      );
+                    }
+                  }
+                }}
                 className="btn btn-sm btn-white"
               >
                 Mint Now

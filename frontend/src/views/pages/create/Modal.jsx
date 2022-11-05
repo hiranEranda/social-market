@@ -10,7 +10,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function FormDialog(props) {
-  const { open, loading1, loading2, loading3, loading4, selected } = props;
+  const { open, loading1, loading2, loading3, loading4, selected, isLazy } =
+    props;
 
   return (
     <div>
@@ -19,7 +20,7 @@ export default function FormDialog(props) {
 
         <DialogContent>
           <div className="d-flex row">
-            {selected ? (
+            {selected && !isLazy ? (
               <>
                 {" "}
                 <LoadingButton
@@ -63,9 +64,8 @@ export default function FormDialog(props) {
                   Adding Item to marketplace
                 </LoadingButton>{" "}
               </>
-            ) : (
+            ) : !selected && !isLazy ? (
               <>
-                {" "}
                 <LoadingButton
                   className="mb-2"
                   color="success"
@@ -97,7 +97,30 @@ export default function FormDialog(props) {
                   Approve item for sale
                 </LoadingButton>
               </>
-            )}
+            ) : isLazy ? (
+              <>
+                <LoadingButton
+                  className="mb-2"
+                  color="success"
+                  loading={loading1}
+                  loadingPosition="start"
+                  startIcon={<CheckCircleIcon />}
+                  variant="contained"
+                >
+                  Saving NFT to IPFS
+                </LoadingButton>
+                <LoadingButton
+                  className="mb-2"
+                  color="success"
+                  loading={loading2}
+                  loadingPosition="start"
+                  startIcon={<CheckCircleIcon />}
+                  variant="contained"
+                >
+                  Adding to marketplace
+                </LoadingButton>
+              </>
+            ) : null}
           </div>
         </DialogContent>
       </Dialog>

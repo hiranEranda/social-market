@@ -31,11 +31,25 @@ contract TokenContract1155 is ERC1155, Ownable, ERC1155Supply,ERC1155Burnable {
         _;
     }
 
-    function createItem(address account, uint256 amount, string memory tokenUri) public  returns (uint256){
+    function mintNft(address account, uint256 amount, string memory tokenUri) public returns (uint256){
 
          _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(account, newItemId, amount, "");
+        setUri(newItemId,tokenUri);
+
+        return newItemId;
+    }
+
+    function lazyMint(address account, string memory tokenUri, uint256 askingPrice, address creator) public payable returns (uint256){
+        require(msg.value >= askingPrice , "Amount of ether sent not correct."); 
+
+        address payable _creator = payable(creator);
+        _creator.transfer(askingPrice);
+
+         _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _mint(account, newItemId, 1, "");
         setUri(newItemId,tokenUri);
 
         return newItemId;

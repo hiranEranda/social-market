@@ -76,7 +76,9 @@ function Erc1155() {
   const createdError = (msg) => toast.error(msg);
   const createdWarn = (msg) => toast.warn(msg);
 
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = React.useState(true);
+  const [isLazy, setIsLazy] = React.useState(false);
+
   const [collectionAddress, setCollectionAddress] = React.useState(null);
 
   const handleSubmit = async (values) => {
@@ -97,6 +99,7 @@ function Erc1155() {
           picture,
           collectionAddress,
           selected,
+          isLazy,
           setLoading1,
           setLoading2,
           setLoading3,
@@ -107,6 +110,10 @@ function Erc1155() {
         }, 1000);
         if (status.state) {
           setBackDrop(false);
+          setLoading1(true);
+          setLoading2(true);
+          setLoading3(true);
+          setLoading4(true);
           created(status.message);
           setTimeout(() => {
             // navigate("/profile");
@@ -136,6 +143,7 @@ function Erc1155() {
           loading3={loading3}
           loading4={loading4}
           selected={selected}
+          isLazy={isLazy}
         />
         <div className="p-4 border-gray-300 rounded-lg border-1">
           <div className="grid gap-2 lg:grid-cols-2">
@@ -172,17 +180,19 @@ function Erc1155() {
               >
                 <Form>
                   <div className="space-y-10">
-                    <span className="nameInput">Title</span>
+                    <span className="text-lg text-black nameInput">Title</span>
                     <Field
                       name="title"
                       type="text"
                       className="form-control"
-                      placeholder="e. g. `vault design art`"
+                      placeholder="e. g. `Design art`"
                     />
                     <ErrorMessage name="title" component={TextError} />
                   </div>
                   <div className="mt-3 space-y-10">
-                    <span className="nameInput">Category</span>
+                    <span className="text-lg text-black nameInput">
+                      Category
+                    </span>
 
                     <Field
                       as="select"
@@ -199,7 +209,7 @@ function Erc1155() {
                     <ErrorMessage name="collection" component={TextError} />
                   </div>
                   <div className="mt-3 space-y-10">
-                    <span className="nameInput">
+                    <span className="text-lg text-black nameInput">
                       Description
                       <span className="color_text">(optional) </span>
                     </span>
@@ -211,9 +221,8 @@ function Erc1155() {
                     />
                     <ErrorMessage name="description" component={TextError} />
                   </div>
-
                   <div className="mt-3">
-                    <span className="nameInput">Amount</span>
+                    <span className="text-lg text-black nameInput">Amount</span>
                     <Field
                       name="amount"
                       type="number"
@@ -222,9 +231,10 @@ function Erc1155() {
                     />
                     <ErrorMessage name="amount" component={TextError} />
                   </div>
-
                   <div className="mt-3">
-                    <span className="nameInput">Royalty</span>
+                    <span className="text-lg text-black nameInput">
+                      Royalty
+                    </span>
                     <Field
                       name="royalty"
                       type="number"
@@ -237,48 +247,78 @@ function Erc1155() {
                     value={{ flag: true }}
                     setCollectionAddress={setCollectionAddress}
                   />
-
                   {/*---------------------------------------------------------------------------------------------------------------*/}
-                  <div className="mt-3 d-flex align-items-center">
-                    <span className="mr-3">Add Items to marketplace</span>
-                    <ToggleButton
-                      value="check"
-                      selected={selected}
-                      onChange={() => {
-                        setSelected(!selected);
-                      }}
-                      style={selected ? { color: "green" } : { color: "black" }}
-                    >
-                      <CheckIcon />
-                    </ToggleButton>
-                  </div>
+                  <div className="flex mt-2 mb-3">
+                    <div className="mt-3 d-flex align-items-center">
+                      <div className="mr-5">
+                        <span className="mr-3 text-lg text-black">
+                          Free minting
+                        </span>
+                        <p className="mr-3 text-sm">
+                          Buyer will pay gas fees for minting
+                        </p>
+                      </div>
 
-                  {/*---------------------------------------------------------------------------------------------------------------*/}
-                  {selected ? (
-                    <div className="space-y-10">
-                      <div>
-                        <div className="mt-2 col">
-                          <span className="nameInput">Price</span>
-                          <Tooltip title={tooltip}>
-                            <i className="float-right ri-information-line d-flex"></i>
-                          </Tooltip>
-                          <div className="d-flex align-items-center">
-                            <FaEthereum size={25} />
-                            <span className="mx-2">ETH</span>
-
-                            <Field
-                              name="price"
-                              type="number"
-                              className="form-control"
-                              placeholder="Price "
-                            />
-                          </div>
-                          <ErrorMessage name="price" component={TextError} />
+                      <ToggleButton
+                        value="check"
+                        selected={isLazy}
+                        onChange={() => {
+                          setIsLazy(!isLazy);
+                        }}
+                        style={
+                          isLazy
+                            ? { color: "black", backgroundColor: "#90EE90" }
+                            : { color: "black" }
+                        }
+                      >
+                        <CheckIcon />
+                      </ToggleButton>
+                    </div>
+                    {/* {!isLazy ? (
+                        <div className="mt-3 ml-3 d-flex align-items-center">
+                          <span className="mr-3">Add Items to marketplace</span>
+                          <ToggleButton
+                            value="check"
+                            selected={selected}
+                            onChange={() => {
+                              setSelected(!selected);
+                            }}
+                            style={
+                              selected ? { color: "green" } : { color: "black" }
+                            }
+                          >
+                            <CheckIcon />
+                          </ToggleButton>
                         </div>
+                      ) : null} */}
+                  </div>
+                  {/*---------------------------------------------------------------------------------------------------------------*/}
+
+                  <div className="space-y-10">
+                    <div>
+                      <div className="mt-3 col">
+                        <span className="text-lg text-black nameInput">
+                          Price
+                        </span>
+                        <Tooltip title={tooltip}>
+                          <i className="float-right ri-information-line d-flex"></i>
+                        </Tooltip>
+                        <div className="d-flex align-items-center">
+                          <FaEthereum size={25} />
+                          <span className="mx-2">ETH</span>
+
+                          <Field
+                            name="price"
+                            type="number"
+                            className="form-control"
+                            placeholder="Price "
+                          />
+                        </div>
+                        <ErrorMessage name="price" component={TextError} />
                       </div>
                     </div>
-                  ) : null}
-                  <button className="mt-2 btn btn-grad" type="submit">
+                  </div>
+                  <button className="mt-3 btn btn-grad" type="submit">
                     Create NFT
                   </button>
                 </Form>

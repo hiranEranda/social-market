@@ -103,28 +103,47 @@ const Home1 = () => {
     // //console.log("getting data");
     try {
       let prefix = "https://gateway.moralisipfs.com/ipfs/";
+      let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getLazySingle");
 
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {
+            const id = { id: item.id };
             let uri =
               prefix +
               item.attributes.uri.substring(34, item.attributes.uri.length);
             // const result = await fetch(uri);
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });
 
-            return { ...item.attributes, ...result.data };
+            return { ...item.attributes, ...result.data, ...id };
           }
         })
       );
 
-      //  //console.log(data2);
-      // data.push(data1);
+      const result2 = await Moralis.Cloud.run("SM_getLazyBatch");
+      // console.log(result2);
+      const data2 = await Promise.all(
+        result2.map(async (item) => {
+          if (item) {
+            const id = { id: item.id };
+            let uri =
+              prefix +
+              item.attributes.uri.substring(34, item.attributes.uri.length);
+            // const result = await fetch(uri);
+            const result = await Moralis.Cloud.run("FetchJson", { url: uri });
+
+            return { ...item.attributes, ...result.data, ...id };
+          }
+        })
+      );
+
+      data.push(data1);
+      data.push(data2);
 
       setLoading(false);
-      return data1;
+      return data;
     } catch (error) {
       setLoading(false);
       //  //console.log(error.message);
@@ -189,7 +208,7 @@ const Home1 = () => {
         setData(data);
       });
       getCollectionData().then((data) => {
-        console.log(data);
+        // console.log(data);
         setCollectionData(data);
       });
       getLazyData().then((data) => {
@@ -201,6 +220,7 @@ const Home1 = () => {
 
   const [alignment, setAlignment] = React.useState("ERC-721");
   const [type, setType] = React.useState("ERC-721");
+  const [typeMint, setTypeMint] = React.useState("ERC-721");
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -387,6 +407,28 @@ const Home1 = () => {
           <h2 style={{ paddingBottom: "1.5rem" }}>
             <span style={{ color: "#c19a2e" }}>Mint </span> now 🏆
           </h2>
+          <div className="mb-3">
+            <ToggleButtonGroup
+              color="primary"
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform"
+            >
+              <ToggleButton
+                onClick={() => setTypeMint("ERC-721")}
+                value="ERC-721"
+              >
+                ERC-721
+              </ToggleButton>
+              <ToggleButton
+                onClick={() => setTypeMint("ERC-1155")}
+                value="ERC-1155"
+              >
+                ERC-1155
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
         </div>
         <div className="max-w-[1400px] mx-auto">
           {loading ? (
@@ -396,20 +438,30 @@ const Home1 = () => {
             >
               <CircularProgress color="inherit" />
             </Backdrop>
-          ) : (!loading && data === null) || data === undefined ? (
+          ) : (!loading && lazyData === null) || lazyData === undefined ? (
             <div>Check your connectivity</div>
-          ) : !loading && data.length === 0 ? (
+          ) : !loading && lazyData.length === 0 ? (
             <div>No Items yet</div>
           ) : (
             <div className="mx-auto">
               <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-                {lazyData.map((val, i) => (
+                {lazyData[0].length > 0 && typeMint === "ERC-721" ? (
                   <>
-                    {/* {console.log(val)} */}
-
-                    <CardsMint721 val={val} isMultiple={false} />
+                    {lazyData[0].map((val, i) => (
+                      <CardsMint721 key={i} val={val} isMultiple={false} />
+                    ))}
                   </>
-                ))}
+                ) : lazyData[1].length > 0 && typeMint === "ERC-1155" ? (
+                  <>
+                    {lazyData[1].map((val, i) => (
+                      <CardsMint721 key={i} val={val} isMultiple={true} />
+                    ))}
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center">
+                    No items found
+                  </div>
+                )}
               </div>
             </div>
           )}

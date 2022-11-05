@@ -47,45 +47,67 @@ const getNameAndSymbol = async (address = null) => {
 };
 
 // mint function
-const mintNft = async (metadataUrl, askingPrice, isLazy, address = null) => {
+const mintNft = async (metadataUrl, address = null) => {
   // configure the required contract address
   let contractAddress = null;
   address === null
     ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
     : (contractAddress = address);
 
-  if (!isLazy) {
-    try {
-      const contract = await tokenContractInstance(contractAddress);
+  try {
+    const contract = await tokenContractInstance(contractAddress);
 
-      var tx = await contract.createItem(metadataUrl, askingPrice, isLazy);
-      let receipt = await tx.wait(2);
-      let sumEvent = receipt.events.pop();
-      var hexString = sumEvent.args.tokenId._hex;
-      var nftId = parseInt(hexString, 16);
-      console.log("nftId: ", nftId);
-
-      var id = await contract.getId();
-      var createdId = parseInt(id, 16);
-      console.log("id: ", createdId);
-    } catch (error) {
-      console.log(error);
-    }
-    return { nftId, createdId };
-  } else {
-    try {
-      const contract = await tokenContractInstance(contractAddress);
-
-      var tx = await contract.createItem(metadataUrl, askingPrice, isLazy);
-      var nftId = null;
-
-      var id = await contract.getId();
-      var createdId = parseInt(id, 16);
-    } catch (error) {
-      console.log(error);
-    }
-    return { nftId, createdId };
+    var tx = await contract.directMint(metadataUrl);
+    let receipt = await tx.wait(2);
+    let sumEvent = receipt.events.pop();
+    var hexString = sumEvent.args.tokenId._hex;
+    var nftId = parseInt(hexString, 16);
+    console.log("nftId: ", nftId);
+  } catch (error) {
+    console.log(error);
   }
+  return nftId;
+};
+
+// lazy mint function
+const lazyMintNft = async (
+  metadataUrl,
+  address = null,
+  creator,
+  askingPrice
+) => {
+  // configure the required contract address
+  let contractAddress = null;
+  address === null
+    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
+    : (contractAddress = address);
+
+  try {
+    const contract = await tokenContractInstance(contractAddress);
+    console.log(contract);
+    const user = await Moralis.User.current();
+
+    var overrides = {
+      gasLimit: 750000,
+      from: user.get("ethAddress"),
+      value: askingPrice,
+    };
+
+    var tx = await contract.lazyMint(
+      creator,
+      askingPrice,
+      metadataUrl,
+      overrides
+    );
+    let receipt = await tx.wait(2);
+    let sumEvent = receipt.events.pop();
+    var hexString = sumEvent.args.tokenId._hex;
+    var nftId = parseInt(hexString, 16);
+    console.log("nftId: ", nftId);
+  } catch (error) {
+    console.log(error);
+  }
+  return nftId;
 };
 
 //marketplace interactions
@@ -161,8 +183,6 @@ const addItemToMarket = async (
     : (contractAddress = address);
 
   const t = await tokenContractInstance(contractAddress);
-  // //console.log("get approved: ", await t.getApproved(nftId));
-
   const user = await Moralis.User.current();
   const contract = await marketContractInstance();
 
@@ -281,6 +301,7 @@ export {
   addItemToMarket,
   ensureMarketplaceIsApproved,
   mintNft,
+  lazyMintNft,
   buyItem,
   getNameAndSymbol,
   getCreatorAndRoyalty,

@@ -72,7 +72,6 @@ function Profile() {
       <Header />
 
       <div className="flex items-center justify-center w-full">
-        {console.log(filter)}
         <div className="w-full bg-slate-900 h-[200px] flex justify-center items-center text-white text-4xl font-bold">
           My page
         </div>
@@ -147,12 +146,19 @@ function Profile() {
             </a>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-2 mx-auto mt-4 md:grid-cols-8 h-[40px]">
+        <div className="grid grid-cols-4 gap-2 mx-auto mt-4 md:grid-cols-4   h-[40px]">
           <div
             onClick={() => setFilter("On sale")}
             className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
           >
             On sale
+          </div>
+
+          <div
+            onClick={() => setFilter("Created")}
+            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+          >
+            Created
           </div>
           <div
             onClick={() => setFilter("Owned")}
@@ -161,18 +167,12 @@ function Profile() {
             Owned
           </div>
           <div
-            onClick={() => setFilter("Created")}
-            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
-          >
-            Created
-          </div>
-          <div
             onClick={() => setFilter("My collection")}
             className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
           >
             My collection
           </div>
-          <div
+          {/* <div
             onClick={() => setFilter("Liked NFTs")}
             className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
           >
@@ -195,7 +195,7 @@ function Profile() {
             className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
           >
             Following
-          </div>
+          </div> */}
         </div>
         <div className="my-8 lg:my-4">
           <ToggleButtonGroup
@@ -217,7 +217,7 @@ function Profile() {
           {filter === "On sale" ? (
             <OnSale isMultiple={type} />
           ) : filter === "Created" ? (
-            <Created />
+            <Created isMultiple={type} />
           ) : filter === "Owned" ? (
             <Owned />
           ) : null}

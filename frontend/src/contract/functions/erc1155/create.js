@@ -6,6 +6,7 @@ const create = async (
   image,
   collectionAddress,
   addToMarket,
+  isLazy,
   setLoading1,
   setLoading2,
   setLoading3,
@@ -34,14 +35,20 @@ const create = async (
   await nftFileMetadata.saveIPFS();
   const nftFileMetadataPath = nftFileMetadata.ipfs();
   // //console.log(nftFileMetadataPath);
-  let nftId = null;
+
   try {
     setLoading1(false);
-    nftId = await contract.mintNft(
-      values.amount,
-      nftFileMetadataPath,
-      collectionAddress
-    );
+    if (!isLazy) {
+      nftId = await contract.mintNft(
+        values.amount,
+        nftFileMetadataPath,
+        collectionAddress
+      );
+    } else {
+      var nftId = null;
+      console.log("assign null to nftId");
+    }
+
     //console.log(nftId);
     const user = await Moralis.User.current();
 
@@ -52,25 +59,52 @@ const create = async (
       category: values.collection,
       description: values.description,
       nftFilePath: nftFilePath,
+      askingPrice: askingPrice,
+
       nftId: nftId,
       type: "erc1155",
       royalty: parseFloat(values.royalty),
+      isLazy: isLazy,
     };
 
-    if (params1.nftId != undefined || params1.nftId != null) {
+    console.log(params1.nftId);
+
+    if (params1.nftId !== undefined) {
       setLoading2(false);
       await Moralis.Cloud.run("SM_setCreators", params1);
+      console.log("nftId is not null");
 
-      const params2 = {
-        ownerOf: user.get("ethAddress").toString(),
-        tokenAddress: collectionAddress.toLowerCase(),
-        tokenId: nftId.toString(),
-        uri: nftFileMetadataPath,
-        amount: values.amount.toString(),
-        isOnSale: false,
-      };
+      if (nftId === null) {
+        console.log("init params2 for lazy");
+        var params2 = {
+          ownerOf: user.get("ethAddress").toString(),
+          tokenAddress: collectionAddress.toLowerCase(),
+          tokenId: nftId,
+          uri: nftFileMetadataPath,
+          amount: values.amount.toString(),
+          isOnSale: false,
+          isLazy: isLazy,
+          askingPrice: askingPrice,
+        };
+      } else {
+        var params2 = {
+          ownerOf: user.get("ethAddress").toString(),
+          tokenAddress: collectionAddress.toLowerCase(),
+          tokenId: nftId.toString(),
+          uri: nftFileMetadataPath,
+          amount: values.amount.toString(),
+          isOnSale: false,
+          isLazy: isLazy,
+          askingPrice: askingPrice,
+        };
+      }
+
       try {
-        await Moralis.Cloud.run("SM_initNftTables1155", params2);
+        if (!isLazy) {
+          await Moralis.Cloud.run("SM_initNftTables1155", params2);
+        } else {
+          await Moralis.Cloud.run("SM_initLazyNftTables1155", params2);
+        }
       } catch (error) {
         //console.log(error.message);
         return { state: true, message: error.message };
@@ -78,28 +112,32 @@ const create = async (
     }
 
     try {
-      await contract.ensureMarketplaceIsApproved(collectionAddress);
-      setLoading3(false);
-      if (addToMarket) {
-        try {
-          const res = await contract.addItemToMarket(
-            nftId,
-            askingPrice,
-            nftFileMetadataPath,
-            values.amount,
-            collectionAddress
-          );
-          if (res.status) {
-            setLoading4(false);
+      if (!isLazy) {
+        await contract.ensureMarketplaceIsApproved(collectionAddress);
+        setLoading3(false);
 
-            return { state: true, message: "Your NFT is created" };
-          } else {
-            return { state: false, message: res.message };
+        if (addToMarket) {
+          try {
+            const res = await contract.addItemToMarket(
+              nftId,
+              askingPrice,
+              nftFileMetadataPath,
+              values.amount,
+              collectionAddress
+            );
+            if (res.status) {
+              setLoading4(false);
+
+              return { state: true, message: "Your NFT is created" };
+            } else {
+              return { state: false, message: res.message };
+            }
+          } catch (e) {
+            return { state: false, message: e.message };
           }
-        } catch (e) {
-          return { state: false, message: e.message };
         }
       }
+
       return { state: true, message: "Your NFT is created" };
     } catch (error) {
       // //console.log(error);

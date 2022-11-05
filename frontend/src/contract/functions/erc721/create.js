@@ -38,13 +38,15 @@ const create = async (
   try {
     setLoading1(false);
     //console.log(collectionAddress);
+    if (!isLazy) {
+      var nftId = await contract.mintNft(
+        nftFileMetadataPath,
+        collectionAddress
+      );
+    } else {
+      var nftId = null;
+    }
 
-    var ids = await contract.mintNft(
-      nftFileMetadataPath,
-      askingPrice.toString(),
-      isLazy,
-      collectionAddress
-    );
     //console.log(nftId);
     const user = await Moralis.User.current();
     const params = {
@@ -54,8 +56,8 @@ const create = async (
       category: values.collection,
       description: values.description,
       nftFilePath: nftFilePath,
-      nftId: ids.nftId,
-      createdId: ids.createdId,
+      nftId: nftId,
+      // createdId: ids.createdId,
       askingPrice: askingPrice,
       type: "erc721",
       royalty: parseFloat(values.royalty),
@@ -66,12 +68,12 @@ const create = async (
       setLoading2(false);
 
       await Moralis.Cloud.run("SM_setCreators", params);
-      if (ids.nftId === null) {
+      if (nftId === null) {
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
-          tokenId: ids.nftId,
-          createdId: ids.createdId.toString(),
+          tokenId: nftId,
+          // createdId: ids.createdId.toString(),
           uri: nftFileMetadataPath,
           isLazy: isLazy,
           askingPrice: askingPrice,
@@ -80,8 +82,8 @@ const create = async (
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
-          tokenId: ids.nftId.toString(),
-          createdId: ids.createdId.toString(),
+          tokenId: nftId.toString(),
+          // createdId: ids.createdId.toString(),
           uri: nftFileMetadataPath,
           isLazy: isLazy,
           askingPrice: askingPrice,
@@ -101,36 +103,32 @@ const create = async (
 
     try {
       if (!isLazy) {
-        await contract.ensureMarketplaceIsApproved(
-          ids.nftId,
-          collectionAddress
-        );
-      }
-      setLoading3(false);
+        await contract.ensureMarketplaceIsApproved(nftId, collectionAddress);
+        setLoading3(false);
 
-      if (addToMarket && !isLazy) {
-        try {
-          const res = await contract.addItemToMarket(
-            ids.nftId,
-            askingPrice,
-            collection,
-            nftFileMetadataPath,
-            collectionAddress
-          );
-          if (res.status) {
-            setLoading4(false);
-            // return { state: true, message: "Your NFT is created" };
-          } else {
-            return { state: false, message: res.message };
+        if (addToMarket) {
+          try {
+            const res = await contract.addItemToMarket(
+              nftId,
+              askingPrice,
+              collection,
+              nftFileMetadataPath,
+              collectionAddress
+            );
+            if (res.status) {
+              setLoading4(false);
+              // return { state: true, message: "Your NFT is created" };
+            } else {
+              return { state: false, message: res.message };
+            }
+          } catch (e) {
+            console.log(e);
+
+            return { state: false, message: e.message };
           }
-        } catch (e) {
-          console.log(e);
-
-          return { state: false, message: e.message };
         }
-      } else {
-        setLoading4(false);
       }
+
       return { state: true, message: "Your NFT is created" };
     } catch (error) {
       console.log(error);

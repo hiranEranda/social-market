@@ -12,7 +12,7 @@ describe("721 Token contract deployment", function () {
 
   describe("Token Contract functions", function () {
     it("direct mint test", async function () {
-      const createItem = await token.createItem("sds", 30000, false);
+      const createItem = await token.directMint("sds", 30000, false);
 
       // wait until the transaction is mined
       let receipt = await createItem.wait();
@@ -22,34 +22,16 @@ describe("721 Token contract deployment", function () {
       yourNumber = parseInt(hexString, 16);
       console.log("tokenId: ", yourNumber);
     });
-    it("lazy mint test 1", async function () {
-      const createItem = await token.createItem("sds", 30000, true);
+    it("create item", async function () {
+      const createItem = await token.lazyMint("sds", 30000, false);
 
+      // wait until the transaction is mined
       let receipt = await createItem.wait();
-    });
-    it("lazy mint test 2", async function () {
-      const createItem = await token.createItem("sds", 30000, true);
-
-      let receipt = await createItem.wait();
-    });
-    it("get id", async function () {
-      const id = await token.getId();
-      const createId = parseInt(id, 16);
-
-      console.log("current create id: " + createId);
-    });
-    it("Lazy mint test mint function", async function () {
-      const mint = await token.lazyMint(2, {
-        value: (30000).toString(),
-        from: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
-      });
-
-      let receipt = await mint.wait();
       let sumEvent = receipt.events.pop();
       var hexString = sumEvent.args.tokenId._hex;
 
       yourNumber = parseInt(hexString, 16);
-      console.log("lazy mint tokenId: ", yourNumber);
+      console.log("tokenId: ", yourNumber);
     });
   });
 

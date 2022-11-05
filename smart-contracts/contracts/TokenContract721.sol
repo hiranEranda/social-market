@@ -23,19 +23,9 @@ contract TokenContract721 is ERC721, Ownable, ERC721Enumerable ,ERC721Burnable {
         string uri;
     }
 
-    struct AuctionItem {
-        uint256 id;
-        string uri;
-        uint256 askingPrice;
-        address payable creator;
-        bool inMinted;
-    }
-
-    AuctionItem[] public itemsForSale;
-
     mapping (uint256 => Item) public Items;
 
-   function directMint(string memory uri) public returns (uint256) {
+    function directMint(string memory uri) public returns (uint256) {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
 
@@ -45,42 +35,41 @@ contract TokenContract721 is ERC721, Ownable, ERC721Enumerable ,ERC721Burnable {
     }
 
 
-    function createItem(string memory uri, uint256 askingPrice, bool isLazy) public returns (uint256) {
+    // function createItem(string memory uri, uint256 askingPrice, bool isLazy) public returns (uint256) {
     
-        id = itemsForSale.length;
+    //     id = itemsForSale.length;
        
 
-        if(!isLazy) {
-            itemsForSale.push(AuctionItem(id, uri, askingPrice, payable(msg.sender), false));
-            uint256 newItemId = directMint(uri);
-             console.log("create id", id);
-            console.log("returned id", newItemId);
-            return (newItemId);
+    //     if(!isLazy) {
+    //         itemsForSale.push(AuctionItem(id, uri, askingPrice, payable(msg.sender), false));
+    //         uint256 newItemId = directMint(uri);
+    //          console.log("create id", id);
+    //         console.log("returned id", newItemId);
+    //         return (newItemId);
 
-        } else {
-            itemsForSale.push(AuctionItem(id, uri, askingPrice, payable(msg.sender), false));
-             console.log("create id", id);
+    //     } else {
+    //         itemsForSale.push(AuctionItem(id, uri, askingPrice, payable(msg.sender), false));
+    //          console.log("create id", id);
 
-            return id;
-        }
+    //         return id;
+    //     }
 
-    }
+    // }
 
-    function lazyMint(uint256 _id) public payable returns (uint256){
-        require(msg.value >= itemsForSale[_id].askingPrice , "Amount of ether sent not correct."); 
+    function lazyMint(address creator, uint256 askingPrice,string memory uri) public payable returns (uint256){
+        require(msg.value >= askingPrice , "Amount of ether sent not correct."); 
 
-        itemsForSale[_id].creator.transfer(itemsForSale[_id].askingPrice);
+        address payable _creator = payable(creator);
 
-        _tokenIds.increment();
+        _creator.transfer(askingPrice);
+
+      	_tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
-        _safeMint(msg.sender, newItemId);
 
+        _safeMint(msg.sender, newItemId);
+        Items[newItemId] = Item(newItemId, msg.sender, uri);        
         return (newItemId);
         
-    }
-
-    function getId() public view returns (uint256){
-        return id;
     }
 
     function tokenURI(uint256 tokenId) public view  override returns (string memory) {
