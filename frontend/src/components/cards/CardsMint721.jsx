@@ -27,12 +27,12 @@ function CardsMint721({ val, isMultiple }) {
                 <img
                   // src={`/images/avatar.png`}
                   src={
-                    val === undefined ||
-                    !val.ownerObject.attributes.Avatar ||
-                    !val.ownerObject.attributes.Avatar === undefined ||
-                    !val.ownerObject.attributes.Avatar === null
-                      ? `/images/avatar.png`
-                      : !val.ownerObject.attributes.Avatar._url
+                    // val === undefined ||
+                    // !val.ownerObject.attributes.Avatar ||
+                    // !val.ownerObject.attributes.Avatar === undefined ||
+                    // !val.ownerObject.attributes.Avatar === null
+                    `/images/avatar.png`
+                    // : !val.ownerObject.attributes.Avatar._url
                   }
                   alt="Avatar"
                   className="avatar avatar-sm"
@@ -40,13 +40,14 @@ function CardsMint721({ val, isMultiple }) {
               </Link>
               <Link to={`#`}>
                 <p className="avatars_name txt_xs">
-                  {val === undefined ||
+                  {/* {val === undefined ||
                   !val.ownerObject.attributes.username.length > 10
                     ? `@${!val.ownerObject.attributes.username.substring(
                         0,
                         10
                       )}....`
-                    : `@${!val.ownerObject.attributes.username}....`}
+                    : `@${!val.ownerObject.attributes.username}....`} */}{" "}
+                  username
                 </p>
               </Link>
             </div>
