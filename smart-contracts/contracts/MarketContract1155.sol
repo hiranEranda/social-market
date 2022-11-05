@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "../node_modules/@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 //import "hardhat/console.sol";
 
@@ -107,5 +108,32 @@ contract MarketContract1155 is ERC1155, Ownable {
         ERC1155(itemsForSale[id].tokenAddress).safeTransferFrom(itemsForSale[id].seller, msg.sender, itemsForSale[id].tokenId, amount, "0x00");
         
         emit itemSold(id, msg.sender,itemsForSale[id].seller,itemsForSale[id].tokenId, itemsForSale[id].askingPrice);
+    }
+    
+    function buyItemWithTokens( uint256 id, uint256 amount,uint256 royalty, address creator, address payToken) payable external ItemExists(id) IsForSale(id)  {
+        // require(msg.value >= itemsForSale[id].askingPrice, "Not enough funds sent!");
+        require(msg.sender != itemsForSale[id].seller,"Owner can't buy the item");
+
+        IERC20 paymentToken = IERC20(payToken);
+        uint256 askingPrice = itemsForSale[id].askingPrice;
+        address payable itemSeller = payable(itemsForSale[id].seller);
+        uint256 itemTokenId = itemsForSale[id].tokenId;
+        address itemTokenAddress = itemsForSale[id].tokenAddress;
+
+        itemsForSale[id].isSold = false;
+        activeItems[itemTokenAddress][itemTokenId] = false;
+
+        // transfer funds to seller
+        paymentToken.transferFrom(msg.sender, itemSeller, askingPrice - ((askingPrice * serviceFee / 10000) + royalty));
+
+        // transfer funds to contract owner
+        paymentToken.transferFrom(msg.sender, payable(owner()), askingPrice * serviceFee / 10000);
+        // transfer royalty finds to creator
+        paymentToken.transferFrom(msg.sender, payable(creator), royalty);
+        
+        // Transfer the NFT to new owner
+        ERC1155(itemTokenAddress).safeTransferFrom(itemSeller, msg.sender, itemTokenId, amount, "0x00");
+        
+        emit itemSold(id, msg.sender,itemSeller,itemTokenId, askingPrice);
     }
 }

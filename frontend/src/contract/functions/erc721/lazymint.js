@@ -7,7 +7,8 @@ const lazyMint = async (
   collectionAddress,
   askingPrice,
   id,
-  owner
+  owner,
+  isCustomToken
 ) => {
   //   console.log(collectionAddress);
 
@@ -17,7 +18,8 @@ const lazyMint = async (
       nftFileMetadataPath,
       collectionAddress.toString().toLowerCase(),
       owner,
-      askingPrice
+      askingPrice,
+      isCustomToken
     );
     const user = await Moralis.User.current();
 

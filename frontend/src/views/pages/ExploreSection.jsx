@@ -1,10 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
 import "reactjs-popup/dist/index.css";
-const Moralis = require("moralis-v1");
 
+import { useMoralis } from "react-moralis";
+
+import Response from "./Response";
+const contract721 = require("../../contract/functions/erc721/contract");
+const contract1155 = require("../../contract/functions/erc1155/contract");
+
+const Moralis = require("moralis-v1");
 function ExploreSection({ val, isMultiple }) {
+  const bought = (msg) => toast.success(msg);
+  const boughtError = (msg) => toast.error(msg);
+  const { authenticate } = useMoralis();
+  let navigate = useNavigate();
+
+  const [loading, setLoading] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [message, setMessage] = React.useState("");
   return (
     <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
       {val.map((val, i) => (
@@ -84,7 +100,8 @@ function ExploreSection({ val, isMultiple }) {
                     <p className="txt_sm">
                       Price:
                       <span className="color_green txt_sm">
-                        {Moralis.Units.FromWei(val.askingPrice, 18)} ETH
+                        {Moralis.Units.FromWei(val.askingPrice, 18)}
+                        ETH
                       </span>
                     </p>
                   </Link>
@@ -197,31 +214,42 @@ function ExploreSection({ val, isMultiple }) {
                       </Popup> */}
                   </div>
                   <button
-                    // onClick={async () => {
-                    //   const user = await Moralis.User.current();
-                    //   if (!user) {
-                    //     navigate("/connect-wallet");
-                    //   } else {
-                    //     setOpen(true);
-                    //     setTitle("Buy Item");
-                    //     setMessage("Sign the transaction to buy item");
-                    //     let res = await contract.buyItem(val, authenticate);
-                    //     if (res.status) {
-                    //       setLoading(false);
-                    //       bought(res.message);
+                    onClick={async () => {
+                      const user = await Moralis.User.current();
+                      if (!user) {
+                        alert("/connect-wallet");
+                      } else {
+                        setOpen(true);
+                        setTitle("Buy Item");
+                        setMessage("Sign the transaction to buy item");
+                        if (isMultiple) {
+                          var res = await contract1155.buyItem(
+                            val,
+                            authenticate
+                          );
+                        } else {
+                          var res = await contract721.buyItem(
+                            val,
+                            authenticate
+                          );
+                        }
 
-                    //       setTimeout(() => {
-                    //         setOpen(false);
-                    //         setLoading(true);
-                    //         navigate("/profile");
-                    //       }, 1000);
-                    //     } else {
-                    //       setOpen(false);
-                    //       setLoading(true);
-                    //       boughtError(res.message);
-                    //     }
-                    //   }
-                    // }}
+                        if (res.status) {
+                          setLoading(false);
+                          bought(res.message);
+
+                          setTimeout(() => {
+                            setOpen(false);
+                            setLoading(true);
+                            // navigate("/profile");
+                          }, 1000);
+                        } else {
+                          setOpen(false);
+                          setLoading(true);
+                          boughtError(res.message);
+                        }
+                      }
+                    }}
                     className="btn btn-sm btn-white"
                   >
                     Buy Now
@@ -229,6 +257,12 @@ function ExploreSection({ val, isMultiple }) {
                 </div>
               </div>
             </div>
+            <Response
+              open={open}
+              loading={loading}
+              title={title}
+              message={message}
+            />
           </div>
         </div>
       ))}

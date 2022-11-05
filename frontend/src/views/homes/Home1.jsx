@@ -35,7 +35,6 @@ const Home1 = () => {
       let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
-      // console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {
@@ -43,6 +42,15 @@ const Home1 = () => {
               tokenId: item.tokenId,
               tokenAddress: item.tokenAddress,
             };
+
+            const query = new Moralis.Query("SM_NFTOwners721");
+            query.equalTo("tokenId", item.tokenId);
+            query.equalTo("tokenAddress", item.tokenAddress);
+            const obj = await query.first();
+            const isCustomToken = {
+              isCustomToken: obj.attributes.isCustomToken,
+            };
+
             const history = await Moralis.Cloud.run("SM_getHistory721", params);
             let uri =
               prefix + item.tokenUri.substring(34, item.tokenUri.length);
@@ -50,7 +58,7 @@ const Home1 = () => {
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });
             // console.log(result);
 
-            return { ...item, ...result.data, ...history };
+            return { ...item, ...result.data, ...history, ...isCustomToken };
           }
         })
       );
@@ -64,12 +72,21 @@ const Home1 = () => {
             uid: val.uid,
           };
 
+          const query = new Moralis.Query("SM_NFTOwners1155");
+          query.equalTo("tokenId", val.tokenId);
+          query.equalTo("tokenAddress", val.tokenAddress);
+          const obj = await query.first();
+          const isCustomToken = {
+            isCustomToken: obj.attributes.isCustomToken,
+          };
+
           const res = await Moralis.Cloud.run("SM_getUserDetails", params);
 
           return {
             ...val,
             sellerUsername: res[0].attributes.ownerObject.attributes.username,
             sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
+            ...isCustomToken,
           };
         })
       );
@@ -204,7 +221,7 @@ const Home1 = () => {
   React.useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
-        // console.log(data);
+        console.log(data);
         setData(data);
       });
       getCollectionData().then((data) => {

@@ -10,7 +10,8 @@ const create = async (
   setLoading1,
   setLoading2,
   setLoading3,
-  setLoading4
+  setLoading4,
+  isCustomToken
 ) => {
   // //console.log(values);
   let list_price = values.price;
@@ -65,6 +66,7 @@ const create = async (
       type: "erc1155",
       royalty: parseFloat(values.royalty),
       isLazy: isLazy,
+      isCustomToken: isCustomToken,
     };
 
     console.log(params1.nftId);
@@ -84,6 +86,8 @@ const create = async (
           amount: values.amount.toString(),
           isOnSale: false,
           isLazy: isLazy,
+          isCustomToken: isCustomToken,
+
           askingPrice: askingPrice,
         };
       } else {
@@ -95,6 +99,8 @@ const create = async (
           amount: values.amount.toString(),
           isOnSale: false,
           isLazy: isLazy,
+          isCustomToken: isCustomToken,
+
           askingPrice: askingPrice,
         };
       }

@@ -4,11 +4,18 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import ToggleButton from "@mui/material/ToggleButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 import { FaEthereum } from "react-icons/fa";
-import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../../components/footer/Footer";
 import Header from "../../../components/header/Header";
 import TextError from "../../../components/errors/TextError";
@@ -75,6 +82,11 @@ function Erc721() {
   const [isLazy, setIsLazy] = React.useState(false);
   const [collectionAddress, setCollectionAddress] = React.useState(null);
 
+  const [isCustomToken, setIsCustomToken] = React.useState(false);
+  const handleChange = (event) => {
+    setIsCustomToken(event.target.value);
+  };
+
   const handleSubmit = async (values) => {
     const user = await Moralis.User.current();
     if (user) {
@@ -98,7 +110,8 @@ function Erc721() {
           setLoading1,
           setLoading2,
           setLoading3,
-          setLoading4
+          setLoading4,
+          isCustomToken
         );
         setTimeout(() => {
           setOpen(false);
@@ -288,19 +301,53 @@ function Erc721() {
                         <i className="float-right ri-information-line d-flex"></i>
                       </Tooltip>
                       <div className="d-flex align-items-center">
-                        <FaEthereum size={25} />
-                        <span className="mx-2">ETH</span>
+                        <Box sx={{ minWidth: 120 }}>
+                          <FormControl
+                            sx={{ m: 1, minWidth: 120 }}
+                            size="small"
+                          >
+                            {/* <InputLabel id="demo-simple-select-label">
+                              Token
+                            </InputLabel> */}
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={isCustomToken}
+                              // label="Age"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value={true}>
+                                <div className="flex items-center justify-center">
+                                  <img
+                                    className="w-[30px] mr-2"
+                                    src="/images/smkt.jpeg"
+                                    alt=""
+                                  />
+                                  <span>SMKT</span>
+                                </div>
+                              </MenuItem>
+
+                              <MenuItem value={false}>
+                                <div className="flex items-center justify-center">
+                                  <FaEthereum size={25} />
+                                  <span>ETH</span>
+                                </div>
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
                         <Field
                           name="price"
                           type="number"
-                          className="form-control"
+                          className="ml-4 form-control"
                           placeholder="Price"
                         />
                       </div>
+
                       <ErrorMessage name="price" component={TextError} />
                     </div>
                   </>
-                  <button className="mt-2 btn btn-grad" type="submit">
+                  <button className="mt-4 btn btn-grad" type="submit">
                     Create NFT
                   </button>
                 </Form>

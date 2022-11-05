@@ -4,6 +4,296 @@ const marketContract_1155 = require("../../../contract/artifacts/contracts/Marke
 const Moralis = require("moralis-v1");
 const { ethers } = require("ethers");
 
+let erc20abi = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "Approval",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+    ],
+    name: "allowance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "approve",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "subtractedValue",
+        type: "uint256",
+      },
+    ],
+    name: "decreaseAllowance",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "addedValue",
+        type: "uint256",
+      },
+    ],
+    name: "increaseAllowance",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "name",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "symbol",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "transfer",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "transferFrom",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+const erc20Contract = async () => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+  // Contract Instance
+  const erc20Contract = new ethers.Contract(
+    process.env.REACT_APP_PAYTOKEN_CONTRACT_ADDRESS,
+    erc20abi,
+    signer
+  );
+  return erc20Contract;
+};
+
 const tokenContractInstance = async (contractAddress) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
@@ -61,7 +351,13 @@ const mintNft = async (amount, metadataUrl, address = null) => {
 };
 
 // lazy mint function
-const lazyMint = async (askingPrice, creator, metadataUrl, address = null) => {
+const lazyMint = async (
+  askingPrice,
+  creator,
+  metadataUrl,
+  isCustomToken,
+  address = null
+) => {
   // //console.log("mint 1155");
   // configure the required contract address
   let contractAddress = null;
@@ -80,21 +376,47 @@ const lazyMint = async (askingPrice, creator, metadataUrl, address = null) => {
       value: askingPrice,
     };
 
-    var tx = await contract.lazyMint(
-      user.get("ethAddress"),
-      metadataUrl,
-      askingPrice,
-      creator,
-      overrides
-    );
-    let receipt = await tx.wait(2);
-    let sumEvent = receipt.events.pop();
-    var hexString = sumEvent.args.id._hex;
-    var yourNumber = parseInt(hexString, 16);
+    if (!isCustomToken) {
+      var tx = await contract.lazyMint(
+        user.get("ethAddress"),
+        metadataUrl,
+        askingPrice,
+        creator,
+        overrides
+      );
+      let receipt = await tx.wait(2);
+      let sumEvent = receipt.events.pop();
+      var hexString = sumEvent.args.id._hex;
+      var yourNumber = parseInt(hexString, 16);
+    } else {
+      let erc20 = await erc20Contract();
+
+      let ttx = await erc20.approve(
+        process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_1155,
+        askingPrice
+      );
+      let res = await ttx.wait(2);
+
+      var tx = await contract.lazyMintCustom(
+        user.get("ethAddress"),
+        metadataUrl,
+        askingPrice,
+        creator,
+        process.env.REACT_APP_PAYTOKEN_CONTRACT_ADDRESS,
+        {
+          gasLimit: 750000,
+          from: user.get("ethAddress"),
+        }
+      );
+      let receipt = await tx.wait(2);
+      let sumEvent = receipt.events.pop();
+      var hexString = sumEvent.args.id._hex;
+      var yourNumber = parseInt(hexString, 16);
+    }
   } catch (error) {
     // //console.log(error);
   }
-  // //console.log(yourNumber);
+  console.log(yourNumber);
   return yourNumber;
 };
 
@@ -212,18 +534,6 @@ const buyItem = async (item, authenticate) => {
     };
   }
 
-  const buyer = await getBalance(
-    item.tokenAddress,
-    user.get("ethAddress"),
-    item.tokenId
-  );
-
-  const seller = await getBalance(
-    item.tokenAddress,
-    item.ownerOf,
-    item.tokenId
-  );
-
   let data = await getCreatorAndRoyalty(item);
   if (!user.attributes.accounts.includes(item.ownerOf)) {
     try {
@@ -236,17 +546,43 @@ const buyItem = async (item, authenticate) => {
       let royaltyPercentage = data.attributes.royalty;
       let royaltyFee = (parseInt(item.askingPrice) * royaltyPercentage) / 100;
 
-      const response = await contract.buyItem(
-        item.uid,
-        1,
-        royaltyFee,
-        data.attributes.ethAddress,
-        overrides
-      );
+      if (!item.isCustomToken) {
+        console.log("regular");
+        var response = await contract.buyItem(
+          item.uid,
+          1,
+          royaltyFee,
+          data.attributes.ethAddress,
+          overrides
+        );
+      } else {
+        console.log("erc20Contract");
+
+        let erc20 = await erc20Contract();
+
+        let ttx = await erc20.approve(
+          process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_1155,
+          item.askingPrice.toString()
+        );
+        let res = await ttx.wait(2);
+
+        var response = await contract.buyItemWithTokens(
+          item.uid,
+          1,
+          royaltyFee.toString(),
+          data.attributes.ethAddress,
+          process.env.REACT_APP_PAYTOKEN_CONTRACT_ADDRESS,
+          {
+            gasLimit: 750000,
+            from: user.get("ethAddress"),
+          }
+        );
+      }
+      console.log(response);
 
       const receipt = await response.wait(2);
       if (receipt.status === 1) {
-        //console.log("after");
+        console.log("after");
         const buyer = await getBalance(
           item.tokenAddress,
           user.get("ethAddress"),
@@ -334,7 +670,7 @@ const buyItem = async (item, authenticate) => {
         };
       }
     } catch (error) {
-      // //console.log(error);
+      console.log(error);
       return {
         status: false,
         message: "Transaction failed",

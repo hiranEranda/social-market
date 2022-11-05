@@ -212,13 +212,14 @@ function CardsMint721({ val, isMultiple }) {
                       // setOpen(true);
                       // setTitle("Buy Item");
                       // setMessage("Sign the transaction to buy item");
-                      // console.log(val);
+
                       let res = await lazyMint721(
                         val.uri,
                         val.tokenAddress,
                         val.askingPrice,
                         val.id,
-                        val.owner
+                        val.owner,
+                        val.isCustomToken
                       );
                       //     if (res.status) {
                       //       setLoading(false);
@@ -241,7 +242,7 @@ function CardsMint721({ val, isMultiple }) {
                         val.askingPrice,
                         val.id,
                         val.owner,
-                        val.amount
+                        val.isCustomToken
                       );
                     }
                   }

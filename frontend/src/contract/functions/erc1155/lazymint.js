@@ -8,13 +8,14 @@ const lazyMint = async (
   askingPrice,
   id,
   owner,
-  amount
+  isCustomToken
 ) => {
   try {
     var nftId = await contract.lazyMint(
       askingPrice,
       owner,
       nftFileMetadataPath,
+      isCustomToken,
       collectionAddress.toString().toLowerCase()
     );
     const user = await Moralis.User.current();
@@ -26,9 +27,10 @@ const lazyMint = async (
       uri: nftFileMetadataPath,
       amount: "1",
       isOnSale: false,
+      askingPrice: askingPrice,
       isLazy: true,
     };
-
+    console.log(params2);
     try {
       await Moralis.Cloud.run("SM_initNftTables1155", params2);
     } catch (error) {
@@ -45,6 +47,7 @@ const lazyMint = async (
       if (newAmount === 0) {
         obj.set("isMinted", true);
         obj.set("amount", newAmount.toString());
+        console.log(newAmount);
         await obj.save();
       } else {
         obj.set("amount", newAmount.toString());

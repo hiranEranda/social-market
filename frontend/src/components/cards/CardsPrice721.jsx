@@ -1,10 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
 import "reactjs-popup/dist/index.css";
+
+import { useMoralis } from "react-moralis";
+
+import Response from "./Response";
+const contract721 = require("../../contract/functions/erc721/contract");
+const contract1155 = require("../../contract/functions/erc1155/contract");
+
 const Moralis = require("moralis-v1");
 
 function CardsPrice721({ val, isMultiple }) {
+  const bought = (msg) => toast.success(msg);
+  const boughtError = (msg) => toast.error(msg);
+  const { authenticate } = useMoralis();
+  let navigate = useNavigate();
+
+  const [loading, setLoading] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [message, setMessage] = React.useState("");
   // console.log(val);
   return (
     // <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
@@ -198,31 +215,33 @@ function CardsPrice721({ val, isMultiple }) {
                       </Popup> */}
               </div>
               <button
-                // onClick={async () => {
-                //   const user = await Moralis.User.current();
-                //   if (!user) {
-                //     navigate("/connect-wallet");
-                //   } else {
-                //     setOpen(true);
-                //     setTitle("Buy Item");
-                //     setMessage("Sign the transaction to buy item");
-                //     let res = await contract.buyItem(val, authenticate);
-                //     if (res.status) {
-                //       setLoading(false);
-                //       bought(res.message);
+                onClick={async () => {
+                  const user = await Moralis.User.current();
+                  if (!user) {
+                    alert("/connect-wallet");
+                  } else {
+                    setOpen(true);
+                    setTitle("Buy Item");
+                    setMessage("Sign the transaction to buy item");
 
-                //       setTimeout(() => {
-                //         setOpen(false);
-                //         setLoading(true);
-                //         navigate("/profile");
-                //       }, 1000);
-                //     } else {
-                //       setOpen(false);
-                //       setLoading(true);
-                //       boughtError(res.message);
-                //     }
-                //   }
-                // }}
+                    let res = await contract721.buyItem(val, authenticate);
+
+                    if (res.status) {
+                      setLoading(false);
+                      bought(res.message);
+
+                      setTimeout(() => {
+                        setOpen(false);
+                        setLoading(true);
+                        // navigate("/profile");
+                      }, 1000);
+                    } else {
+                      setOpen(false);
+                      setLoading(true);
+                      boughtError(res.message);
+                    }
+                  }
+                }}
                 className="btn btn-sm btn-white"
               >
                 Buy Now
@@ -231,10 +250,10 @@ function CardsPrice721({ val, isMultiple }) {
           </div>
         </div>
       </div>
+      <Response open={open} loading={loading} title={title} message={message} />
     </div>
     // ))}
     // <ToastContainer position="bottom-right" />
-    // <Response open={open} loading={loading} title={title} message={message} />
     // </div>
   );
 }

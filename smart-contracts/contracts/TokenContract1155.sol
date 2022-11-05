@@ -7,9 +7,8 @@ import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-
-import "../node_modules/hardhat/console.sol";
 
 contract TokenContract1155 is ERC1155, Ownable, ERC1155Supply,ERC1155Burnable {
     string public name;
@@ -53,6 +52,23 @@ contract TokenContract1155 is ERC1155, Ownable, ERC1155Supply,ERC1155Burnable {
         setUri(newItemId,tokenUri);
 
         return newItemId;
+    }
+
+    function lazyMintCustom(address account, string memory tokenUri, uint256 askingPrice, address creator, address payToken) public payable returns (uint256){
+        // require(msg.value >= askingPrice , "Amount of ether sent not correct."); 
+
+        address payable _creator = payable(creator);
+
+        IERC20 paymentToken = IERC20(payToken);
+        paymentToken.transferFrom(msg.sender, _creator, askingPrice);
+
+         _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _mint(account, newItemId, 1, "");
+        setUri(newItemId,tokenUri);
+          
+        return (newItemId);
+      
     }
 
     function uri(uint256 tokenId) override public view returns (string memory) {

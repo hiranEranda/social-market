@@ -3,11 +3,11 @@
 pragma solidity ^0.8.4;
 
 import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "../node_modules/hardhat/console.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TokenContract721 is ERC721, Ownable, ERC721Enumerable ,ERC721Burnable {
     using Counters for Counters.Counter;
@@ -33,29 +33,7 @@ contract TokenContract721 is ERC721, Ownable, ERC721Enumerable ,ERC721Burnable {
         Items[newItemId] = Item(newItemId, msg.sender, uri);        
         return (newItemId);
     }
-
-
-    // function createItem(string memory uri, uint256 askingPrice, bool isLazy) public returns (uint256) {
     
-    //     id = itemsForSale.length;
-       
-
-    //     if(!isLazy) {
-    //         itemsForSale.push(AuctionItem(id, uri, askingPrice, payable(msg.sender), false));
-    //         uint256 newItemId = directMint(uri);
-    //          console.log("create id", id);
-    //         console.log("returned id", newItemId);
-    //         return (newItemId);
-
-    //     } else {
-    //         itemsForSale.push(AuctionItem(id, uri, askingPrice, payable(msg.sender), false));
-    //          console.log("create id", id);
-
-    //         return id;
-    //     }
-
-    // }
-
     function lazyMint(address creator, uint256 askingPrice,string memory uri) public payable returns (uint256){
         require(msg.value >= askingPrice , "Amount of ether sent not correct."); 
 
@@ -70,6 +48,23 @@ contract TokenContract721 is ERC721, Ownable, ERC721Enumerable ,ERC721Burnable {
         Items[newItemId] = Item(newItemId, msg.sender, uri);        
         return (newItemId);
         
+    }
+
+    function lazyMintCustom(address creator, uint256 askingPrice, string memory uri, address payToken) public payable returns (uint256){
+        // require(msg.value >= askingPrice , "Amount of ether sent not correct."); 
+
+        address payable _creator = payable(creator);
+
+        IERC20 paymentToken = IERC20(payToken);
+        paymentToken.transferFrom(msg.sender, _creator, askingPrice);
+
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+
+        _safeMint(msg.sender, newItemId);
+        Items[newItemId] = Item(newItemId, msg.sender, uri);        
+        return (newItemId);
+      
     }
 
     function tokenURI(uint256 tokenId) public view  override returns (string memory) {

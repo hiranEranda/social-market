@@ -10,11 +10,14 @@ const create = async (
   setLoading1,
   setLoading2,
   setLoading3,
-  setLoading4
+  setLoading4,
+  isCustomToken
 ) => {
   let collection = values.collection;
   let list_price = values.price;
+
   const askingPrice = Moralis.Units.ETH(list_price);
+
   const data = image;
   const nftFile = new Moralis.File(data.name, data);
   try {
@@ -62,6 +65,7 @@ const create = async (
       type: "erc721",
       royalty: parseFloat(values.royalty),
       isLazy: isLazy,
+      isCustomToken: isCustomToken,
     };
     //console.log(params);
     if (params.nftId !== undefined) {
@@ -76,6 +80,8 @@ const create = async (
           // createdId: ids.createdId.toString(),
           uri: nftFileMetadataPath,
           isLazy: isLazy,
+          isCustomToken: isCustomToken,
+
           askingPrice: askingPrice,
         };
       } else {
@@ -86,6 +92,8 @@ const create = async (
           // createdId: ids.createdId.toString(),
           uri: nftFileMetadataPath,
           isLazy: isLazy,
+          isCustomToken: isCustomToken,
+
           askingPrice: askingPrice,
         };
       }
