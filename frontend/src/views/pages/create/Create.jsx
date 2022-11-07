@@ -2,13 +2,28 @@ import React from "react";
 import Footer from "../../../components/footer/Footer";
 import Header from "../../../components/header/Header";
 import { useNavigate } from "react-router";
+import { useMoralis } from "react-moralis";
 
 import { HiDocument } from "react-icons/hi";
 import { HiDocumentDuplicate } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
+import useDocumentTitle from "../../../components/useDocumentTitle";
+const Moralis = require("moralis-v1");
+
 function Create() {
+  useDocumentTitle("Upload Type");
+  const { isInitialized, isAuthenticated } = useMoralis();
   const navigate = new useNavigate();
+  React.useEffect(() => {
+    setTimeout(async () => {
+      const user = await Moralis.User.current();
+      if (!user) {
+        // window.location.href = `/connect-wallet`;
+        navigate(`/connect-wallet`);
+      }
+    }, 1000);
+  }, [isInitialized, isAuthenticated]);
   return (
     <>
       <Header />

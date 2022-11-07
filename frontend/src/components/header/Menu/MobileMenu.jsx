@@ -81,31 +81,7 @@ function MobileMenu() {
             <button
               className="btn btn-sm btn-grad"
               onClick={async () => {
-                if (typeof window.ethereum !== "undefined") {
-                  try {
-                    await authenticate();
-                    wallet(true);
-                  } catch (e) {
-                    // //console.log(e);
-                  }
-                  // if (chainId === chain) {
-                  //   try {
-                  //     await authenticate();
-                  //   } catch (e) {
-                  //     // //console.log(e);
-                  //   }
-                  // } else {
-                  //   try {
-                  //     switchNetwork(chain);
-                  //     await authenticate();
-                  //   } catch (error) {
-                  //     // //console.log(error);
-                  //   }
-                  // }
-                  // navigate(-1);
-                } else {
-                  wallet(false);
-                }
+                navigate("connect-wallet");
               }}
             >
               <i className="ri-wallet-3-line" />

@@ -31,6 +31,7 @@ function EditProfile() {
   };
 
   /// Basic inputs ///////////////////////////////////////////////////////////////////////////////
+
   const initialValues = {
     name: "",
     email: "",
@@ -83,21 +84,43 @@ function EditProfile() {
 
       await user.save();
       update();
-      console.log(user);
+      navigate(`/profile`);
     }
   };
 
-  const { isInitialized } = useMoralis();
+  const { isInitialized, isAuthenticated, user } = useMoralis();
   let navigate = useNavigate();
+
+  let [formValues, setFormValues] = React.useState({
+    name: "",
+    email: "",
+    twitter: "",
+    instagram: "",
+    facebook: "",
+    customUrl: "",
+    introduction: "",
+  });
+
   React.useEffect(() => {
-    async function redirectIfNotLoggedIn() {
+    setTimeout(async () => {
       const user = await Moralis.User.current();
+      console.log(user);
       if (!user) {
         navigate(`/`);
+      } else {
+        setFormValues({
+          name: user.attributes.username,
+          email: user.attributes.email,
+          twitter: user.attributes.twitter,
+          instagram: user.attributes.instagram,
+          facebook: user.attributes.facebook,
+          customUrl: user.attributes.customUrl,
+          introduction: user.attributes.introduction,
+        });
+        setAvatarData(user.attributes.avatar._url);
       }
-    }
-    redirectIfNotLoggedIn();
-  }, [isInitialized, navigate]);
+    }, 1000);
+  }, [isInitialized, navigate, isAuthenticated]);
 
   return (
     <>
@@ -136,101 +159,108 @@ function EditProfile() {
               {/* <ToastContainer position="bottom-right" /> */}
             </div>
           </div>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            <Form>
-              <div className="space-y-10">
-                <span className="nameInput">User Name*</span>
-                <Field name="name" type="text" className="mb-4 form-control" />
-                <ErrorMessage name="name" component={TextError} />
-              </div>
-              <div className="space-y-10">
-                <span className="nameInput d-flex justify-content-between">
-                  Twitter Account
-                </span>
-                <div className="confirm">
+          {user !== null && formValues !== null ? (
+            <Formik
+              initialValues={formValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+              enableReinitialize
+            >
+              <Form>
+                <div className="space-y-10">
+                  <span className="nameInput">User Name*</span>
                   <Field
-                    name="twitter"
+                    name="name"
                     type="text"
                     className="mb-4 form-control"
-                    placeholder="Enter your twitter handle"
                   />
+                  <ErrorMessage name="name" component={TextError} />
                 </div>
-              </div>
-              <div className="space-y-10">
-                <span className="nameInput d-flex justify-content-between">
-                  Instagram Account
-                </span>
-                <div className="confirm">
-                  <Field
-                    name="instagram"
-                    type="text"
-                    className="mb-4 form-control"
-                    placeholder="Add your ig handle"
-                  />
+                <div className="space-y-10">
+                  <span className="nameInput d-flex justify-content-between">
+                    Twitter Account
+                  </span>
+                  <div className="confirm">
+                    <Field
+                      name="twitter"
+                      type="text"
+                      className="mb-4 form-control"
+                      placeholder="Enter your twitter handle"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-10">
-                <span className="nameInput d-flex justify-content-between">
-                  Facebook Account
-                </span>
-                <div className="confirm">
-                  <Field
-                    name="facebook"
-                    type="text"
-                    className="mb-4 form-control"
-                    placeholder="Add your Facebook profile"
-                  />
+                <div className="space-y-10">
+                  <span className="nameInput d-flex justify-content-between">
+                    Instagram Account
+                  </span>
+                  <div className="confirm">
+                    <Field
+                      name="instagram"
+                      type="text"
+                      className="mb-4 form-control"
+                      placeholder="Add your ig handle"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-10">
-                <span className="nameInput d-flex justify-content-between">
-                  Personal website or portfolio
-                </span>
-                <div className="confirm">
-                  <Field
-                    name="customUrl"
-                    type="text"
-                    className="mb-4 form-control"
-                    placeholder="wwww.yourWebsite.com"
-                  />
+                <div className="space-y-10">
+                  <span className="nameInput d-flex justify-content-between">
+                    Facebook Account
+                  </span>
+                  <div className="confirm">
+                    <Field
+                      name="facebook"
+                      type="text"
+                      className="mb-4 form-control"
+                      placeholder="Add your Facebook profile"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-10">
-                <span className="nameInput d-flex justify-content-between">
-                  User email*
-                </span>
-                <div className="confirm">
-                  <Field
-                    name="email"
-                    type="text"
-                    className="mb-4 form-control"
-                    placeholder="Enter your email"
-                  />
-                  <ErrorMessage name="email" component={TextError} />
+                <div className="space-y-10">
+                  <span className="nameInput d-flex justify-content-between">
+                    Personal website or portfolio
+                  </span>
+                  <div className="confirm">
+                    <Field
+                      name="customUrl"
+                      type="text"
+                      className="mb-4 form-control"
+                      placeholder="wwww.yourWebsite.com"
+                    />
+                  </div>
                 </div>
-              </div>
+                <div className="space-y-10">
+                  <span className="nameInput d-flex justify-content-between">
+                    User email*
+                  </span>
+                  <div className="confirm">
+                    <Field
+                      name="email"
+                      type="text"
+                      className="mb-4 form-control"
+                      placeholder="Enter your email"
+                    />
+                    <ErrorMessage name="email" component={TextError} />
+                  </div>
+                </div>
 
-              <div className="space-y-10">
-                <span className="nameInput">Introduction</span>
-                <Field
-                  as="textarea"
-                  style={{ minHeight: 110 }}
-                  name="introduction"
-                  type="text"
-                  className="mb-4 rounded-xl form-control"
-                  placeholder="Introduction"
-                />
-                <ErrorMessage name="introduction" component={TextError} />
-              </div>
-              <button className="mt-2 btn btn-grad" type="submit">
-                Update profile
-              </button>
-            </Form>
-          </Formik>
+                <div className="space-y-10">
+                  <span className="nameInput">Introduction</span>
+                  <Field
+                    as="textarea"
+                    style={{ minHeight: 110 }}
+                    name="introduction"
+                    type="text"
+                    className="mb-4 rounded-xl form-control"
+                    placeholder="Introduction"
+                  />
+                  <ErrorMessage name="introduction" component={TextError} />
+                </div>
+                <button className="mt-2 btn btn-grad" type="submit">
+                  Update profile
+                </button>
+              </Form>
+            </Formik>
+          ) : null}
         </div>
         <ToastContainer position="bottom-right" />
       </div>

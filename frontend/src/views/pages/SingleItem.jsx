@@ -9,6 +9,8 @@ import { useMoralis } from "react-moralis";
 
 import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import { FaEthereum } from "react-icons/fa";
+
 import { ToastContainer, toast } from "react-toastify";
 
 const Moralis = require("moralis-v1");
@@ -59,6 +61,14 @@ function SingleItem() {
       const royalty = await contract.getCreatorAndRoyalty(result[0]);
       setRoyalty(royalty);
 
+      const query = new Moralis.Query("SM_NFTOwners721");
+      query.equalTo("tokenId", _tokenId);
+      query.equalTo("tokenAddress", _tokenAddress);
+      const obj = await query.first();
+      const isCustomToken = {
+        isCustomToken: obj.attributes.isCustomToken,
+      };
+
       const creatorObject = await Moralis.Cloud.run("SM_getCreator", params);
       //  //console.log("creatorObject: ", creatorObject);
       var contractAvatar = await Moralis.Cloud.run(
@@ -92,6 +102,7 @@ function SingleItem() {
               creatorObject,
               contractDetails,
               contractAvatar,
+              ...isCustomToken,
             };
           }
         })
@@ -110,6 +121,7 @@ function SingleItem() {
     if (isInitialized) {
       getData().then((info) => {
         if (info !== null && info !== undefined) {
+          console.log(info, data);
           setData(info.data);
           setHistory(info.history.history);
         }
@@ -197,13 +209,18 @@ function SingleItem() {
                     <p className="text-xl text-black">Price</p>
                     <p className="flex text-xl font-bold text-black">
                       <span className="mr-2">
-                        <img
-                          src="/images/fire.gif"
-                          className="w-6 h-6"
-                          alt=""
-                        />
+                        {data[0].isCustomToken ? (
+                          <img
+                            className="w-[30px] mr-2"
+                            src="/images/smkt.jpeg"
+                            alt=""
+                          />
+                        ) : (
+                          <FaEthereum size={25} />
+                        )}
                       </span>
-                      {Moralis.Units.FromWei(data[0].askingPrice, 18)} ETH
+                      {Moralis.Units.FromWei(data[0].askingPrice, 18)}{" "}
+                      {data[0].isCustomToken ? "SMKT" : "ETH"}
                     </p>
                   </div>
                   <div className="px-3 mt-4">
@@ -212,8 +229,8 @@ function SingleItem() {
                       onClick={async () => {
                         const user = await Moralis.User.current();
                         if (!user) {
-                          // navigate(`/connect-wallet`);
-                          boughtError("Please connect wallet");
+                          navigate(`/connect-wallet`);
+                          // boughtError("Please connect wallet");
                         } else {
                           setOpen(true);
                           setTitle("Buy Item");
@@ -228,7 +245,7 @@ function SingleItem() {
                             setTimeout(() => {
                               setOpen(false);
                               setLoading(true);
-                              // navigate("/profile");
+                              navigate("/profile");
                             }, 1000);
                           } else {
                             setOpen(false);

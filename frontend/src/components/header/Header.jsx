@@ -128,34 +128,8 @@ const Header = () => {
               !user ||
               user.attributes.username === undefined ? (
                 <button
-                  className="btn btn-sm btn-grad"
-                  onClick={async () => {
-                    if (typeof window.ethereum !== "undefined") {
-                      try {
-                        await authenticate();
-                        wallet(true);
-                      } catch (e) {
-                        // //console.log(e);
-                      }
-                      // if (chainId === chain) {
-                      //   try {
-                      //     await authenticate();
-                      //   } catch (e) {
-                      //     // //console.log(e);
-                      //   }
-                      // } else {
-                      //   try {
-                      //     switchNetwork(chain);
-                      //     await authenticate();
-                      //   } catch (error) {
-                      //     // //console.log(error);
-                      //   }
-                      // }
-                      // navigate(-1);
-                    } else {
-                      wallet(false);
-                    }
-                  }}
+                  className="py-[10px] px-[15px] bg-black text-white rounded-3xl border-2 border-yellow-500"
+                  onClick={() => navigate("/connect-wallet")}
                 >
                   <i className="ri-wallet-3-line" />
                   Connect wallet

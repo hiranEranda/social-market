@@ -21,11 +21,28 @@ import Header from "../../../components/header/Header";
 import TextError from "../../../components/errors/TextError";
 import Collection from "./Collection";
 import create1155 from "../../../contract/functions/erc1155/create";
+
+import useDocumentTitle from "../../../components/useDocumentTitle";
+import { useMoralis } from "react-moralis";
+
 import Modal from "./Modal";
 const Moralis = require("moralis-v1");
 
 function Erc1155() {
   let tooltip = "Here type the tooltip message";
+  useDocumentTitle("ERC-1155");
+
+  const { isInitialized, isAuthenticated } = useMoralis();
+  let navigate = useNavigate();
+  React.useEffect(() => {
+    setTimeout(async () => {
+      const user = await Moralis.User.current();
+      if (!user) {
+        // window.location.href = `/connect-wallet`;
+        navigate(`/connect-wallet`);
+      }
+    }, 1000);
+  }, [isInitialized, isAuthenticated]);
 
   /// testing image upload//////////////////////////////////////////////////////////////////////
   const [picture, setPicture] = React.useState(null);

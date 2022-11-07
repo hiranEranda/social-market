@@ -48,24 +48,23 @@ function Profile() {
     }
   };
 
-  const { isInitialized } = useMoralis();
+  const { isInitialized, isAuthenticated } = useMoralis();
   let navigate = useNavigate();
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
-    async function redirectIfNotLoggedIn() {
+    setTimeout(async () => {
       const user = await Moralis.User.current();
       if (!user) {
-        navigate(`/`);
+        navigate(`/connect-wallet`);
       } else {
         getData().then((data) => {
           // console.log(data);
           setData(data);
         });
       }
-    }
-    redirectIfNotLoggedIn();
-  }, [isInitialized, navigate]);
+    }, 1000);
+  }, [isInitialized, navigate, isAuthenticated]);
 
   return (
     <>
@@ -136,7 +135,7 @@ function Profile() {
               className="text-2xl cursor-pointer"
             />
           </div>
-          <p className="flex justify-center mt-4">This is my bio</p>
+          <p className="flex justify-center mt-4">{data.bio}</p>
           <div className="flex mx-auto items-center justify-center mt-4 bg-yellow-500 rounded-2xl h-[40px] w-[350px] md:w-[200px]">
             <span className="mr-2 text-xl text-white">
               <FaUserEdit />
