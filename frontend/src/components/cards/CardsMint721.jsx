@@ -52,9 +52,7 @@ function CardsMint721({ val, isMultiple }) {
           </div>
           <div className="card_head">
             {isMultiple ? (
-              <Link
-              // to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}
-              >
+              <Link to={`/view-item/lazy1155/${val.id}`}>
                 <img
                   width="10"
                   height="80"
@@ -64,7 +62,7 @@ function CardsMint721({ val, isMultiple }) {
               </Link>
             ) : (
               // <Link to={`#`}>
-              <Link to={`/view-item/${val.id}`}>
+              <Link to={`/view-item/lazy721/${val.id}`}>
                 <img
                   width="10"
                   height="80"

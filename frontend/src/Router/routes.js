@@ -14,6 +14,7 @@ import BatchItem from "../views/pages/BatchItem";
 import Collections from "../views/pages/Collections";
 import ConnectWallet from "../views/pages/ConnectWallet";
 import SingleItemMint from "../views/pages/SingleItemMint";
+import BatchItemMint from "../views/pages/BatchItemMint";
 
 const ROUTES = () => {
   return (
@@ -25,7 +26,14 @@ const ROUTES = () => {
             path="/view-item/:tokenAddress/:tokenId"
             element={<SingleItem />}
           />
-          <Route path="/view-item/:objectId" element={<SingleItemMint />} />
+          <Route
+            path="/view-item/lazy721/:objectId"
+            element={<SingleItemMint />}
+          />
+          <Route
+            path="/view-item/lazy1155/:objectId"
+            element={<BatchItemMint />}
+          />
           <Route
             path="/view-item/:tokenAddress/:tokenId/:uid"
             element={<BatchItem />}

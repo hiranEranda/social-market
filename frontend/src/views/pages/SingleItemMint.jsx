@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import { BsFacebook } from "react-icons/bs";
@@ -19,12 +19,6 @@ import lazyMint721 from "../../../src/contract/functions/erc721/lazymint";
 const Moralis = require("moralis-v1");
 const contract = require("../../../src/contract/functions/erc721/contract");
 
-const nft = {
-  id: "3213154654",
-  category: "Art",
-  price: "120",
-};
-
 function SingleItemMint() {
   const bought = (msg) => toast.success(msg);
   const boughtError = (msg) => toast.error(msg);
@@ -43,10 +37,6 @@ function SingleItemMint() {
 
   const { isInitialized, authenticate, user } = useMoralis();
   let navigate = useNavigate();
-
-  useEffect(() => {
-    setId(objectId);
-  }, [setId, id]);
 
   const getData = async () => {
     _setLoading(true);
@@ -104,8 +94,8 @@ function SingleItemMint() {
             return {
               ...item,
               ...res.data,
-              // creatorObject,
-              // contractDetails,
+              creatorObject,
+              contractDetails,
               contractAvatar,
               ...isCustomToken,
             };
@@ -124,6 +114,8 @@ function SingleItemMint() {
 
   useEffect(() => {
     if (isInitialized) {
+      setId(objectId);
+
       getData().then((info) => {
         if (info !== null && info !== undefined) {
           console.log(info, data);
@@ -132,7 +124,7 @@ function SingleItemMint() {
         }
       });
     }
-  }, [isInitialized, id]);
+  }, [isInitialized, id, setId, id]);
 
   return (
     <>

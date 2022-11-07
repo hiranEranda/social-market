@@ -165,7 +165,7 @@ function BatchItem() {
         {/* {console.log(data)} */}
         <div className="w-full h-[250px] bg-slate-900 flex">
           <p className="flex items-center justify-center text-6xl text-white">
-            Single Product
+            Batch Product
           </p>
         </div>
       </div>
@@ -208,6 +208,9 @@ function BatchItem() {
                   <p className="mt-3 text-black">
                     Item category: {data[0].category}
                   </p>
+                  <p className="mt-3 text-black">
+                    Item Amount: {data[0].amount}
+                  </p>
                   <div className="grid gap-3 my-3 md:grid-cols-2">
                     <div className="p-2 border-gray-400 rounded-lg border-1 h-[70px] my-auto">
                       <div className="grid grid-flow-col grid-rows-2 gap-2 h-[50px]">
@@ -230,10 +233,12 @@ function BatchItem() {
                       </div>
                     </div>
                   </div>
+
                   <p className="text-black">Description</p>
                   <div className="overflow-auto scroll-y scroll-smooth h-[6rem] border- border-gray-300 rounded-lg py-2">
                     <p>{data[0].description}</p>
                   </div>
+
                   <div className="px-3 mt-4">
                     <p className="text-xl text-black">Price</p>
                     <p className="flex text-xl font-bold text-black">
