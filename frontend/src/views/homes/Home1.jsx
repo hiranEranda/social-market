@@ -12,6 +12,8 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
+import CircularStatic from "../../components/LoadingAnime";
+
 import { useMoralis } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import CardsMint721 from "../../components/cards/CardsMint721";
@@ -248,6 +250,7 @@ const Home1 = () => {
       <Header />
 
       <img
+        className="mx-auto"
         style={{ maxWidth: " 100%", height: "auto" }}
         src="images/back_01.png"
         alt="..."
@@ -274,7 +277,9 @@ const Home1 = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (!loading && data === null) || data === undefined ? (
-        <div>Check your connectivity</div>
+        <div className="flex justify-center mx-auto">
+          <CircularStatic />
+        </div>
       ) : !loading && data.length === 0 ? (
         <div>No Items yet</div>
       ) : (
@@ -322,7 +327,9 @@ const Home1 = () => {
           </Backdrop>
         ) : (!loading && collectionData === null) ||
           collectionData === undefined ? (
-          <div>Check your connectivity</div>
+          <div className="flex justify-center mx-auto">
+            <CircularStatic />
+          </div>
         ) : !loading && collectionData.length === 0 ? (
           <div>No Items yet</div>
         ) : (
@@ -397,7 +404,9 @@ const Home1 = () => {
             <CircularProgress color="inherit" />
           </Backdrop>
         ) : (!loading && data === null) || data === undefined ? (
-          <div className="mx-auto max-w-[1280px]"> Check your connectivity</div>
+          <div className="mx-auto max-w-[1280px] flex justify-center">
+            <CircularStatic />
+          </div>
         ) : !loading && data.length === 0 ? (
           <div className="mx-auto max-w-[1280px]">No Items yet</div>
         ) : (
@@ -457,7 +466,9 @@ const Home1 = () => {
               <CircularProgress color="inherit" />
             </Backdrop>
           ) : (!loading && lazyData === null) || lazyData === undefined ? (
-            <div>Check your connectivity</div>
+            <div className="flex justify-center mx-auto">
+              <CircularStatic />
+            </div>
           ) : !loading && lazyData.length === 0 ? (
             <div>No Items yet</div>
           ) : (

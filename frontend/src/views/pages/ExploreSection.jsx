@@ -98,10 +98,11 @@ function ExploreSection({ val, isMultiple }) {
                   </div>
                   <Link to="#">
                     <p className="txt_sm">
+                      {console.log(val)}
                       Price:
                       <span className="color_green txt_sm">
-                        {Moralis.Units.FromWei(val.askingPrice, 18)}
-                        ETH
+                        {Moralis.Units.FromWei(val.askingPrice, 18)}{" "}
+                        {val.isCustomToken ? "SMKT" : "ETH"}
                       </span>
                     </p>
                   </Link>

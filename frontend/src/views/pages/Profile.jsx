@@ -99,7 +99,7 @@ function Profile() {
           <p className="flex justify-center pt-4 text-xl">
             {data === null ? person.ethAddress : data.ethAddress}
           </p>
-          <div className="grid grid-cols-2 gap-2 w-[400px] mx-auto mt-4 ">
+          {/* <div className="grid grid-cols-2 gap-2 w-[400px] mx-auto mt-4 ">
             <p className="flex justify-center text-xl w-[100px] text-black">
               <span className="flex justify-center mr-2 text-black">
                 {person.followers}
@@ -112,7 +112,7 @@ function Profile() {
               </span>
               Following
             </p>
-          </div>
+          </div> */}
           <div className="flex justify-center gap-2 mx-auto mt-4">
             <AiFillInstagram
               onClick={() => {

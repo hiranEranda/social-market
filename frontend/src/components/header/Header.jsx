@@ -57,9 +57,8 @@ const Header = () => {
                   id="logo_js"
                   style={{
                     height: "50px",
-                    width: "50px",
                   }}
-                  src="/images/smkt.jpeg"
+                  src="/images/logo2.png"
                   // src="/img/logos/coin.svg"
                   alt="logo"
                 />
@@ -94,8 +93,8 @@ const Header = () => {
                 </li>
               </ul>
             </div>
-            {/* ================= */}
-            <div className="header__search">
+            {/* ================= search bar ================= */}
+            {/* <div className="header__search">
               <input
                 type="text"
                 placeholder="Search"
@@ -119,7 +118,7 @@ const Header = () => {
               >
                 <i className="ri-search-line" />
               </Link>
-            </div>
+            </div> */}
 
             {/* //////////////////////////////////////////////////////// */}
 
@@ -135,7 +134,7 @@ const Header = () => {
                   Connect wallet
                 </button>
               ) : (
-                <li className="flex-row has_popup2 d-flex align-items-center">
+                <li className="flex-row has_popup2 d-flex align-items-center py-[5px] px-[5px] rounded-[2rem] border-2 border-yellow-500">
                   <div className="d-inline">
                     <Avatar
                       onClick={() => window.location.reload()}

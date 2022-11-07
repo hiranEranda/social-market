@@ -88,7 +88,7 @@ function CardsMint721({ val, isMultiple }) {
                 <p className="txt_sm">
                   Price:
                   <span className="color_green txt_sm">
-                    {Moralis.Units.FromWei(val.askingPrice, 18)} ETH
+                    {Moralis.Units.FromWei(val.askingPrice, 18)} SMKT
                   </span>
                 </p>
               </Link>

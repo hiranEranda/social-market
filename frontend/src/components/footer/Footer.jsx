@@ -25,7 +25,7 @@ function Footer() {
             }}
           >
             <div className="container ">
-              <div className="grid md:grid-cols-3 ">
+              <div className="grid md:grid-cols-3">
                 <div className="pt-3 space-y-20 md:pt-0">
                   <h3>Customer Service</h3>
                   <span className="footer__text">: cs@sm.one</span>
@@ -50,21 +50,21 @@ function Footer() {
         <div>
           <footer className="footer__1" style={{ marginTop: "auto" }}>
             <div className="container">
-              <div className="row">
-                <div className="space-y-20 col-lg-4">
+              <div className="grid md:grid-cols-4">
+                <div className="space-y-20 ">
                   <div className="footer__logo">
                     <img
-                      src="/images/smkt.jpeg"
-                      className="w-[100px] mx-auto"
+                      src="/images/logo2.png"
+                      className="mx-auto w-[500px]"
                       alt=""
                     />
                   </div>
-                  <p className="footer__text">
+                  <p className="p-2 footer__text">
                     General knowledge is something that helps us to grow both on
                     a personal as well as academic level
                   </p>
                 </div>
-                <div className="col-lg-2 col-6">
+                <div className="flex justify-start p-2 md:justify-center">
                   <ul className="footer__list">
                     <li>
                       <Link to="#"> About Us </Link>
@@ -80,7 +80,7 @@ function Footer() {
                     </li>
                   </ul>
                 </div>
-                <div className="col-lg-2 col-6">
+                <div className="flex justify-start p-2 md:justify-center">
                   <ul className="footer__list">
                     <li>
                       <Link to="#"> Contact Us </Link>
@@ -96,9 +96,11 @@ function Footer() {
                     </li>
                   </ul>
                 </div>
-                <div className="col-lg-2 col-6">
-                  <h6 className="footer__title">Connect with us</h6>
-                  <ul className="mb-40 space-x-10 footer__social">
+                <div className="mx-auto">
+                  <h6 className="flex justify-center mb-4 footer__title">
+                    Connect with us
+                  </h6>
+                  <ul className="mb-40 space-x-20 footer__social">
                     <li>
                       <a
                         href="https://www.facebook.com/"
