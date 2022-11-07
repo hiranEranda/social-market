@@ -135,7 +135,12 @@ function Profile() {
               className="text-2xl cursor-pointer"
             />
           </div>
-          <p className="flex justify-center mt-4">{data.bio}</p>
+          {console.log(data)}
+          <p className="flex justify-center mt-4">
+            {data !== undefined && data !== null && data.bio !== undefined
+              ? data.bio
+              : "My bio"}
+          </p>
           <div className="flex mx-auto items-center justify-center mt-4 bg-yellow-500 rounded-2xl h-[40px] w-[350px] md:w-[200px]">
             <span className="mr-2 text-xl text-white">
               <FaUserEdit />

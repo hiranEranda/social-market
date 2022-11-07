@@ -59,7 +59,7 @@ const Header = () => {
                     height: "50px",
                     width: "50px",
                   }}
-                  src="/images/fire.gif"
+                  src="/images/smkt.jpeg"
                   // src="/img/logos/coin.svg"
                   alt="logo"
                 />

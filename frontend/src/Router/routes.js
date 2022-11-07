@@ -13,6 +13,7 @@ import Erc721 from "../views/pages/create/Erc721";
 import BatchItem from "../views/pages/BatchItem";
 import Collections from "../views/pages/Collections";
 import ConnectWallet from "../views/pages/ConnectWallet";
+import SingleItemMint from "../views/pages/SingleItemMint";
 
 const ROUTES = () => {
   return (
@@ -24,6 +25,7 @@ const ROUTES = () => {
             path="/view-item/:tokenAddress/:tokenId"
             element={<SingleItem />}
           />
+          {/* <Route path="/view-item/:objectId" element={<SingleItemMint />} /> */}
           <Route
             path="/view-item/:tokenAddress/:tokenId/:uid"
             element={<BatchItem />}

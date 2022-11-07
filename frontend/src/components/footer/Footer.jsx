@@ -53,7 +53,11 @@ function Footer() {
               <div className="row">
                 <div className="space-y-20 col-lg-4">
                   <div className="footer__logo">
-                    <img src="/images/fire.gif" alt="" />
+                    <img
+                      src="/images/smkt.jpeg"
+                      className="w-[100px] mx-auto"
+                      alt=""
+                    />
                   </div>
                   <p className="footer__text">
                     General knowledge is something that helps us to grow both on

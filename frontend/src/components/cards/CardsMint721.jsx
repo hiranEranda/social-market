@@ -53,7 +53,7 @@ function CardsMint721({ val, isMultiple }) {
           <div className="card_head">
             {isMultiple ? (
               <Link
-                to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}
+              // to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}
               >
                 <img
                   width="10"
