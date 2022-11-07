@@ -14,7 +14,7 @@ const Moralis = require("moralis-v1");
 const contract721 = require("../../contract/functions/erc721/contract");
 const contract1155 = require("../../contract/functions/erc1155/contract");
 
-function CardsCreated721({ val, isMultiple }) {
+function CardsOwned721({ val, isMultiple }) {
   let tooltip = "Here type the tooltip message";
 
   const added = (msg) => toast.success(msg);
@@ -247,4 +247,4 @@ function CardsCreated721({ val, isMultiple }) {
   );
 }
 
-export default CardsCreated721;
+export default CardsOwned721;

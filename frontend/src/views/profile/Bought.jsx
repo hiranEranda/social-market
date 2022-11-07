@@ -5,10 +5,11 @@ import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { useMoralis } from "react-moralis";
 import CardsCreated from "../../components/cards/CardsCreated";
+import CardsOwned721 from "../../components/cards/CardsOwned721";
 
 const Moralis = require("moralis-v1");
 
-function Created({ isMultiple }) {
+function Bought({ isMultiple }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
@@ -23,8 +24,43 @@ function Created({ isMultiple }) {
     };
 
     try {
-      const data = await Moralis.Cloud.run("SM_getUserDesignedItems", params);
-      console.log(data);
+      let prefix = "https://gateway.moralisipfs.com/ipfs/";
+      let data = [];
+
+      const result1 = await Moralis.Cloud.run("SM_getUserBoughtItems", params);
+
+      const data1 = await Promise.all(
+        result1.map(async (item) => {
+          if (item) {
+            let uri = prefix + item.uri.substring(34, item.uri.length);
+            const result = await Moralis.Cloud.run("FetchJson", {
+              url: uri,
+            });
+            return { ...item, ...result.data };
+          }
+        })
+      );
+      //   console.log(data1);
+
+      const result2 = await Moralis.Cloud.run(
+        "SM_getUserBoughtItems1155",
+        params
+      );
+      const data2 = await Promise.all(
+        result2.map(async (item) => {
+          if (item) {
+            let uri = prefix + item.uri.substring(34, item.uri.length);
+            const result = await Moralis.Cloud.run("FetchJson", {
+              url: uri,
+            });
+            return { ...item, ...result.data };
+          }
+        })
+      );
+      //   console.log(data1);
+
+      data.push(data1);
+      data.push(data2);
 
       setLoading(false);
       return data;
@@ -38,7 +74,7 @@ function Created({ isMultiple }) {
   useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
-        // //console.log(data);
+        console.log(data);
         setData(data);
       });
     }
@@ -56,28 +92,22 @@ function Created({ isMultiple }) {
       ) : (!loading && data === null) || data === undefined ? (
         <div>Check your connectivity</div>
       ) : !loading && data.length === 0 ? (
-        <div>No Items added yet....</div>
+        <div>No Items bought yet....</div>
       ) : (
+        // <div>data fetched</div>
+
         <>
           {isMultiple ? (
             <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-              {data
-                .filter(function (item) {
-                  return item.contractType === "erc1155";
-                })
-                .map((val, i) => (
-                  <CardsCreated val={val} isMultiple={isMultiple} />
-                ))}
+              {data[1].map((val, i) => (
+                <CardsOwned721 val={val} isMultiple={isMultiple} />
+              ))}
             </div>
           ) : (
             <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-              {data
-                .filter(function (item) {
-                  return item.contractType === "erc721";
-                })
-                .map((val, i) => (
-                  <CardsCreated key={i} val={val} />
-                ))}
+              {data[0].map((val, i) => (
+                <CardsOwned721 val={val} isMultiple={isMultiple} />
+              ))}
             </div>
           )}
         </>
@@ -86,4 +116,4 @@ function Created({ isMultiple }) {
   );
 }
 
-export default Created;
+export default Bought;

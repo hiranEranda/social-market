@@ -16,6 +16,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import OnSale from "../profile/OnSale";
 import Created from "../profile/Created";
 import Owned from "../profile/Owned";
+import Bought from "../profile/Bought";
 
 const Moralis = require("moralis-v1");
 
@@ -65,6 +66,10 @@ function Profile() {
       }
     }, 1000);
   }, [isInitialized, navigate, isAuthenticated]);
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
 
   return (
     <>
@@ -135,7 +140,6 @@ function Profile() {
               className="text-2xl cursor-pointer"
             />
           </div>
-          {console.log(data)}
           <p className="flex justify-center mt-4">
             {data !== undefined && data !== null && data.bio !== undefined
               ? data.bio
@@ -153,28 +157,44 @@ function Profile() {
         <div className="grid grid-cols-4 gap-2 mx-auto mt-4 md:grid-cols-4   h-[40px]">
           <div
             onClick={() => setFilter("On sale")}
-            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            className={classNames(
+              filter === "On sale" &&
+                "flex items-center justify-center text-white border-black bg-yellow-400 cursor-pointer border-1 rounded-3xl",
+              "flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            )}
           >
-            On sale
+            Items On sale
           </div>
 
           <div
-            onClick={() => setFilter("Created")}
-            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
-          >
-            Created
-          </div>
-          <div
             onClick={() => setFilter("Owned")}
-            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            className={classNames(
+              filter === "Owned" &&
+                "flex items-center justify-center text-white border-black bg-yellow-500 cursor-pointer border-1 rounded-3xl",
+              "flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            )}
           >
-            Owned
+            Owned Items
           </div>
           <div
-            onClick={() => setFilter("My collection")}
-            className="flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            onClick={() => setFilter("Bought")}
+            className={classNames(
+              filter === "Bought" &&
+                "flex items-center justify-center text-white border-black bg-yellow-500 cursor-pointer border-1 rounded-3xl",
+              "flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            )}
           >
-            My collection
+            Bought Items
+          </div>
+          <div
+            onClick={() => setFilter("Created")}
+            className={classNames(
+              filter === "Created" &&
+                "flex items-center justify-center text-white border-black bg-yellow-500 cursor-pointer border-1 rounded-3xl",
+              "flex items-center justify-center text-yellow-600 border-yellow-600 cursor-pointer border-1 rounded-3xl"
+            )}
+          >
+            Created Items
           </div>
           {/* <div
             onClick={() => setFilter("Liked NFTs")}
@@ -220,10 +240,12 @@ function Profile() {
         <div className="mt-4">
           {filter === "On sale" ? (
             <OnSale isMultiple={type} />
+          ) : filter === "Owned" ? (
+            <Owned isMultiple={type} />
+          ) : filter === "Bought" ? (
+            <Bought isMultiple={type} />
           ) : filter === "Created" ? (
             <Created isMultiple={type} />
-          ) : filter === "Owned" ? (
-            <Owned />
           ) : null}
         </div>
       </div>

@@ -610,14 +610,14 @@ const buyItem = async (item, authenticate) => {
         await Moralis.Cloud.run("updateData", params);
 
         // check if the buyer already have this token and has put on sale
-        const query3 = new Moralis.Query("Bought1155");
+        const query3 = new Moralis.Query("SM_Bought1155");
         query3.equalTo("tokenId", item.tokenId);
         query3.equalTo("tokenAddress", item.tokenAddress);
         query3.equalTo("owner", user.get("ethAddress").toLowerCase());
         const obj3 = await query3.first();
 
         // check if the buyer already have this token and hasn't put on sale
-        const query4 = new Moralis.Query("Bought1155");
+        const query4 = new Moralis.Query("SM_Bought1155");
         query4.equalTo("tokenId", item.tokenId);
         query4.equalTo("tokenAddress", item.tokenAddress);
         query4.equalTo("owner", user.get("ethAddress").toLowerCase());
@@ -631,37 +631,37 @@ const buyItem = async (item, authenticate) => {
         const userObject = await userQuery.first({ useMasterKey: true });
 
         if (!obj3) {
-          // create new record in Bought1155 table for buyer
-          // create new record in Bought1155 table for buyer
-          const Bought1155 = Moralis.Object.extend("Bought1155");
-          const bought1155 = new Bought1155();
+          // create new record in SM_Bought1155 table for buyer
+          // create new record in SM_Bought1155 table for buyer
+          const SM_Bought1155 = Moralis.Object.extend("SM_Bought1155");
+          const SM_bought1155 = new SM_Bought1155();
 
-          bought1155.set("tokenId", item.tokenId);
-          bought1155.set("tokenAddress", item.tokenAddress);
-          bought1155.set("owner", user.get("ethAddress").toLowerCase());
-          bought1155.set("ownerObject", userObject);
-          bought1155.set("amount", buyer.amount.toString());
-          bought1155.set("uri", item.tokenUri);
-          bought1155.set("isAddedToMarket", false);
-          bought1155.set("uid", item.uid);
-          await bought1155.save();
+          SM_bought1155.set("tokenId", item.tokenId);
+          SM_bought1155.set("tokenAddress", item.tokenAddress);
+          SM_bought1155.set("owner", user.get("ethAddress").toLowerCase());
+          SM_bought1155.set("ownerObject", userObject);
+          SM_bought1155.set("amount", buyer.amount.toString());
+          SM_bought1155.set("uri", item.tokenUri);
+          SM_bought1155.set("isAddedToMarket", false);
+          SM_bought1155.set("uid", item.uid);
+          await SM_bought1155.save();
         } else if (obj4) {
           obj4.set("amount", buyer.amount.toString());
           await obj4.save();
         } else {
           // create new record in NFTOwners1155 table for buyer
-          const Bought1155 = Moralis.Object.extend("Bought1155");
-          const bought1155 = new Bought1155();
+          const SM_Bought1155 = Moralis.Object.extend("SM_Bought1155");
+          const SM_bought1155 = new SM_Bought1155();
 
-          bought1155.set("tokenId", item.tokenId);
-          bought1155.set("tokenAddress", item.tokenAddress);
-          bought1155.set("owner", user.get("ethAddress").toLowerCase());
-          bought1155.set("ownerObject", userObject);
-          bought1155.set("amount", buyer.amount.toString());
-          bought1155.set("uri", item.tokenUri);
-          bought1155.set("isAddedToMarket", false);
-          bought1155.set("uid", item.uid);
-          await bought1155.save();
+          SM_bought1155.set("tokenId", item.tokenId);
+          SM_bought1155.set("tokenAddress", item.tokenAddress);
+          SM_bought1155.set("owner", user.get("ethAddress").toLowerCase());
+          SM_bought1155.set("ownerObject", userObject);
+          SM_bought1155.set("amount", buyer.amount.toString());
+          SM_bought1155.set("uri", item.tokenUri);
+          SM_bought1155.set("isAddedToMarket", false);
+          SM_bought1155.set("uid", item.uid);
+          await SM_bought1155.save();
         }
 
         return {

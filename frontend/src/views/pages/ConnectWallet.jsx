@@ -46,19 +46,19 @@ const ConnectWallet = () => {
   }, [isAuthenticated, isWeb3Enabled, isWeb3EnableLoading, enableWeb3]);
 
   return (
-    <div className="effect">
+    <div className="">
       <Header />
 
-      <div className="container">
+      <div className="container pb-[100px]">
         <div>
           <Link to="/" className="mt-20 btn btn-white btn-sm">
             Back to home
           </Link>
           <div className="hero__wallets pt-100 pb-50">
             <div className="space-y-20 d-flex flex-column align-items-center">
-              <div className="logo">
+              <div className="p-4 bg-gray-200 rounded-full logo">
                 <img
-                  src={`images/smkt.jpeg`}
+                  src={`images/logo1.png`}
                   alt="ImgPreview"
                   className="w-[200px]"
                 />
