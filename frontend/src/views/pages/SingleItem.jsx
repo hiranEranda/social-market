@@ -57,6 +57,7 @@ function SingleItem() {
         tokenAddress: _tokenAddress,
       };
       const result = await Moralis.Cloud.run("SM_viewItem", params);
+      console.log(result);
       const history = await Moralis.Cloud.run("SM_getHistory721", params);
       const royalty = await contract.getCreatorAndRoyalty(result[0]);
       setRoyalty(royalty);

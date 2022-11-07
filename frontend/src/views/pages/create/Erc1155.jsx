@@ -145,7 +145,7 @@ function Erc1155() {
           setLoading4(true);
           created(status.message);
           setTimeout(() => {
-            // navigate("/profile");
+            navigate("/profile");
           }, 1000);
         } else {
           setBackDrop(false);

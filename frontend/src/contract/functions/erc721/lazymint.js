@@ -36,7 +36,7 @@ const lazyMint = async (
       await Moralis.Cloud.run("SM_initNftTables721", params2);
     } catch (error) {
       console.log(error.message);
-      return { state: true, message: error.message };
+      return { state: false, message: error.message };
     }
 
     try {
@@ -47,8 +47,9 @@ const lazyMint = async (
       await obj.save();
     } catch (error) {
       console.log(error.message);
-      return { state: true, message: error.message };
+      return { state: false, message: error.message };
     }
+    return { state: true, message: "Minting complete" };
   } catch (error) {
     console.log(error);
   }

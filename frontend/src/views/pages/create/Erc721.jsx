@@ -142,7 +142,7 @@ function Erc721() {
         setLoading4(true);
         created(state.message);
         setTimeout(() => {
-          // navigate("/profile");
+          navigate("/profile");
         }, 1000);
       } else {
         setBackDrop(false);

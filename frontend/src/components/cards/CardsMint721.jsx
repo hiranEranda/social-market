@@ -63,8 +63,8 @@ function CardsMint721({ val, isMultiple }) {
                 />
               </Link>
             ) : (
-              <Link to={`#`}>
-                {/* <Link to={`/view-item/${val.tokenAddress}/${val.tokenId}`}> */}
+              // <Link to={`#`}>
+              <Link to={`/view-item/${val.id}`}>
                 <img
                   width="10"
                   height="80"

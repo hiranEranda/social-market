@@ -25,7 +25,7 @@ const ROUTES = () => {
             path="/view-item/:tokenAddress/:tokenId"
             element={<SingleItem />}
           />
-          {/* <Route path="/view-item/:objectId" element={<SingleItemMint />} /> */}
+          <Route path="/view-item/:objectId" element={<SingleItemMint />} />
           <Route
             path="/view-item/:tokenAddress/:tokenId/:uid"
             element={<BatchItem />}
