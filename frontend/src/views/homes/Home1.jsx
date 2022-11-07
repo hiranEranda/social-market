@@ -35,6 +35,7 @@ const Home1 = () => {
       let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
+      console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {
@@ -229,7 +230,7 @@ const Home1 = () => {
         setCollectionData(data);
       });
       getLazyData().then((data) => {
-        console.log(data);
+        // console.log(data);
         setLazyData(data);
       });
     }
@@ -396,9 +397,9 @@ const Home1 = () => {
             <CircularProgress color="inherit" />
           </Backdrop>
         ) : (!loading && data === null) || data === undefined ? (
-          <div>Check your connectivity</div>
+          <div className="mx-auto max-w-[1280px]"> Check your connectivity</div>
         ) : !loading && data.length === 0 ? (
-          <div>No Items yet</div>
+          <div className="mx-auto max-w-[1280px]">No Items yet</div>
         ) : (
           <div className="mx-auto">
             {data[0].length > 0 && type === "ERC-721" ? (
