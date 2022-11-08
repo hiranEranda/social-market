@@ -80,6 +80,7 @@ const create = async (
         console.log("init params2 for lazy");
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
+          creator: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
           tokenId: nftId,
           uri: nftFileMetadataPath,
@@ -93,6 +94,7 @@ const create = async (
       } else {
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
+          creator: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
           tokenId: nftId.toString(),
           uri: nftFileMetadataPath,

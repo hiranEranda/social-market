@@ -75,6 +75,7 @@ const create = async (
       if (nftId === null) {
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
+          creator: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
           tokenId: nftId,
           // createdId: ids.createdId.toString(),
@@ -87,6 +88,7 @@ const create = async (
       } else {
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
+          creator: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
           tokenId: nftId.toString(),
           // createdId: ids.createdId.toString(),

@@ -6,10 +6,12 @@ import { BsFacebook } from "react-icons/bs";
 import { AiFillInstagram } from "react-icons/ai";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { useMoralis } from "react-moralis";
+import { FaEthereum } from "react-icons/fa";
 
 import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { ToastContainer, toast } from "react-toastify";
+import Response from "./Response";
 
 const Moralis = require("moralis-v1");
 const contract = require("../../../src/contract/functions/erc1155/contract");
@@ -241,13 +243,17 @@ function BatchItem() {
 
                   <div className="px-3 mt-4">
                     <p className="text-xl text-black">Price</p>
-                    <p className="flex text-xl font-bold text-black">
+                    <p className="flex items-center text-xl font-bold text-black">
                       <span className="mr-2">
-                        <img
-                          src="/images/fire.gif"
-                          className="w-6 h-6"
-                          alt=""
-                        />
+                        {data[0].isCustomToken ? (
+                          <img
+                            className="w-[30px] mr-2"
+                            src="/images/smkt.jpeg"
+                            alt=""
+                          />
+                        ) : (
+                          <FaEthereum size={20} />
+                        )}
                       </span>
                       {Moralis.Units.FromWei(data[0].askingPrice, 18)} ETH
                     </p>
@@ -358,6 +364,12 @@ function BatchItem() {
           <Footer />
         </>
       )}
+      <Response
+        open={open}
+        loading={_loading}
+        title={title}
+        message={message}
+      />
       <ToastContainer position="bottom-right" />
     </>
   );

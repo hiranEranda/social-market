@@ -361,7 +361,7 @@ function Erc1155() {
 
                                 <MenuItem value={false}>
                                   <div className="flex items-center justify-center">
-                                    <FaEthereum size={25} />
+                                    <FaEthereum size={20} />
                                     <span>ETH</span>
                                   </div>
                                 </MenuItem>

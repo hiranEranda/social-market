@@ -10,6 +10,8 @@ import MegaMenu from "./Menu/MegaMenu";
 import ProfileMenu from "./Menu/ProfileMenu";
 import Avatar from "@mui/material/Avatar";
 
+import { FaWallet } from "react-icons/fa";
+
 const PagesMenu = [
   {
     title: "Marketplace",
@@ -101,6 +103,14 @@ const Header = () => {
                     <MegaMenu />
                   </ul> */}
                 </li>
+                <li className="has_popup2">
+                  <Link className="color_white is_new hovered" to="/create">
+                    Creator Center <i className="ri-more-2-fill" />
+                  </Link>
+                  {/* <ul className="space-y-20 menu__popup2">
+                    <MegaMenu />
+                  </ul> */}
+                </li>
               </ul>
             </div>
             {/* ================= search bar ================= */}
@@ -137,10 +147,10 @@ const Header = () => {
               !user ||
               user.attributes.username === undefined ? (
                 <button
-                  className="py-[10px] px-[15px] bg-black text-white rounded-3xl border-2 border-yellow-500"
+                  className="flex py-[10px] px-[15px] bg-black text-white rounded-3xl border-2 border-yellow-500 items-center"
                   onClick={() => navigate("/connect-wallet")}
                 >
-                  <i className="ri-wallet-3-line" />
+                  <FaWallet className="mr-2 text-xl text-white" />
                   Connect wallet
                 </button>
               ) : (

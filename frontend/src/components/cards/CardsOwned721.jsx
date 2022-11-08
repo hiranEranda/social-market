@@ -213,7 +213,7 @@ function CardsOwned721({ val, isMultiple }) {
                       </Tooltip>
 
                       <div className="d-flex align-items-center">
-                        <FaEthereum size={25} />
+                        <FaEthereum size={20} />
 
                         <Field
                           name="price"

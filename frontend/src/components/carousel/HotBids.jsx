@@ -71,7 +71,7 @@ function HotBids({ data }) {
           {data.map((val, i) => (
             <div
               key={i}
-              className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] pt-2"
+              className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] pt-2"
             >
               <CardsPrice721 val={val} />
             </div>

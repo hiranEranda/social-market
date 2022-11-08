@@ -60,7 +60,7 @@ function App() {
               alt="logo"
             />
           </div>
-          <div className="mx-auto py-[250px] bg-[#111111]">
+          <div className="mx-auto py-[250px] bg-[#111111] h-[full]">
             <div className="mx-auto">
               <h1 className="flex items-center justify-center mb-3 text-5xl text-white md:text-6xl">
                 Wrong network
@@ -71,7 +71,7 @@ function App() {
               </p>
               <div
                 onClick={() => {
-                  switchNetwork("0x5");
+                  switchNetwork(process.env.REACT_APP_CHAIN);
                 }}
                 className="w-[180px] h-[50px] border-1 bg-white rounded-2xl mx-auto mt-3 flex items-center justify-center text-black cursor-pointer"
               >

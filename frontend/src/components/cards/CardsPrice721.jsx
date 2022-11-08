@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "reactjs-popup/dist/index.css";
+import { FaEthereum } from "react-icons/fa";
 
 import { useMoralis } from "react-moralis";
 
@@ -87,25 +88,41 @@ function CardsPrice721({ val, isMultiple }) {
             )}
           </div>
           {/* =============== */}
-          <h6 className="card_title">{val.name}</h6>
+          <div className="card_footer justify-content-between">
+            <div className="creators">
+              <p className="text-sm card_title">
+                {val.name.length > 10
+                  ? `${val.name.substring(0, 15)}....`
+                  : `${val.name}`}
+              </p>
+            </div>
+            <div className="creators">
+              {isMultiple ? (
+                <p className="txt_sm"> {val.amount} in stock</p>
+              ) : (
+                <p className="txt_sm"> 1 in stock</p>
+              )}
+            </div>
+          </div>
 
           <div className="space-y-10 card_footer d-block">
             <div className="card_footer justify-content-between">
               <div className="creators">
-                {isMultiple ? (
-                  <p className="txt_sm"> {val.amount} in stock</p>
-                ) : (
-                  <p className="txt_sm"> 1 in stock</p>
-                )}
-              </div>
-              <Link to="#">
                 <p className="txt_sm">
+                  {/* {console.log(val)} */}
                   Price:
                   <span className="color_green txt_sm">
-                    {Moralis.Units.FromWei(val.askingPrice, 18)} ETH
+                    {Moralis.Units.FromWei(val.askingPrice, 18)}{" "}
+                    {val.isCustomToken ? "SMKT" : "ETH"}
                   </span>
                 </p>
-              </Link>
+              </div>
+
+              {val.isCustomToken ? (
+                <img className="w-[20px] mr-2" src="/images/smkt.jpeg" alt="" />
+              ) : (
+                <FaEthereum size={20} />
+              )}
             </div>
             <div className="hr" />
             <div className="space-x-10 d-flex align-items-center justify-content-between">

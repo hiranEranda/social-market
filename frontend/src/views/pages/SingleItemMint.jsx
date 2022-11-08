@@ -213,7 +213,7 @@ function SingleItemMint() {
                             alt=""
                           />
                         ) : (
-                          <FaEthereum size={25} />
+                          <FaEthereum size={20} />
                         )}
                       </span>
                       {Moralis.Units.FromWei(data[0].askingPrice, 18)}{" "}

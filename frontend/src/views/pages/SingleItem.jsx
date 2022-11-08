@@ -13,6 +13,8 @@ import { FaEthereum } from "react-icons/fa";
 
 import { ToastContainer, toast } from "react-toastify";
 
+import Response from "./Response";
+
 const Moralis = require("moralis-v1");
 const contract = require("../../../src/contract/functions/erc721/contract");
 
@@ -210,8 +212,8 @@ function SingleItem() {
                     <p>{data[0].description}</p>
                   </div>
                   <div className="px-3 mt-4">
-                    <p className="text-xl text-black">Price</p>
-                    <p className="flex text-xl font-bold text-black">
+                    <p className="px-1 text-xl text-black">Price</p>
+                    <p className="flex items-center text-xl font-bold text-black">
                       <span className="mr-2">
                         {data[0].isCustomToken ? (
                           <img
@@ -220,14 +222,14 @@ function SingleItem() {
                             alt=""
                           />
                         ) : (
-                          <FaEthereum size={25} />
+                          <FaEthereum size={20} />
                         )}
                       </span>
                       {Moralis.Units.FromWei(data[0].askingPrice, 18)}{" "}
                       {data[0].isCustomToken ? "SMKT" : "ETH"}
                     </p>
                   </div>
-                  <div className="px-3 mt-4">
+                  <div className="px-[20px] mt-4">
                     <button
                       className="px-[100px] py-2 bg-yellow-400 rounded-md"
                       onClick={async () => {
@@ -334,6 +336,8 @@ function SingleItem() {
           <Footer />
         </>
       )}
+
+      <Response open={open} loading={loading} title={title} message={message} />
       <ToastContainer position="bottom-right" />
     </>
   );

@@ -190,7 +190,7 @@ const Home1 = () => {
           const user = await Moralis.Cloud.run("SM_getUser", {
             ethAddress: item.attributes.userAddress,
           });
-          //   console.log(user);
+          console.log(user);
 
           const items = await Moralis.Cloud.run("SM_getCollectionData", params);
           const nfts = await Promise.all(
@@ -256,7 +256,6 @@ const Home1 = () => {
         src="images/back_01.png"
         alt="..."
       />
-
       <div
         style={{
           padding: "3em 3.5rem 3em 3.5rem",
@@ -483,7 +482,7 @@ const Home1 = () => {
             <div>No Items yet</div>
           ) : (
             <div className="mx-auto">
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+              <div className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] ">
                 {lazyData[0].length > 0 && typeMint === "ERC-721" ? (
                   <>
                     {lazyData[0].map((val, i) => (

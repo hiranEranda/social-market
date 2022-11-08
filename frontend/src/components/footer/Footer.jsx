@@ -25,23 +25,29 @@ function Footer() {
             }}
           >
             <div className="container ">
-              <div className="grid md:grid-cols-3">
-                <div className="pt-3 space-y-20 md:pt-0">
-                  <h3>Customer Service</h3>
-                  <span className="footer__text">: cs@sm.one</span>
+              <div className="grid md:grid-cols-3 max-w-[600px] mx-auto md:max-w-full md:w-full">
+                <div className="flex justify-center pt-3">
+                  <span>Customer Service: cs@sm.one</span>
                 </div>
-                <div className="pt-3 md:pt-0">
+                <div className="px-2 pt-3 md:pt-0">
                   <p>
                     Receive NFT news! You can receive the latest domestic NFT
                     news and newsletters by e-mail.
                   </p>
                 </div>
-                <div className="pt-3 md:pt-0">
+                <div className="px-2 pt-3 md:pt-0">
                   <h6 className="footer__title">Join the news subscription </h6>
                   <p>
                     Get up-to-date information about your shelves and get
                     notifications about products on sale via email.
                   </p>
+                  <input
+                    className="h-10 mt-3 border-gray-300 rounded-full border-1"
+                    type="text"
+                  />
+                  <div className="flex justify-center p-2 mt-2 bg-yellow-500 rounded-full">
+                    Application
+                  </div>
                 </div>
               </div>
             </div>
@@ -50,7 +56,7 @@ function Footer() {
         <div>
           <footer className="footer__1" style={{ marginTop: "auto" }}>
             <div className="container">
-              <div className="grid md:grid-cols-4">
+              <div className="grid md:grid-cols-4 w-[600px] mx-auto md:w-full">
                 <div className="space-y-20 ">
                   <div className="footer__logo">
                     <img
