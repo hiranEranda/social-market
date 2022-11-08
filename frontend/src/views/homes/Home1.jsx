@@ -14,7 +14,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
 import CircularStatic from "../../components/LoadingAnime";
 
-import { useMoralis } from "react-moralis";
+import { useMoralis, useChain } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import CardsMint721 from "../../components/cards/CardsMint721";
 
@@ -245,6 +245,7 @@ const Home1 = () => {
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
+
   return (
     <div>
       <Header />
@@ -320,7 +321,10 @@ const Home1 = () => {
 
         {loading ? (
           <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
             open
           >
             <CircularProgress color="inherit" />
@@ -398,7 +402,10 @@ const Home1 = () => {
 
         {loading ? (
           <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
             open
           >
             <CircularProgress color="inherit" />
@@ -460,7 +467,10 @@ const Home1 = () => {
         <div className="max-w-[1400px] mx-auto">
           {loading ? (
             <Backdrop
-              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              sx={{
+                color: "#fff",
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+              }}
               open
             >
               <CircularProgress color="inherit" />
@@ -496,6 +506,7 @@ const Home1 = () => {
           )}
         </div>
       </div>
+
       <Footer />
     </div>
   );

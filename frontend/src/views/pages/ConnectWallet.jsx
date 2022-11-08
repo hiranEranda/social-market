@@ -85,6 +85,8 @@ const ConnectWallet = () => {
                       onClick={async () => {
                         if (typeof window.ethereum !== "undefined") {
                           //   console.log(window.history);
+                          console.log(chainId);
+
                           if (chainId === chain) {
                             try {
                               await authenticate();
@@ -127,7 +129,7 @@ const ConnectWallet = () => {
                       className="space-y-10 box in__wallet"
                       onClick={async () => {
                         if (typeof window.ethereum !== "undefined") {
-                          //console.log("walletConnect is installed!");
+                          console.log(chainId);
 
                           if (chainId === chain) {
                             try {

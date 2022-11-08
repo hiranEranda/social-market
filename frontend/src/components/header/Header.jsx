@@ -29,14 +29,24 @@ const Header = () => {
   };
 
   let navigate = useNavigate();
-  const { user, isAuthenticated, authenticate } = useMoralis();
+  const { Moralis, isAuthenticated, user, account } = useMoralis();
+
   const [isActive, setActive] = useState(false);
   const [text, setText] = useState(null);
 
   const toggleClass = () => {
     setActive(!isActive);
   };
-
+  React.useEffect(() => {
+    Moralis.onAccountChanged(async (account) => {
+      Moralis.User.logOut().then(() => {
+        const currentUser = Moralis.User.current(); // this will now be null
+        if (currentUser === null) {
+          navigate(`/connect-wallet`);
+        }
+      });
+    });
+  }, [account]);
   return (
     <div
     // style={{

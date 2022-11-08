@@ -66,12 +66,15 @@ function SingleItem() {
       query.equalTo("tokenId", _tokenId);
       query.equalTo("tokenAddress", _tokenAddress);
       const obj = await query.first();
+
+      console.log(params);
+
       const isCustomToken = {
         isCustomToken: obj.attributes.isCustomToken,
       };
 
       const creatorObject = await Moralis.Cloud.run("SM_getCreator", params);
-      //  //console.log("creatorObject: ", creatorObject);
+      console.log("creatorObject: ", creatorObject);
       var contractAvatar = await Moralis.Cloud.run(
         "SM_getContractAvatar",
         params
