@@ -29,18 +29,20 @@ function EditProfile() {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+  const [header, setHeader] = useState(null);
+  const [headerData, setHeaderData] = useState(null);
+  const onChangeHeader = (e) => {
+    if (e.target.files[0]) {
+      setHeader(e.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setHeaderData(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
 
   /// Basic inputs ///////////////////////////////////////////////////////////////////////////////
-
-  const initialValues = {
-    name: "",
-    email: "",
-    twitter: "",
-    instagram: "",
-    facebook: "",
-    customUrl: "",
-    introduction: "",
-  };
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -79,8 +81,17 @@ function EditProfile() {
       user.set("facebook", values.facebook);
       user.set("bio", values.introduction);
       user.set("customUrl", values.customUrl);
-      const avatar = new Moralis.File("photo.jpg", picture);
-      user.set("avatar", avatar);
+
+      if (picture !== true) {
+        const avatar = new Moralis.File("photo.jpg", picture);
+        user.set("avatar", avatar);
+      }
+      if (header !== true) {
+        const _header = new Moralis.File("photo.jpg", header);
+        user.set("header", _header);
+      }
+      console.log("sss");
+      console.log(header);
 
       await user.save();
       update();
@@ -105,6 +116,7 @@ function EditProfile() {
     setTimeout(async () => {
       const user = await Moralis.User.current();
       console.log(user);
+
       if (!user) {
         navigate(`/`);
       } else {
@@ -115,12 +127,33 @@ function EditProfile() {
           instagram: user.attributes.instagram,
           facebook: user.attributes.facebook,
           customUrl: user.attributes.customUrl,
-          introduction: user.attributes.introduction,
+          introduction: user.attributes.bio,
         });
-        setAvatarData(user.attributes.avatar._url);
+        if (
+          user.attributes.avatar === undefined ||
+          user.attributes.avatar === null
+        ) {
+          return 0;
+        } else {
+          setPicture(true);
+          setAvatarData(user.attributes.avatar._url);
+        }
+        if (
+          user.attributes.header === undefined ||
+          user.attributes.header === null
+        ) {
+          return 0;
+        } else {
+          setHeader(true);
+          setHeaderData(user.attributes.header._url);
+        }
       }
     }, 1000);
   }, [isInitialized, navigate, isAuthenticated]);
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -138,22 +171,54 @@ function EditProfile() {
           <div className="mt-4 ">
             <p className="text-xl text-black">upload your avatar*</p>
 
-            <div className="flex justify-center py-4 mx-auto mt-4 ">
+            {/* <div className="flex justify-center py-4 mx-auto mt-4 ">
               <Avatar
                 alt="Remy Sharp"
                 src={!avatarData ? `/images/upload.png` : avatarData}
                 sx={{ width: 200, height: 200 }}
               />
+            </div> */}
+
+            <div className="relative flex justify-center py-4 mb-5">
+              <img
+                className="w-[120px] h-[120px] rounded-full object-cover border-[8px] border-white absolute -bottom-10 bg-white"
+                src={
+                  avatarData === null || avatarData === undefined
+                    ? "/images/Avatar.png"
+                    : avatarData
+                }
+                alt=""
+              />
+              <img
+                className="rounded-xl object-cover h-[280px] w-full border-1 border-gray-400 bg-gray-600"
+                src={
+                  headerData === null || headerData === undefined
+                    ? "/images/back_01.png"
+                    : headerData
+                }
+                alt=""
+              />
             </div>
 
             <div className="flex justify-center mx-auto mt-4">
-              <div className="flex justify-center">
-                <span className="sr-only">Choose profile photo</span>
-                <input
-                  onChange={onChangePicture}
-                  type="file"
-                  className="block w-full text-sm bg-yellow-200 rounded-2xl text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
-                />
+              <div className="flex justify-center gap-4">
+                <div className="">
+                  <p className="flex items-center justify-center">Profile</p>
+                  <input
+                    onChange={onChangePicture}
+                    type="file"
+                    className="block w-full text-sm bg-yellow-200 rounded-2xl text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
+                  />
+                </div>
+
+                <div className="">
+                  <p className="flex items-center justify-center">Cover</p>
+                  <input
+                    onChange={onChangeHeader}
+                    type="file"
+                    className="block w-full text-sm bg-yellow-200 rounded-2xl text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
+                  />
+                </div>
               </div>
 
               {/* <ToastContainer position="bottom-right" /> */}

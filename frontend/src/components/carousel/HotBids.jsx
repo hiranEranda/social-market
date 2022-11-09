@@ -14,7 +14,7 @@ function HotBids({ data }) {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     prevArrow: <SlickArrowLeft />,
     nextArrow: <SlickArrowRight />,
@@ -56,7 +56,7 @@ function HotBids({ data }) {
     ],
   };
   return (
-    <div className="justify-self-center mx-auto max-w-[1400px]">
+    <div className="justify-self-center mx-auto max-w-[1500px]">
       <div
         className="max-w-[2180px] "
         style={{ padding: "3rem", backgroundColor: "#fff" }}
@@ -71,7 +71,7 @@ function HotBids({ data }) {
           {data.map((val, i) => (
             <div
               key={i}
-              className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] pt-2"
+              className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1500px] pt-2"
             >
               <CardsPrice721 val={val} />
             </div>

@@ -15,6 +15,10 @@ function Create() {
   useDocumentTitle("Upload Type");
   const { isInitialized, isAuthenticated } = useMoralis();
   const navigate = new useNavigate();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   React.useEffect(() => {
     setTimeout(async () => {
       const user = await Moralis.User.current();

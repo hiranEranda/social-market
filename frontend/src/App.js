@@ -57,7 +57,7 @@ function App() {
   }, [isInitialized, chainId]);
 
   return (
-    <div class="overflow-hidden App">
+    <div className="overflow-hidden App">
       {chainId === process.env.REACT_APP_CHAIN ? (
         <ROUTES />
       ) : (

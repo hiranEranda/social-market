@@ -160,6 +160,10 @@ function BatchItem() {
     }
   }, [isInitialized, _tokenAddress, _tokenId, _uid]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header />

@@ -71,6 +71,10 @@ function Profile() {
     return classes.filter(Boolean).join(" ");
   }
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header />
@@ -92,8 +96,12 @@ function Profile() {
             alt=""
           />
           <img
-            className="rounded-xl object-cover h-[280px]"
-            src="/images/back_01.png"
+            className="rounded-xl object-cover h-[280px] w-full "
+            src={
+              data === null || data.header === undefined
+                ? "/images/back_01.png"
+                : data.header._url
+            }
             alt=""
           />
         </div>

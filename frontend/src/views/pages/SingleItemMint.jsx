@@ -126,6 +126,10 @@ function SingleItemMint() {
     }
   }, [isInitialized, id, setId, id]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header />

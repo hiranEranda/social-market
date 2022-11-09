@@ -45,6 +45,10 @@ const ConnectWallet = () => {
       }
   }, [isAuthenticated, isWeb3Enabled, isWeb3EnableLoading, enableWeb3]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="">
       <Header />

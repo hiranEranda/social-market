@@ -238,6 +238,10 @@ const Home1 = () => {
     }
   }, [isInitialized]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [alignment, setAlignment] = React.useState("ERC-721");
   const [type, setType] = React.useState("ERC-721");
   const [typeMint, setTypeMint] = React.useState("ERC-721");

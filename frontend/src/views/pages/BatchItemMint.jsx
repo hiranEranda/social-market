@@ -136,6 +136,10 @@ function BatchItemMint() {
     }
   }, [isInitialized, _tokenAddress, _uid, setId, id]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header />
