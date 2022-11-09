@@ -126,7 +126,7 @@ function EditProfile() {
     <>
       <Header />
 
-      <div className="flex items-center justify-center w-full">
+      <div className="flex items-center justify-center w-full pt-[90px]">
         <div className="w-full bg-slate-900 h-[200px] flex justify-center items-center text-white text-4xl font-bold">
           Edit Profile
         </div>

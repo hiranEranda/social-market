@@ -160,7 +160,7 @@ function Erc721() {
   return (
     <>
       <Header />
-      <div className="container mt-4">
+      <div className="container mt-4 pt-[90px]">
         <Modal
           open={open}
           loading1={loading1}

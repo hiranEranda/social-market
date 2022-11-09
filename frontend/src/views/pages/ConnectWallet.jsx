@@ -49,7 +49,7 @@ const ConnectWallet = () => {
     <div className="">
       <Header />
 
-      <div className="container pb-[100px]">
+      <div className="container pb-[90px]">
         <div>
           <Link to="/" className="mt-20 btn btn-white btn-sm">
             Back to home

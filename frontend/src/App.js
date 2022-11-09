@@ -4,8 +4,6 @@ import "./assets/scss/style.scss";
 import React from "react";
 
 import { useMoralis, useChain } from "react-moralis";
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
 
 const Moralis = require("moralis-v1");
 
@@ -23,6 +21,16 @@ function App() {
           window.location.reload();
         });
       }
+
+      window.ethereum.on("disconnect", async () => {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        setAccount("0x0");
+        console.log(accounts);
+        // window.location.reload();
+      });
+
       let currentChain;
 
       const switchNetwork = async () => {
@@ -40,10 +48,16 @@ function App() {
       });
       Moralis.enableWeb3();
     }
+    return () => {
+      // Return function of a non-async useEffect will clean up on component leaving screen, or from re-reneder to due dependency change
+      // window.ethereum.off("accountsChanged", accountWasChanged);
+      // window.ethereum.off("connect", getAndSetAccount);
+      // window.ethereum.off("disconnect", clearAccount);
+    };
   }, [isInitialized, chainId]);
 
   return (
-    <div className="overflow-hidden App ">
+    <div class="overflow-hidden App">
       {chainId === process.env.REACT_APP_CHAIN ? (
         <ROUTES />
       ) : (

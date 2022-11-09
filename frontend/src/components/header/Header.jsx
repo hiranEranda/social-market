@@ -51,13 +51,14 @@ const Header = () => {
   }, [account]);
   return (
     <div
-    // style={{
-    //   overflow: "hidden",
-    //   backgroundColor: "#333",
-    //   position: "fixed" /* Set the navbar to fixed position */,
-    //   top: "0" /* Position the navbar at the top of the page */,
-    //   width: "100%" /* Full width */,
-    // }}
+      style={{
+        // overflow: "hidden",
+        // backgroundColor: "#333",
+        zIndex: 1,
+        position: "fixed" /* Set the navbar to fixed position */,
+        // top: "0" /* Position the navbar at the top of the page */,
+        width: "100%" /* Full width */,
+      }}
     >
       <header className="header__1">
         <div className="container">
@@ -142,7 +143,7 @@ const Header = () => {
 
             {/* //////////////////////////////////////////////////////// */}
 
-            <div style={{ width: "200px" }} className="header__btns">
+            <div className="header__btns w-[150px] mr-5">
               {!isAuthenticated ||
               !user ||
               user.attributes.username === undefined ? (
@@ -165,7 +166,7 @@ const Header = () => {
                           : user.attributes.avatar._url
                       }
                       style={{ cursor: "pointer", border: "1px solid yellow" }}
-                      sx={{ width: 50, height: 50 }}
+                      sx={{ width: 40, height: 40 }}
                     />
                     <ul
                       style={{ width: "180px" }}

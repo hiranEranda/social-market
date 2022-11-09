@@ -28,7 +28,7 @@ function Create() {
     <>
       <Header />
 
-      <div className="mx-auto max-w-[1300px]  mt-[250px] align-center px-3 mb-[200px]">
+      <div className="mx-auto max-w-[1300px] pt-[90px] mt-[130px] align-center px-3 mb-[200px]">
         <h1>Choose Type</h1>
         <p className="mt-3">
           Choose “Single” for one of a kind or “Multiple” if you want to sell

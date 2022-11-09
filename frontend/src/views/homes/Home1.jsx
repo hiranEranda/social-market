@@ -251,7 +251,7 @@ const Home1 = () => {
       <Header />
 
       <img
-        className="mx-auto"
+        className="mx-auto pt-[90px]"
         style={{ maxWidth: " 100%", height: "auto" }}
         src="images/back_01.png"
         alt="..."

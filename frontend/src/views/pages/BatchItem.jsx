@@ -163,7 +163,7 @@ function BatchItem() {
   return (
     <>
       <Header />
-      <div className="flex items-center justify-center w-full">
+      <div className="flex items-center justify-center w-full pt-[90px]">
         {/* {console.log(data)} */}
         <div className="w-full h-[250px] bg-slate-900 flex">
           <p className="flex items-center justify-center text-6xl text-white">
