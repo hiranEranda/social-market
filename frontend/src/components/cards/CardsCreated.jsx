@@ -28,18 +28,26 @@ function CardsCreated({ val }) {
             <div className="card_footer justify-content-between">
               <p className="txt_sm">
                 Name:
-                <span className="txt_sm"> {val.nftName}</span>
+                <span className="txt_sm">
+                  {val.nftName.length > 10
+                    ? `${val.nftName.substring(0, 15)}....`
+                    : `${val.nftName}`}
+                </span>
               </p>
             </div>
           </div>
-          <div className="space-y-10 card_footer d-block">
+          {/* <div className="space-y-10 card_footer d-block">
             <div className="card_footer justify-content-between">
               <p className="txt_sm">
                 Description:
-                <span className="txt_sm"> {val.description}</span>
+                <span className="txt_sm">
+                  {val.description.length > 10
+                    ? `${val.description.substring(0, 15)}....`
+                    : `${val.description}`}
+                </span>
               </p>
             </div>
-          </div>
+          </div> */}
           <div className="space-y-10 card_footer d-block">
             <div className="card_footer justify-content-between">
               <p className="txt_sm">

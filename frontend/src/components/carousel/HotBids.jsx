@@ -21,6 +21,15 @@ function HotBids({ data }) {
     initialSlide: 0,
     responsive: [
       {
+        breakpoint: 1300,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
         breakpoint: 1200,
         settings: {
           slidesToShow: 3,

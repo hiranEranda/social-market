@@ -5,7 +5,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Backdrop from "@mui/material/Backdrop/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { useMoralis } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 
@@ -65,13 +66,14 @@ function EditProfile() {
   /// toast containers
   const update = () => toast.success("Your Profile updated");
   const error = (error) => toast.error(error);
+  const [loading, setLoading] = React.useState(false);
 
   const handleSubmit = async (values) => {
     if (picture === null || picture.length === 0) {
       error("Please select a DP");
       return;
     } else {
-      // setBackDrop(true);
+      setLoading(true);
       const user = await Moralis.User.current();
 
       user.set("email", values.email);
@@ -94,6 +96,7 @@ function EditProfile() {
       console.log(header);
 
       await user.save();
+      setLoading(false);
       update();
       navigate(`/profile`);
     }
@@ -158,6 +161,14 @@ function EditProfile() {
   return (
     <>
       <Header />
+      {loading ? (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : null}
 
       <div className="flex items-center justify-center w-full pt-[90px]">
         <div className="w-full bg-slate-900 h-[200px] flex justify-center items-center text-white text-4xl font-bold">
