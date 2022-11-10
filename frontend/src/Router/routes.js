@@ -15,6 +15,7 @@ import Collections from "../views/pages/Collections";
 import ConnectWallet from "../views/pages/ConnectWallet";
 import SingleItemMint from "../views/pages/SingleItemMint";
 import BatchItemMint from "../views/pages/BatchItemMint";
+import Marketplace from "../views/pages/Marketplace";
 
 const ROUTES = () => {
   return (
@@ -46,6 +47,7 @@ const ROUTES = () => {
           <Route path="/create/erc-721" element={<Erc721 />} />
 
           <Route path="/all-collections" element={<Collections />} />
+          <Route path="/marketplace" element={<Marketplace />} />
 
           <Route path="/connect-wallet" element={<ConnectWallet />} />
           {/* <Route path="/upload-type" element={<UploadType />} />

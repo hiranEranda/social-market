@@ -18,6 +18,8 @@ import { useMoralis, useChain } from "react-moralis";
 import { useNavigate, Link } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import CardsMint721 from "../../components/cards/CardsMint721";
+import ExploreAll from "./ExploreAll";
+import ExploreCategory from "./ExploreCategory";
 
 const Moralis = require("moralis-v1");
 
@@ -29,6 +31,7 @@ const Home1 = () => {
   const [lazyData, setLazyData] = React.useState(null);
   const [collectionData, setCollectionData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [loading2, setLoading2] = React.useState(false);
   const [text, setText] = React.useState(null);
   const [filter, setFilter] = React.useState("All");
 
@@ -125,74 +128,80 @@ const Home1 = () => {
 
   const getCategoryData = async () => {
     setLoading(true);
-    // //console.log("getting data");
-    const params = {
-      collection: filter,
-    };
-    try {
-      let prefix = "https://gateway.moralisipfs.com/ipfs/";
-      let data = [];
+    if (filter !== "All") {
+      const params = {
+        collection: filter,
+      };
+      try {
+        let prefix = "https://gateway.moralisipfs.com/ipfs/";
+        let data = [];
 
-      const result = await Moralis.Cloud.run("SM_filterCollections", params);
-      const data1 = await Promise.all(
-        result.map(async (item) => {
-          if (item) {
-            const params = {
-              tokenId: item.tokenId,
-              tokenAddress: item.tokenAddress,
+        const result = await Moralis.Cloud.run("SM_filterCollections", params);
+        const data1 = await Promise.all(
+          result.map(async (item) => {
+            if (item) {
+              const params = {
+                tokenId: item.tokenId,
+                tokenAddress: item.tokenAddress,
+              };
+              const history = await Moralis.Cloud.run(
+                "SM_getHistory721",
+                params
+              );
+              let uri =
+                prefix + item.tokenUri.substring(34, item.tokenUri.length);
+              const result = await fetch(uri);
+              return { ...item, ...(await result.json()), ...history };
+            }
+          })
+        );
+        const res = await Moralis.Cloud.run("SM_getItemsBatch");
+        const result2 = await Promise.all(
+          res.map(async (val, i) => {
+            let params = {
+              owner: val.ownerOf.toLowerCase(),
+              uid: val.uid,
             };
-            const history = await Moralis.Cloud.run("SM_getHistory721", params);
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
-            const result = await fetch(uri);
-            return { ...item, ...(await result.json()), ...history };
-          }
-        })
-      );
-      const res = await Moralis.Cloud.run("SM_getItemsBatch");
-      const result2 = await Promise.all(
-        res.map(async (val, i) => {
-          let params = {
-            owner: val.ownerOf.toLowerCase(),
-            uid: val.uid,
-          };
-          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
-          return {
-            ...val,
-            sellerUsername: res[0].attributes.ownerObject.attributes.username,
-            sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
-          };
-        })
-      );
-      // //console.log(result2);
+            const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+            return {
+              ...val,
+              sellerUsername: res[0].attributes.ownerObject.attributes.username,
+              sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
+            };
+          })
+        );
+        // //console.log(result2);
 
-      const data2 = await Promise.all(
-        result2.map(async (item) => {
-          if (item) {
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
-            const result = await fetch(uri);
-            return { ...item, ...(await result.json()) };
-          }
-        })
-      );
-      // //console.log("init data");
+        const data2 = await Promise.all(
+          result2.map(async (item) => {
+            if (item) {
+              let uri =
+                prefix + item.tokenUri.substring(34, item.tokenUri.length);
+              const result = await fetch(uri);
+              return { ...item, ...(await result.json()) };
+            }
+          })
+        );
+        // //console.log("init data");
 
-      const filterData = [];
-      for (let i = 0; i < data2.length; i++) {
-        if (data2[i].category === filter) {
-          filterData.push(data2[i]);
+        const filterData = [];
+        for (let i = 0; i < data2.length; i++) {
+          if (data2[i].category === filter) {
+            filterData.push(data2[i]);
+          }
         }
+
+        data.push(data1);
+        data.push(filterData);
+
+        setLoading(false);
+        return data;
+      } catch (error) {
+        setLoading(false);
+        // //console.log(error);
+        return null;
       }
-
-      data.push(data1);
-      data.push(filterData);
-
-      setLoading(false);
-      return data;
-    } catch (error) {
-      setLoading(false);
-      // //console.log(error);
+    } else {
       return null;
     }
   };
@@ -303,7 +312,7 @@ const Home1 = () => {
   React.useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
-        console.log(data);
+        // console.log(data);
         setData(data);
       });
       getCollectionData().then((data) => {
@@ -314,16 +323,12 @@ const Home1 = () => {
         // console.log(data);
         setLazyData(data);
       });
-    }
-  }, [isInitialized]);
-
-  React.useEffect(() => {
-    if (filter !== "All")
       getCategoryData().then((data) => {
-        console.log(data);
+        // console.log(data);
         setCategoryData(data);
       });
-  }, [filter]);
+    }
+  }, [isInitialized, filter]);
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -344,7 +349,17 @@ const Home1 = () => {
   return (
     <div>
       <Header />
-
+      {loading ? (
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : null}
       <img
         className="mx-auto pt-[90px]"
         style={{ maxWidth: " 100%", height: "auto" }}
@@ -364,14 +379,7 @@ const Home1 = () => {
           ⚡️
         </h2>
       </div>
-      {loading ? (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      ) : (!loading && data === null) || data === undefined ? (
+      {loading ? null : (!loading && data === null) || data === undefined ? (
         <div className="flex justify-center mx-auto">
           <CircularStatic />
         </div>
@@ -413,17 +421,7 @@ const Home1 = () => {
           <span style={{ color: "#c19a2e" }}>Top </span> Collections
         </h2>
 
-        {loading ? (
-          <Backdrop
-            sx={{
-              color: "#fff",
-              zIndex: (theme) => theme.zIndex.drawer + 1,
-            }}
-            open
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        ) : (!loading && collectionData === null) ||
+        {loading ? null : (!loading && collectionData === null) ||
           collectionData === undefined ? (
           <div className="flex justify-center mx-auto">
             <CircularStatic />
@@ -471,9 +469,11 @@ const Home1 = () => {
       >
         <div className="mx-auto max-w-[1280px]">
           <div className="flex justify-between mb-3 max-h-10">
-            <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
-              Explore ⚡️
-            </h2>
+            <Link to={"/marketplace"}>
+              <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
+                Explore ⚡️
+              </h2>
+            </Link>
 
             {/* ================= search bar ================= */}
             <div className="flex border-blue-500 rounded-xl header__search border-1">
@@ -603,42 +603,23 @@ const Home1 = () => {
             </ToggleButtonGroup>
           </div>
         </div>
-
-        {loading ? (
-          <Backdrop
-            sx={{
-              color: "#fff",
-              zIndex: (theme) => theme.zIndex.drawer + 1,
-            }}
-            open
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        ) : (!loading && data === null) || data === undefined ? (
-          <div className="mx-auto max-w-[1280px] flex justify-center">
-            <CircularStatic />
-          </div>
-        ) : !loading && data.length === 0 ? (
-          <div className="mx-auto max-w-[1280px]">No Items yet</div>
-        ) : (
-          <div className="mx-auto">
-            {data[0].length > 0 && type === "ERC-721" && filter === "All" ? (
-              <ExploreSection val={data[0]} isMultiple={false} />
-            ) : data[1].length > 0 &&
-              type === "ERC-1155" &&
-              filter === "All" ? (
-              <ExploreSection val={data[1]} isMultiple={true} />
-            ) : categoryData[0].length > 0 && type === "ERC-721" ? (
-              <ExploreSection val={categoryData[0]} isMultiple={true} />
-            ) : categoryData[1].length > 0 && type === "ERC-1155" ? (
-              <ExploreSection val={categoryData[1]} isMultiple={true} />
-            ) : (
-              <div className="flex items-center justify-center">
-                No items found
-              </div>
-            )}
-          </div>
-        )}
+        {loading ? null : filter === "All" && data !== null ? (
+          <ExploreAll
+            loading={loading}
+            data={data}
+            data_1={data[0]}
+            data_2={data[1]}
+            type={type}
+          />
+        ) : categoryData !== null ? (
+          <ExploreCategory
+            loading={loading}
+            data={categoryData}
+            data_1={categoryData[0]}
+            data_2={categoryData[1]}
+            type={type}
+          />
+        ) : null}
       </div>
       <div
         className="w-full mx-auto"
@@ -676,17 +657,8 @@ const Home1 = () => {
           </div>
         </div>
         <div className="max-w-[1400px] mx-auto">
-          {loading ? (
-            <Backdrop
-              sx={{
-                color: "#fff",
-                zIndex: (theme) => theme.zIndex.drawer + 1,
-              }}
-              open
-            >
-              <CircularProgress color="inherit" />
-            </Backdrop>
-          ) : (!loading && lazyData === null) || lazyData === undefined ? (
+          {loading ? null : (!loading && lazyData === null) ||
+            lazyData === undefined ? (
             <div className="flex justify-center mx-auto">
               <CircularStatic />
             </div>

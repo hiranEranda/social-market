@@ -15,7 +15,7 @@ import { FaWallet } from "react-icons/fa";
 const PagesMenu = [
   {
     title: "Marketplace",
-    link: "/",
+    link: "/marketplace",
   },
   {
     title: "My page",
@@ -143,7 +143,7 @@ const Header = () => {
 
             {/* //////////////////////////////////////////////////////// */}
 
-            <div className="header__btns w-[200px] mr-5">
+            <div className="header__btns w-[200px] ">
               {!isAuthenticated ||
               !user ||
               user.attributes.username === undefined ? (
