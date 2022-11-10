@@ -11,25 +11,26 @@ function App() {
   const [chainId, setChainId] = React.useState(null);
   const [account, setAccount] = React.useState(null);
 
-  const { isInitialized } = useMoralis();
+  const {
+    authenticate,
+    isInitialized,
+    isAuthenticated,
+    enableWeb3,
+    isWeb3EnableLoading,
+    isWeb3Enabled,
+  } = useMoralis();
   const { switchNetwork } = useChain();
 
   React.useEffect(() => {
+    if (isWeb3Enabled) {
+      enableWeb3();
+    }
     if (isInitialized) {
       if (window.ethereum) {
         window.ethereum.on("chainChanged", () => {
           window.location.reload();
         });
       }
-
-      window.ethereum.on("disconnect", async () => {
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
-        setAccount("0x0");
-        console.log(accounts);
-        // window.location.reload();
-      });
 
       let currentChain;
 
@@ -48,6 +49,7 @@ function App() {
       });
       Moralis.enableWeb3();
     }
+
     return () => {
       // Return function of a non-async useEffect will clean up on component leaving screen, or from re-reneder to due dependency change
       // window.ethereum.off("accountsChanged", accountWasChanged);

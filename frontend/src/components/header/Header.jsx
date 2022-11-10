@@ -143,7 +143,7 @@ const Header = () => {
 
             {/* //////////////////////////////////////////////////////// */}
 
-            <div className="header__btns w-[150px] mr-5">
+            <div className="header__btns w-[200px] mr-5">
               {!isAuthenticated ||
               !user ||
               user.attributes.username === undefined ? (

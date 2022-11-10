@@ -236,6 +236,7 @@ function Profile() {
             exclusive
             onChange={handleChange}
             aria-label="Platform"
+            size="small"
           >
             <ToggleButton onClick={() => setType(false)} value="ERC-721">
               ERC-721

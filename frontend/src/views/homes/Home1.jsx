@@ -15,7 +15,8 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import CircularStatic from "../../components/LoadingAnime";
 
 import { useMoralis, useChain } from "react-moralis";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { BsSearch } from "react-icons/bs";
 import CardsMint721 from "../../components/cards/CardsMint721";
 
 const Moralis = require("moralis-v1");
@@ -24,9 +25,13 @@ const Home1 = () => {
   let navigate = useNavigate();
 
   const [data, setData] = React.useState(null);
+  const [categoryData, setCategoryData] = React.useState(null);
   const [lazyData, setLazyData] = React.useState(null);
   const [collectionData, setCollectionData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [text, setText] = React.useState(null);
+  const [filter, setFilter] = React.useState("All");
+
   const { isInitialized } = useMoralis();
 
   const getData = async () => {
@@ -37,7 +42,7 @@ const Home1 = () => {
       let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
-      console.log(result1);
+      // console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {
@@ -114,6 +119,80 @@ const Home1 = () => {
     } catch (error) {
       setLoading(false);
       //  //console.log(error.message);
+      return null;
+    }
+  };
+
+  const getCategoryData = async () => {
+    setLoading(true);
+    // //console.log("getting data");
+    const params = {
+      collection: filter,
+    };
+    try {
+      let prefix = "https://gateway.moralisipfs.com/ipfs/";
+      let data = [];
+
+      const result = await Moralis.Cloud.run("SM_filterCollections", params);
+      const data1 = await Promise.all(
+        result.map(async (item) => {
+          if (item) {
+            const params = {
+              tokenId: item.tokenId,
+              tokenAddress: item.tokenAddress,
+            };
+            const history = await Moralis.Cloud.run("SM_getHistory721", params);
+            let uri =
+              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            const result = await fetch(uri);
+            return { ...item, ...(await result.json()), ...history };
+          }
+        })
+      );
+      const res = await Moralis.Cloud.run("SM_getItemsBatch");
+      const result2 = await Promise.all(
+        res.map(async (val, i) => {
+          let params = {
+            owner: val.ownerOf.toLowerCase(),
+            uid: val.uid,
+          };
+          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+          return {
+            ...val,
+            sellerUsername: res[0].attributes.ownerObject.attributes.username,
+            sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
+          };
+        })
+      );
+      // //console.log(result2);
+
+      const data2 = await Promise.all(
+        result2.map(async (item) => {
+          if (item) {
+            let uri =
+              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            const result = await fetch(uri);
+            return { ...item, ...(await result.json()) };
+          }
+        })
+      );
+      // //console.log("init data");
+
+      const filterData = [];
+      for (let i = 0; i < data2.length; i++) {
+        if (data2[i].category === filter) {
+          filterData.push(data2[i]);
+        }
+      }
+
+      data.push(data1);
+      data.push(filterData);
+
+      setLoading(false);
+      return data;
+    } catch (error) {
+      setLoading(false);
+      // //console.log(error);
       return null;
     }
   };
@@ -239,6 +318,14 @@ const Home1 = () => {
   }, [isInitialized]);
 
   React.useEffect(() => {
+    if (filter !== "All")
+      getCategoryData().then((data) => {
+        console.log(data);
+        setCategoryData(data);
+      });
+  }, [filter]);
+
+  React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -249,6 +336,10 @@ const Home1 = () => {
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
 
   return (
     <div>
@@ -379,9 +470,118 @@ const Home1 = () => {
         }}
       >
         <div className="mx-auto max-w-[1280px]">
-          <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
-            Explore ⚡️
-          </h2>
+          <div className="flex justify-between mb-3 max-h-10">
+            <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
+              Explore ⚡️
+            </h2>
+
+            {/* ================= search bar ================= */}
+            <div className="flex border-blue-500 rounded-xl header__search border-1">
+              <input
+                type="text"
+                placeholder="Search"
+                className="flex"
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    text === null || text === undefined || text.length === 0
+                      ? navigate(`/no-results`)
+                      : navigate(`/results/${text}`);
+                  }
+                }}
+              />
+
+              <Link
+                to={
+                  text === null || text === undefined || text.length === 0
+                    ? `/no-results`
+                    : `/results/${text}`
+                }
+                className=""
+              >
+                {/* <BsSearch /> */}
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid w-full grid-cols-2 gap-2 mb-3 max-h-15 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8">
+            <div
+              onClick={() => setFilter("All")}
+              className={classNames(
+                filter === "All" &&
+                  "cursor-pointer flex items-center justify-center border-black bg-yellow-200 rounded-full border-2",
+                "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
+              )}
+            >
+              <img
+                src="/images/category/rainbow.png"
+                className="flex items-center justify-center w-5 mr-2"
+                alt=""
+              />
+              All
+            </div>
+            <div
+              onClick={() => setFilter("Art")}
+              className={classNames(
+                filter === "Art" &&
+                  "cursor-pointer flex items-center justify-center border-black bg-yellow-200 rounded-full border-2",
+                "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
+              )}
+            >
+              <img
+                src="/images/category/art.png"
+                className="flex items-center justify-center w-5 mr-2"
+                alt=""
+              />
+              Art
+            </div>
+            <div
+              onClick={() => setFilter("Games")}
+              className={classNames(
+                filter === "Games" &&
+                  "cursor-pointer flex items-center justify-center border-black bg-yellow-200 rounded-full border-2",
+                "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
+              )}
+            >
+              <img
+                src="/images/category/cup.png"
+                className="flex items-center justify-center w-5 mr-2"
+                alt=""
+              />{" "}
+              Games
+            </div>
+            <div
+              onClick={() => setFilter("Music")}
+              className={classNames(
+                filter === "Music" &&
+                  "cursor-pointer flex items-center justify-center border-black bg-yellow-200 rounded-full border-2",
+                "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
+              )}
+            >
+              <img
+                src="/images/category/music.png"
+                className="flex items-center justify-center w-5 mr-2"
+                alt=""
+              />{" "}
+              Music
+            </div>
+            <div
+              onClick={() => setFilter("Memes")}
+              className={classNames(
+                filter === "Memes" &&
+                  "cursor-pointer flex items-center justify-center border-black bg-yellow-200 rounded-full border-2",
+                "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
+              )}
+            >
+              <img
+                src="/images/category/dino.png"
+                className="flex items-center justify-center w-5 mr-2"
+                alt=""
+              />{" "}
+              Memes
+            </div>
+          </div>
+
           <div className="mb-3">
             <ToggleButtonGroup
               color="primary"
@@ -389,6 +589,7 @@ const Home1 = () => {
               exclusive
               onChange={handleChange}
               aria-label="Platform"
+              size="small"
             >
               <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
                 ERC-721
@@ -421,10 +622,16 @@ const Home1 = () => {
           <div className="mx-auto max-w-[1280px]">No Items yet</div>
         ) : (
           <div className="mx-auto">
-            {data[0].length > 0 && type === "ERC-721" ? (
+            {data[0].length > 0 && type === "ERC-721" && filter === "All" ? (
               <ExploreSection val={data[0]} isMultiple={false} />
-            ) : data[1].length > 0 && type === "ERC-1155" ? (
+            ) : data[1].length > 0 &&
+              type === "ERC-1155" &&
+              filter === "All" ? (
               <ExploreSection val={data[1]} isMultiple={true} />
+            ) : categoryData[0].length > 0 && type === "ERC-721" ? (
+              <ExploreSection val={categoryData[0]} isMultiple={true} />
+            ) : categoryData[1].length > 0 && type === "ERC-1155" ? (
+              <ExploreSection val={categoryData[1]} isMultiple={true} />
             ) : (
               <div className="flex items-center justify-center">
                 No items found
@@ -451,6 +658,7 @@ const Home1 = () => {
               exclusive
               onChange={handleChange}
               aria-label="Platform"
+              size="small"
             >
               <ToggleButton
                 onClick={() => setTypeMint("ERC-721")}

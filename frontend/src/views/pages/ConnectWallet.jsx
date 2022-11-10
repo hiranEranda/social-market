@@ -25,9 +25,29 @@ const ConnectWallet = () => {
   useDocumentTitle("Connect wallet");
 
   const navigate = useNavigate();
-  const chain = "0x5";
 
-  const authenticateAsync = async () => {};
+  const reqWalletPermission = async () => {
+    // Runs only they are brand new, or have hit the disconnect button
+    await window.ethereum.request({
+      method: "wallet_requestPermissions",
+      params: [
+        {
+          eth_accounts: {},
+        },
+      ],
+    });
+  };
+  const reqCurrentAccount = async () => {
+    const walletAddress = await window.ethereum.request({
+      method: "eth_requestAccounts",
+      params: [
+        {
+          eth_accounts: {},
+        },
+      ],
+    });
+    console.log(walletAddress);
+  };
 
   const {
     authenticate,
@@ -35,6 +55,7 @@ const ConnectWallet = () => {
     enableWeb3,
     isWeb3EnableLoading,
     isWeb3Enabled,
+    account,
   } = useMoralis();
   const { switchNetwork, chainId } = useChain();
 
@@ -89,9 +110,9 @@ const ConnectWallet = () => {
                       onClick={async () => {
                         if (typeof window.ethereum !== "undefined") {
                           //   console.log(window.history);
-                          console.log(chainId);
 
-                          if (chainId === chain) {
+                          if (chainId === process.env.REACT_APP_CHAIN) {
+                            console.log(account);
                             try {
                               await authenticate();
                               navigate(-1);
@@ -100,7 +121,7 @@ const ConnectWallet = () => {
                             }
                           } else {
                             try {
-                              switchNetwork(chain);
+                              switchNetwork(process.env.REACT_APP_CHAIN);
                               await authenticate();
                               navigate(-1);
                             } catch (error) {
@@ -135,7 +156,7 @@ const ConnectWallet = () => {
                         if (typeof window.ethereum !== "undefined") {
                           console.log(chainId);
 
-                          if (chainId === chain) {
+                          if (chainId === process.env.REACT_APP_CHAIN) {
                             try {
                               await authenticate({ provider: "walletconnect" });
                             } catch (e) {
@@ -143,7 +164,7 @@ const ConnectWallet = () => {
                             }
                           } else {
                             try {
-                              switchNetwork(chain);
+                              switchNetwork(process.env.REACT_APP_CHAIN);
                               await authenticate({ provider: "walletconnect" });
                             } catch (error) {
                               // //console.log(error);
