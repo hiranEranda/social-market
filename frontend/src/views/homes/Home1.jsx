@@ -20,6 +20,7 @@ import { BsSearch } from "react-icons/bs";
 import CardsMint721 from "../../components/cards/CardsMint721";
 import ExploreAll from "./ExploreAll";
 import ExploreCategory from "./ExploreCategory";
+import DropDown from "../../components/header/DropDown";
 
 const Moralis = require("moralis-v1");
 

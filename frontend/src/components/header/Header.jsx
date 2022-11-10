@@ -5,12 +5,20 @@ import { ToastContainer, toast } from "react-toastify";
 
 import { useMoralis } from "react-moralis";
 
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { Menu } from "@headlessui/react";
+
 import MobileMenu from "./Menu/MobileMenu";
 import MegaMenu from "./Menu/MegaMenu";
 import ProfileMenu from "./Menu/ProfileMenu";
 import Avatar from "@mui/material/Avatar";
 
 import { FaWallet } from "react-icons/fa";
+import DropDown from "./DropDown";
 
 const PagesMenu = [
   {
@@ -24,6 +32,11 @@ const PagesMenu = [
 ];
 
 const Header = () => {
+  const [language, setLanguage] = React.useState(false);
+  const handleChange = (event) => {
+    setLanguage(event.target.value);
+  };
+
   const wallet = (flag) => {
     flag
       ? toast.success("Wallet connected successfully")
@@ -79,16 +92,16 @@ const Header = () => {
             </div>
             {/* ==================  */}
             <div className="header__menu">
-              <ul className="space-x-20 d-flex">
+              <ul className="flex items-center space-x-20">
                 {PagesMenu.map((val, i) => (
-                  <li key={i}>
+                  <li className="has_popup2 text-sm lg:text-[1rem]" key={i}>
                     <Link className="color_white" to={val.link}>
                       {val.title}
                     </Link>
                   </li>
                 ))}
 
-                <li className="has_popup2">
+                <li className="text-sm lg:text-[1rem] has_popup2">
                   <Link className="color_white is_new hovered" to="#">
                     Customer Community <i className="ri-more-2-fill" />
                   </Link>
@@ -96,7 +109,7 @@ const Header = () => {
                     <MegaMenu />
                   </ul>
                 </li>
-                <li className="has_popup2">
+                <li className="has_popup2 text-sm lg:text-[1rem]">
                   <Link className="color_white is_new hovered" to="/create">
                     Creator Center <i className="ri-more-2-fill" />
                   </Link>
@@ -104,13 +117,8 @@ const Header = () => {
                     <MegaMenu />
                   </ul> */}
                 </li>
-                <li className="has_popup2">
-                  <Link className="color_white is_new hovered" to="/create">
-                    Creator Center <i className="ri-more-2-fill" />
-                  </Link>
-                  {/* <ul className="space-y-20 menu__popup2">
-                    <MegaMenu />
-                  </ul> */}
+                <li className="flex items-center justify-center color_white has_popup2">
+                  <DropDown />
                 </li>
               </ul>
             </div>
