@@ -15,6 +15,15 @@ function OnSale({ isMultiple }) {
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
 
+  function fromBinary(encoded) {
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }
+
   const getData = async () => {
     setLoading(true);
     // //console.log("getting data");
@@ -38,6 +47,10 @@ function OnSale({ isMultiple }) {
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
             return { ...item, ...result.data };
           }
         })
@@ -66,6 +79,10 @@ function OnSale({ isMultiple }) {
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
             return { ...item, ...result.data };
           }
         })
@@ -89,6 +106,7 @@ function OnSale({ isMultiple }) {
       });
     }
   }, [isInitialized]);
+
   return (
     <>
       {loading ? (
@@ -106,7 +124,7 @@ function OnSale({ isMultiple }) {
         <>
           {isMultiple ? (
             <>
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+              <div className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] ">
                 {data[1].map((val, i) => (
                   <CardsPrice721 key={i} val={val} isMultiple={isMultiple} />
                 ))}
@@ -114,7 +132,7 @@ function OnSale({ isMultiple }) {
             </>
           ) : (
             <>
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+              <div className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] ">
                 {data[0].map((val, i) => (
                   <CardsPrice721 key={i} val={val} isMultiple={isMultiple} />
                 ))}

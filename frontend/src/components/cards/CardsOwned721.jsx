@@ -14,7 +14,7 @@ const Moralis = require("moralis-v1");
 const contract721 = require("../../contract/functions/erc721/contract");
 const contract1155 = require("../../contract/functions/erc1155/contract");
 
-function CardsOwned721({ val, isMultiple }) {
+function CardsOwned721({ val, isMultiple, isExternal }) {
   let tooltip = "Here type the tooltip message";
 
   const added = (msg) => toast.success(msg);
@@ -28,10 +28,7 @@ function CardsOwned721({ val, isMultiple }) {
   const handle721 = async (values, item) => {
     setOpen(true);
     try {
-      await contract721.ensureMarketplaceIsApproved(
-        parseInt(item.tokenId),
-        item.tokenAddress
-      );
+      await contract721.ensureMarketplaceIsApproved(parseInt(item.tokenId), item.tokenAddress);
       setLoading1(false);
       let res = await contract721.addItemToMarket(
         parseInt(item.tokenId),
@@ -113,11 +110,7 @@ function CardsOwned721({ val, isMultiple }) {
     price: Yup.number()
       .typeError("Must be a number")
       .required("Price is required")
-      .test(
-        "Is positive?",
-        "value must be greater than 0!",
-        (value) => value > 0
-      ),
+      .test("Is positive?", "value must be greater than 0!", (value) => value > 0),
   });
   return (
     <div>
@@ -174,72 +167,60 @@ function CardsOwned721({ val, isMultiple }) {
                   </div> */}
             </div>
             <div className="card_head">
-              <Link
-                to={`/Item-info/assets/${val.tokenId}/${
-                  val.tokenAddress
-                }/${true}/${false}/${false}`}
-              >
-                <img
-                  width="10"
-                  height="80"
-                  src={`${val.image}`}
-                  alt={"nftImage"}
-                />
+              <Link to={`/Item-info/assets/${val.tokenId}/${val.tokenAddress}/${true}/${false}/${false}`}>
+                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             </div>
             {/* =============== */}
             <h6 className="card_title">{val.name}</h6>
-
-            <div className="space-y-10 card_footer d-block ">
-              <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={(values) => {
-                  if (isMultiple) {
-                    console.log(isMultiple);
-                    handle1155(values, val);
-                  } else {
-                    console.log("721");
-                    handle721(values, val);
-                  }
-                }}
-              >
-                <Form className="">
-                  <div className="space-y-10 form-group ">
-                    <div className="space-y-10 ">
-                      <span className="nameInput">List Price</span>
-                      <Tooltip title={tooltip}>
-                        <i className="float-right ri-information-line d-flex"></i>
-                      </Tooltip>
-
-                      <div className="d-flex align-items-center">
-                        <FaEthereum size={20} />
-
-                        <Field
-                          name="price"
-                          type="number"
-                          className="ml-auto form-control"
-                          placeholder="Enter price`"
-                        />
-                      </div>
-                      <ErrorMessage name="price" component={TextError} />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-sm btn-primary float-end "
+            {isExternal ? null : (
+              <>
+                <div className="space-y-10 card_footer d-block ">
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={(values) => {
+                      if (isMultiple) {
+                        console.log(isMultiple);
+                        handle1155(values, val);
+                      } else {
+                        console.log("721");
+                        handle721(values, val);
+                      }
+                    }}
                   >
-                    Add Item to Market
-                  </button>
-                </Form>
-              </Formik>
-            </div>
-            <Response1
-              open={open}
-              loading1={loading1}
-              loading2={loading2}
-              isRemoved={false}
-            />
+                    <Form className="">
+                      <div className="space-y-10 form-group ">
+                        <div className="space-y-10 ">
+                          <span className="nameInput">List Price</span>
+                          <Tooltip title={tooltip}>
+                            <i className="float-right ri-information-line d-flex"></i>
+                          </Tooltip>
+
+                          <div className="d-flex align-items-center">
+                            <FaEthereum size={20} />
+
+                            <Field
+                              name="price"
+                              type="number"
+                              className="ml-auto form-control"
+                              placeholder="Enter price`"
+                            />
+                          </div>
+                          <ErrorMessage name="price" component={TextError} />
+                        </div>
+                      </div>
+
+                      <button type="submit" className="btn btn-sm btn-primary float-end ">
+                        Add Item to Market
+                      </button>
+                    </Form>
+                  </Formik>
+                </div>
+              </>
+            )}
+
+            <Response1 open={open} loading1={loading1} loading2={loading2} isRemoved={false} />
           </div>
         </div>
       </div>

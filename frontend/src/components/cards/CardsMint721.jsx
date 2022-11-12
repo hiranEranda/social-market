@@ -9,6 +9,7 @@ import lazyMint1155 from "../../contract/functions/erc1155/lazymint";
 const Moralis = require("moralis-v1");
 
 function CardsMint721({ val, isMultiple }) {
+  // console.log(val);
   return (
     <div
       className="mx-auto"
@@ -26,27 +27,30 @@ function CardsMint721({ val, isMultiple }) {
                 <img
                   // src={`/images/avatar.png`}
                   src={
-                    // val === undefined ||
-                    // !val.ownerObject.attributes.Avatar ||
-                    // !val.ownerObject.attributes.Avatar === undefined ||
-                    // !val.ownerObject.attributes.Avatar === null
-                    `/images/avatar.png`
-                    // : !val.ownerObject.attributes.Avatar._url
+                    val === undefined ||
+                    !val.ownerObject.attributes.avatar ||
+                    val.ownerObject.attributes.avatar === undefined ||
+                    val.ownerObject.attributes.avatar === null
+                      ? `/images/avatar.png`
+                      : val.ownerObject.attributes.avatar._url
                   }
                   alt="Avatar"
                   className="avatar avatar-sm"
                 />
               </Link>
-              <Link to={`#`}>
+              <Link
+                to={
+                  val === undefined || !val.ownerObject.attributes
+                    ? `#`
+                    : `/profile/${val.ownerObject.attributes.ethAddress}`
+                }
+              >
                 <p className="avatars_name txt_xs">
-                  {/* {val === undefined ||
-                  !val.ownerObject.attributes.username.length > 10
-                    ? `@${!val.ownerObject.attributes.username.substring(
-                        0,
-                        10
-                      )}....`
-                    : `@${!val.ownerObject.attributes.username}....`} */}{" "}
-                  username
+                  {val === undefined || val === null
+                    ? "Loading.."
+                    : val.ownerObject.attributes.username.length > 10
+                    ? `@${val.ownerObject.attributes.username.substring(0, 10)}....`
+                    : `@${val.ownerObject.attributes.username}`}
                 </p>
               </Link>
             </div>
@@ -54,22 +58,12 @@ function CardsMint721({ val, isMultiple }) {
           <div className="card_head">
             {isMultiple ? (
               <Link to={`/view-item/lazy1155/${val.id}`}>
-                <img
-                  width="10"
-                  height="80"
-                  src={`${val.image}`}
-                  alt={"nftImage"}
-                />
+                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             ) : (
               // <Link to={`#`}>
               <Link to={`/view-item/lazy721/${val.id}`}>
-                <img
-                  width="10"
-                  height="80"
-                  src={`${val.image}`}
-                  alt={"nftImage"}
-                />
+                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             )}
           </div>
@@ -77,17 +71,11 @@ function CardsMint721({ val, isMultiple }) {
           <div className="card_footer justify-content-between">
             <div className="creators">
               <p className="text-sm card_title">
-                {val.name.length > 10
-                  ? `${val.name.substring(0, 15)}....`
-                  : `${val.name}`}
+                {val.name.length > 10 ? `${val.name.substring(0, 15)}....` : `${val.name}`}
               </p>
             </div>
             <div className="creators">
-              {isMultiple ? (
-                <p className="txt_sm"> {val.amount} in stock</p>
-              ) : (
-                <p className="txt_sm"> 1 in stock</p>
-              )}
+              {isMultiple ? <p className="txt_sm"> {val.amount} in stock</p> : <p className="txt_sm"> 1 in stock</p>}
             </div>
           </div>
 
@@ -98,8 +86,7 @@ function CardsMint721({ val, isMultiple }) {
                   {/* {console.log(val)} */}
                   Price:
                   <span className="color_green txt_sm">
-                    {Moralis.Units.FromWei(val.askingPrice, 18)}{" "}
-                    {val.isCustomToken ? "SMKT" : "ETH"}
+                    {Moralis.Units.FromWei(val.askingPrice, 18)} {val.isCustomToken ? "SMKT" : "ETH"}
                   </span>
                 </p>
               </div>

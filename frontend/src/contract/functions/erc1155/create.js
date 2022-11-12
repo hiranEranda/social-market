@@ -23,11 +23,23 @@ const create = async (
   } catch (error) {
     return { state: false, message: error.message };
   }
+
+  function toBinary(string) {
+    const codeUnits = new Uint16Array(string.length);
+    for (let i = 0; i < codeUnits.length; i++) {
+      codeUnits[i] = string.charCodeAt(i);
+    }
+    return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)));
+  }
+
+  let encoded_title = toBinary(values.title);
+  let encoded_description = toBinary(values.description);
+
   const nftFilePath = nftFile.ipfs();
   const metadata = {
-    name: values.title,
+    name: encoded_title,
     category: values.collection,
-    description: values.description,
+    description: encoded_description,
     image: nftFilePath,
   };
   const nftFileMetadata = new Moralis.File("metadata.json", {
@@ -40,11 +52,7 @@ const create = async (
   try {
     setLoading1(false);
     if (!isLazy) {
-      nftId = await contract.mintNft(
-        values.amount,
-        nftFileMetadataPath,
-        collectionAddress
-      );
+      nftId = await contract.mintNft(values.amount, nftFileMetadataPath, collectionAddress);
     } else {
       var nftId = null;
       console.log("assign null to nftId");
@@ -61,7 +69,6 @@ const create = async (
       description: values.description,
       nftFilePath: nftFilePath,
       askingPrice: askingPrice,
-
       nftId: nftId,
       type: "erc1155",
       royalty: parseFloat(values.royalty),

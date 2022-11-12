@@ -45,9 +45,7 @@ function CardsPrice721({ val, isMultiple }) {
                 <img
                   // src={`/images/avatar.png`}
                   src={
-                    !val.sellerAvatar ||
-                    val.sellerAvatar === undefined ||
-                    val.sellerAvatar === null
+                    !val.sellerAvatar || val.sellerAvatar === undefined || val.sellerAvatar === null
                       ? `/images/avatar.png`
                       : val.sellerAvatar._url
                   }
@@ -55,7 +53,7 @@ function CardsPrice721({ val, isMultiple }) {
                   className="avatar avatar-sm"
                 />
               </Link>
-              <Link to={`#`}>
+              <Link to={val === undefined || !val.ownerOf ? `#` : `/profile/${val.ownerOf}`}>
                 <p className="avatars_name txt_xs">
                   {val.sellerUsername.length > 10
                     ? `@${val.sellerUsername.substring(0, 10)}....`
@@ -66,24 +64,12 @@ function CardsPrice721({ val, isMultiple }) {
           </div>
           <div className="card_head">
             {isMultiple ? (
-              <Link
-                to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}
-              >
-                <img
-                  width="10"
-                  height="80"
-                  src={`${val.image}`}
-                  alt={"nftImage"}
-                />
+              <Link to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}>
+                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             ) : (
               <Link to={`/view-item/${val.tokenAddress}/${val.tokenId}`}>
-                <img
-                  width="10"
-                  height="80"
-                  src={`${val.image}`}
-                  alt={"nftImage"}
-                />
+                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             )}
           </div>
@@ -91,17 +77,11 @@ function CardsPrice721({ val, isMultiple }) {
           <div className="card_footer justify-content-between">
             <div className="creators">
               <p className="text-sm card_title">
-                {val.name.length > 10
-                  ? `${val.name.substring(0, 15)}....`
-                  : `${val.name}`}
+                {val.name.length > 10 ? `${val.name.substring(0, 15)}....` : `${val.name}`}
               </p>
             </div>
             <div className="creators">
-              {isMultiple ? (
-                <p className="txt_sm"> {val.amount} in stock</p>
-              ) : (
-                <p className="txt_sm"> 1 in stock</p>
-              )}
+              {isMultiple ? <p className="txt_sm"> {val.amount} in stock</p> : <p className="txt_sm"> 1 in stock</p>}
             </div>
           </div>
 
@@ -112,8 +92,7 @@ function CardsPrice721({ val, isMultiple }) {
                   {/* {console.log(val)} */}
                   Price:
                   <span className="color_green txt_sm">
-                    {Moralis.Units.FromWei(val.askingPrice, 18)}{" "}
-                    {val.isCustomToken ? "SMKT" : "ETH"}
+                    {Moralis.Units.FromWei(val.askingPrice, 18)} {val.isCustomToken ? "SMKT" : "ETH"}
                   </span>
                 </p>
               </div>

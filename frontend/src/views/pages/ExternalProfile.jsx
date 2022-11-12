@@ -8,19 +8,19 @@ import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaUserEdit } from "react-icons/fa";
 
 import { useMoralis } from "react-moralis";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import OnSale from "../profile/OnSale";
-import Created from "../profile/Created";
-import Owned from "../profile/Owned";
-import Bought from "../profile/Bought";
+import OnSale from "../externalProfile/OnSale";
+import Created from "../externalProfile/Created";
+import Owned from "../externalProfile/Owned";
+import Bought from "../externalProfile/Bought";
 
 const Moralis = require("moralis-v1");
 
-function Profile() {
+function ExternalProfile() {
   const person = {
     name: "john",
     ethAddress: "0xf5Cca8165459917B7db1c3d56f16Fa3A9c8A8B2c",
@@ -36,11 +36,12 @@ function Profile() {
     setAlignment(newAlignment);
   };
 
+  let { ethAddress } = useParams();
+
   const getData = async () => {
     try {
-      const user = await Moralis.User.current();
       const params = {
-        ethAddress: user.get("ethAddress").toString().toLowerCase(),
+        ethAddress: ethAddress.toString().toLowerCase(),
       };
       const data = await Moralis.Cloud.run("getUser", params);
       return data.attributes;
@@ -55,15 +56,10 @@ function Profile() {
 
   React.useEffect(() => {
     setTimeout(async () => {
-      const user = await Moralis.User.current();
-      if (!user) {
-        navigate(`/connect-wallet`);
-      } else {
-        getData().then((data) => {
-          // console.log(data);
-          setData(data);
-        });
-      }
+      getData().then((data) => {
+        // console.log(data);
+        setData(data);
+      });
     }, 1000);
   }, [isInitialized, navigate, isAuthenticated]);
 
@@ -80,9 +76,9 @@ function Profile() {
       <Header />
 
       <div className="flex items-center justify-center w-full pt-[90px]">
-        <div className="w-full bg-slate-900 h-[200px] flex justify-center items-center text-white text-4xl font-bold">
+        {/* <div className="w-full bg-slate-900 h-[200px] flex justify-center items-center text-white text-4xl font-bold">
           My page
-        </div>
+        </div> */}
       </div>
       <div className="max-w-[1300px] mx-auto px-4 pb-[3rem] border-b border-gray-600">
         <div className="relative flex justify-center py-4">
@@ -250,4 +246,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default ExternalProfile;

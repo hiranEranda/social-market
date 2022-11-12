@@ -43,9 +43,7 @@ function ExploreSection({ val, isMultiple }) {
                     <img
                       // src={`/images/avatar.png`}
                       src={
-                        !val.sellerAvatar ||
-                        val.sellerAvatar === undefined ||
-                        val.sellerAvatar === null
+                        !val.sellerAvatar || val.sellerAvatar === undefined || val.sellerAvatar === null
                           ? `/images/avatar.png`
                           : val.sellerAvatar._url
                       }
@@ -53,7 +51,7 @@ function ExploreSection({ val, isMultiple }) {
                       className="avatar avatar-sm"
                     />
                   </Link>
-                  <Link to={`#`}>
+                  <Link to={val === undefined || !val.ownerOf ? `#` : `/profile/${val.ownerOf}`}>
                     <p className="avatars_name txt_xs">
                       {val.sellerUsername.length > 10
                         ? `@${val.sellerUsername.substring(0, 10)}....`
@@ -64,24 +62,12 @@ function ExploreSection({ val, isMultiple }) {
               </div>
               <div className="card_head">
                 {isMultiple ? (
-                  <Link
-                    to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}
-                  >
-                    <img
-                      width="10"
-                      height="80"
-                      src={`${val.image}`}
-                      alt={"nftImage"}
-                    />
+                  <Link to={`/view-item/${val.tokenAddress}/${val.tokenId}/${val.uid}`}>
+                    <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
                   </Link>
                 ) : (
                   <Link to={`/view-item/${val.tokenAddress}/${val.tokenId}`}>
-                    <img
-                      width="10"
-                      height="80"
-                      src={`${val.image}`}
-                      alt={"nftImage"}
-                    />
+                    <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
                   </Link>
                 )}
               </div>
@@ -89,9 +75,7 @@ function ExploreSection({ val, isMultiple }) {
               <div className="card_footer justify-content-between">
                 <div className="creators">
                   <p className="text-sm card_title">
-                    {val.name.length > 10
-                      ? `${val.name.substring(0, 10)}....`
-                      : `${val.name}`}
+                    {val.name.length > 10 ? `${val.name.substring(0, 10)}....` : `${val.name}`}
                   </p>
                 </div>
                 <div className="creators">
@@ -110,18 +94,13 @@ function ExploreSection({ val, isMultiple }) {
                       {/* {console.log(val)} */}
                       Price:
                       <span className="color_green txt_sm">
-                        {Moralis.Units.FromWei(val.askingPrice, 18)}{" "}
-                        {val.isCustomToken ? "SMKT" : "ETH"}
+                        {Moralis.Units.FromWei(val.askingPrice, 18)} {val.isCustomToken ? "SMKT" : "ETH"}
                       </span>
                     </p>
                   </div>
 
                   {val.isCustomToken ? (
-                    <img
-                      className="w-[20px] mr-2"
-                      src="/images/smkt.jpeg"
-                      alt=""
-                    />
+                    <img className="w-[20px] mr-2" src="/images/smkt.jpeg" alt="" />
                   ) : (
                     <FaEthereum size={20} />
                   )}
@@ -243,15 +222,9 @@ function ExploreSection({ val, isMultiple }) {
                         setTitle("Buy Item");
                         setMessage("Sign the transaction to buy item");
                         if (isMultiple) {
-                          var res = await contract1155.buyItem(
-                            val,
-                            authenticate
-                          );
+                          var res = await contract1155.buyItem(val, authenticate);
                         } else {
-                          var res = await contract721.buyItem(
-                            val,
-                            authenticate
-                          );
+                          var res = await contract721.buyItem(val, authenticate);
                         }
 
                         if (res.status) {
@@ -277,12 +250,7 @@ function ExploreSection({ val, isMultiple }) {
                 </div>
               </div>
             </div>
-            <Response
-              open={open}
-              loading={loading}
-              title={title}
-              message={message}
-            />
+            <Response open={open} loading={loading} title={title} message={message} />
           </div>
         </div>
       ))}

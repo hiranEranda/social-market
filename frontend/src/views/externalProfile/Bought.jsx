@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useMoralis } from "react-moralis";
+import React, { useRef, useState, useEffect } from "react";
 
 import "reactjs-popup/dist/index.css";
 import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import { useMoralis } from "react-moralis";
 
+import { useParams } from "react-router-dom";
+import CardsCreated from "../../components/cards/CardsCreated";
 import CardsOwned721 from "../../components/cards/CardsOwned721";
 
 const Moralis = require("moralis-v1");
 
-function Owned({ isMultiple }) {
+function Bought({ isMultiple }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
+
+  let { ethAddress } = useParams();
 
   function fromBinary(encoded) {
     const binary = atob(encoded);
@@ -29,19 +33,19 @@ function Owned({ isMultiple }) {
     const user = await Moralis.User.current();
 
     const params = {
-      ethAddress: user.get("ethAddress").toString().toLowerCase(),
+      ethAddress: ethAddress.toString().toLowerCase(),
     };
 
     try {
       let prefix = "https://gateway.moralisipfs.com/ipfs/";
       let data = [];
 
-      const result1 = await Moralis.Cloud.run("SM_getUserCreatedItems1155", params);
+      const result1 = await Moralis.Cloud.run("SM_getUserBoughtItems", params);
 
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {
-            let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
+            let uri = prefix + item.uri.substring(34, item.uri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
@@ -49,18 +53,17 @@ function Owned({ isMultiple }) {
             let decoded_description = fromBinary(result.data.description);
             result.data.name = decoded_name;
             result.data.description = decoded_description;
-            return { ...item.attributes, ...result.data };
+            return { ...item, ...result.data };
           }
         })
       );
+      //   console.log(data1);
 
-      const result = await Moralis.Cloud.run("SM_getUserCreatedItems721", params);
-      // console.log(result);
+      const result2 = await Moralis.Cloud.run("SM_getUserBoughtItems1155", params);
       const data2 = await Promise.all(
-        result.map(async (item) => {
+        result2.map(async (item) => {
           if (item) {
-            let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
-            // const result = await fetch(uri);
+            let uri = prefix + item.uri.substring(34, item.uri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
@@ -68,15 +71,15 @@ function Owned({ isMultiple }) {
             let decoded_description = fromBinary(result.data.description);
             result.data.name = decoded_name;
             result.data.description = decoded_description;
-            // return { ...item.attributes, ...(await result.json()) };
-            return { ...item.attributes, ...result.data };
+            return { ...item, ...result.data };
           }
         })
       );
+      //   console.log(data1);
 
-      //console.log(data2);
       data.push(data1);
       data.push(data2);
+
       setLoading(false);
       return data;
     } catch (error) {
@@ -96,7 +99,7 @@ function Owned({ isMultiple }) {
   }, [isInitialized]);
 
   return (
-    <>
+    <div>
       {loading ? (
         <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
           <CircularProgress color="inherit" />
@@ -104,30 +107,28 @@ function Owned({ isMultiple }) {
       ) : (!loading && data === null) || data === undefined ? (
         <div>Check your connectivity</div>
       ) : !loading && data.length === 0 ? (
-        <div>No Items yet</div>
+        <div>No Items bought yet....</div>
       ) : (
+        // <div>data fetched</div>
+
         <>
           {isMultiple ? (
-            <>
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-                {data[0].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
-                ))}
-              </div>
-            </>
+            <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+              {data[1].map((val, i) => (
+                <CardsOwned721 val={val} isMultiple={isMultiple} isExternal={true} />
+              ))}
+            </div>
           ) : (
-            <>
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-                {data[1].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
-                ))}
-              </div>
-            </>
+            <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
+              {data[0].map((val, i) => (
+                <CardsOwned721 val={val} isMultiple={isMultiple} isExternal={true} />
+              ))}
+            </div>
           )}
         </>
       )}
-    </>
+    </div>
   );
 }
 
-export default Owned;
+export default Bought;

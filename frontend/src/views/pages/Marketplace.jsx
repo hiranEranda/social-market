@@ -26,7 +26,14 @@ function Marketplace() {
   const [filter, setFilter] = React.useState("All");
 
   const { isInitialized } = useMoralis();
-
+  function fromBinary(encoded) {
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }
   const getData = async () => {
     setLoading(true);
     // //console.log("getting data");
@@ -53,10 +60,14 @@ function Marketplace() {
             };
 
             const history = await Moralis.Cloud.run("SM_getHistory721", params);
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             // const result = await fetch(uri);
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
+
             // console.log(result);
 
             return { ...item, ...result.data, ...history, ...isCustomToken };
@@ -94,11 +105,14 @@ function Marketplace() {
       const data2 = await Promise.all(
         result2.map(async (item) => {
           if (item) {
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
             return { ...item, ...result.data };
           }
         })
@@ -135,8 +149,7 @@ function Marketplace() {
               tokenAddress: item.tokenAddress,
             };
             const history = await Moralis.Cloud.run("SM_getHistory721", params);
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
@@ -165,8 +178,7 @@ function Marketplace() {
       const data2 = await Promise.all(
         result2.map(async (item) => {
           if (item) {
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
@@ -272,9 +284,7 @@ function Marketplace() {
       >
         <div className="mx-auto max-w-[1280px]">
           <div className="flex justify-between mb-3 max-h-10">
-            <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
-              Explore ⚡️
-            </h2>
+            <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>Explore ⚡️</h2>
 
             {/* ================= search bar ================= */}
             <div className="flex border-blue-500 rounded-xl header__search border-1">
@@ -293,11 +303,7 @@ function Marketplace() {
               />
 
               <Link
-                to={
-                  text === null || text === undefined || text.length === 0
-                    ? `/no-results`
-                    : `/results/${text}`
-                }
+                to={text === null || text === undefined || text.length === 0 ? `/no-results` : `/results/${text}`}
                 className=""
               >
                 {/* <BsSearch /> */}
@@ -314,11 +320,7 @@ function Marketplace() {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/rainbow.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />
+              <img src="/images/category/rainbow.png" className="flex items-center justify-center w-5 mr-2" alt="" />
               All
             </div>
             <div
@@ -329,11 +331,7 @@ function Marketplace() {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/art.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />
+              <img src="/images/category/art.png" className="flex items-center justify-center w-5 mr-2" alt="" />
               Art
             </div>
             <div
@@ -344,12 +342,7 @@ function Marketplace() {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/cup.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />{" "}
-              Games
+              <img src="/images/category/cup.png" className="flex items-center justify-center w-5 mr-2" alt="" /> Games
             </div>
             <div
               onClick={() => setFilter("Music")}
@@ -359,11 +352,7 @@ function Marketplace() {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/music.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />{" "}
+              <img src="/images/category/music.png" className="flex items-center justify-center w-5 mr-2" alt="" />{" "}
               Music
             </div>
             <div
@@ -374,12 +363,7 @@ function Marketplace() {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/dino.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />{" "}
-              Memes
+              <img src="/images/category/dino.png" className="flex items-center justify-center w-5 mr-2" alt="" /> Memes
             </div>
           </div>
 
@@ -395,10 +379,7 @@ function Marketplace() {
               <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
                 ERC-721
               </ToggleButton>
-              <ToggleButton
-                onClick={() => setType("ERC-1155")}
-                value="ERC-1155"
-              >
+              <ToggleButton onClick={() => setType("ERC-1155")} value="ERC-1155">
                 ERC-1155
               </ToggleButton>
             </ToggleButtonGroup>
@@ -406,13 +387,7 @@ function Marketplace() {
         </div>
 
         {loading ? null : filter === "All" && data !== null ? (
-          <ExploreAll
-            loading={loading}
-            data={data}
-            data_1={data[0]}
-            data_2={data[1]}
-            type={type}
-          />
+          <ExploreAll loading={loading} data={data} data_1={data[0]} data_2={data[1]} type={type} />
         ) : categoryData !== null ? (
           <ExploreCategory
             loading={loading}

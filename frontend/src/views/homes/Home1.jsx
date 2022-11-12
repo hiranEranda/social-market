@@ -38,6 +38,22 @@ const Home1 = () => {
 
   const { isInitialized } = useMoralis();
 
+  function fromBinary(encoded) {
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }
+  function fromBinary(encoded) {
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }
   const getData = async () => {
     setLoading(true);
     // //console.log("getting data");
@@ -64,11 +80,13 @@ const Home1 = () => {
             };
 
             const history = await Moralis.Cloud.run("SM_getHistory721", params);
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             // const result = await fetch(uri);
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });
-            // console.log(result);
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
 
             return { ...item, ...result.data, ...history, ...isCustomToken };
           }
@@ -76,7 +94,7 @@ const Home1 = () => {
       );
 
       const res = await Moralis.Cloud.run("SM_getItemsBatch");
-      // console.log(res);
+
       const result2 = await Promise.all(
         res.map(async (val, i) => {
           let params = {
@@ -105,11 +123,16 @@ const Home1 = () => {
       const data2 = await Promise.all(
         result2.map(async (item) => {
           if (item) {
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
+
             return { ...item, ...result.data };
           }
         })
@@ -145,12 +168,8 @@ const Home1 = () => {
                 tokenId: item.tokenId,
                 tokenAddress: item.tokenAddress,
               };
-              const history = await Moralis.Cloud.run(
-                "SM_getHistory721",
-                params
-              );
-              let uri =
-                prefix + item.tokenUri.substring(34, item.tokenUri.length);
+              const history = await Moralis.Cloud.run("SM_getHistory721", params);
+              let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
               const result = await fetch(uri);
               return { ...item, ...(await result.json()), ...history };
             }
@@ -176,8 +195,7 @@ const Home1 = () => {
         const data2 = await Promise.all(
           result2.map(async (item) => {
             if (item) {
-              let uri =
-                prefix + item.tokenUri.substring(34, item.tokenUri.length);
+              let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
               const result = await fetch(uri);
               return { ...item, ...(await result.json()) };
             }
@@ -220,16 +238,20 @@ const Home1 = () => {
         result1.map(async (item) => {
           if (item) {
             const id = { id: item.id };
-            let uri =
-              prefix +
-              item.attributes.uri.substring(34, item.attributes.uri.length);
+            let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
             // const result = await fetch(uri);
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });
+
+            // our previous Base64-encoded string
+            let decoded = fromBinary(result.data.name);
+            result.data.name = decoded;
 
             return { ...item.attributes, ...result.data, ...id };
           }
         })
       );
+
+      // console.log(data1);
 
       const result2 = await Moralis.Cloud.run("SM_getLazyBatch");
       // console.log(result2);
@@ -237,11 +259,11 @@ const Home1 = () => {
         result2.map(async (item) => {
           if (item) {
             const id = { id: item.id };
-            let uri =
-              prefix +
-              item.attributes.uri.substring(34, item.attributes.uri.length);
+            let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
             // const result = await fetch(uri);
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });
+            let decoded = fromBinary(result.data.name);
+            result.data.name = decoded;
 
             return { ...item.attributes, ...result.data, ...id };
           }
@@ -269,6 +291,8 @@ const Home1 = () => {
       query1.equalTo("collectionType", "erc1155");
       const collection = await query1.find();
 
+      // console.log(collection);
+
       const data = await Promise.all(
         collection.map(async (item) => {
           let params = {
@@ -279,15 +303,16 @@ const Home1 = () => {
           const user = await Moralis.Cloud.run("SM_getUser", {
             ethAddress: item.attributes.userAddress,
           });
-          console.log(user);
+          // console.log(user);
 
           const items = await Moralis.Cloud.run("SM_getCollectionData", params);
+
+          // console.log(items);
           const nfts = await Promise.all(
             items.map(async (item) => {
               let prefix = "https://gateway.moralisipfs.com/ipfs/";
-              let uri =
-                prefix + item.tokenUri.substring(34, item.tokenUri.length);
-              //   const result = await fetch(uri);
+              let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
+              // const result = await fetch(uri);
               const result = await Moralis.Cloud.run("FetchJson", {
                 url: uri,
               });
@@ -313,11 +338,11 @@ const Home1 = () => {
   React.useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
-        // console.log(data);
+        console.log(data);
         setData(data);
       });
       getCollectionData().then((data) => {
-        // console.log(data);
+        console.log(data);
         setCollectionData(data);
       });
       getLazyData().then((data) => {
@@ -422,8 +447,7 @@ const Home1 = () => {
           <span style={{ color: "#c19a2e" }}>Top </span> Collections
         </h2>
 
-        {loading ? null : (!loading && collectionData === null) ||
-          collectionData === undefined ? (
+        {loading ? null : (!loading && collectionData === null) || collectionData === undefined ? (
           <div className="flex justify-center mx-auto">
             <CircularStatic />
           </div>
@@ -434,26 +458,27 @@ const Home1 = () => {
             {collectionData.slice(0, 5).map((val, i) => (
               <div
                 key={i}
-                className="h-[54px] max-w-[300px] mb-10 mr-3 choose_collection mb-md-0 mr-md-3 border-1 border-gray-300"
+                className="h-[54px] max-w-[300px] mb-10 mr-3 choose_collection mb-md-0 mr-md-3 border-1 border-gray-300 bg-white shadow-md"
                 type="button"
                 onClick={() => {
                   navigate(`/all-collections`);
                 }}
               >
                 <div className="flex items-center">
+                  <span className="inline mr-2">{i + 1}</span>
                   <img
                     className="object-cover w-10 h-10 rounded-full"
                     src={
-                      val === null ||
-                      val.user[0].attributes.avatar === undefined
+                      val === null || val.user[0].attributes.avatar === undefined
                         ? "/images/avatar.png"
                         : val.user[0].attributes.avatar._url
                     }
                     alt=""
                   />
-                  <span className="flex items-center px-3 text-sm">
-                    {val.name}
-                  </span>
+                  <div className="">
+                    <span className="flex items-center mb-2 ml-2 text-xs">{val.name}</span>
+                    <span className="flex items-center ml-2 text-xs">No. of NFTs: {val.nfts.length}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -471,9 +496,7 @@ const Home1 = () => {
         <div className="mx-auto max-w-[1280px]">
           <div className="flex justify-between mb-3 max-h-10">
             <Link to={"/marketplace"}>
-              <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>
-                Explore ⚡️
-              </h2>
+              <h2 style={{ color: "#c19a2e", paddingBottom: "1.5rem" }}>Explore ⚡️</h2>
             </Link>
 
             {/* ================= search bar ================= */}
@@ -493,11 +516,7 @@ const Home1 = () => {
               />
 
               <Link
-                to={
-                  text === null || text === undefined || text.length === 0
-                    ? `/no-results`
-                    : `/results/${text}`
-                }
+                to={text === null || text === undefined || text.length === 0 ? `/no-results` : `/results/${text}`}
                 className=""
               >
                 {/* <BsSearch /> */}
@@ -514,11 +533,7 @@ const Home1 = () => {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/rainbow.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />
+              <img src="/images/category/rainbow.png" className="flex items-center justify-center w-5 mr-2" alt="" />
               All
             </div>
             <div
@@ -529,11 +544,7 @@ const Home1 = () => {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/art.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />
+              <img src="/images/category/art.png" className="flex items-center justify-center w-5 mr-2" alt="" />
               Art
             </div>
             <div
@@ -544,12 +555,7 @@ const Home1 = () => {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/cup.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />{" "}
-              Games
+              <img src="/images/category/cup.png" className="flex items-center justify-center w-5 mr-2" alt="" /> Games
             </div>
             <div
               onClick={() => setFilter("Music")}
@@ -559,11 +565,7 @@ const Home1 = () => {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/music.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />{" "}
+              <img src="/images/category/music.png" className="flex items-center justify-center w-5 mr-2" alt="" />{" "}
               Music
             </div>
             <div
@@ -574,12 +576,7 @@ const Home1 = () => {
                 "cursor-pointer flex items-center justify-center border-yellow-400 rounded-full border-1"
               )}
             >
-              <img
-                src="/images/category/dino.png"
-                className="flex items-center justify-center w-5 mr-2"
-                alt=""
-              />{" "}
-              Memes
+              <img src="/images/category/dino.png" className="flex items-center justify-center w-5 mr-2" alt="" /> Memes
             </div>
           </div>
 
@@ -595,23 +592,14 @@ const Home1 = () => {
               <ToggleButton onClick={() => setType("ERC-721")} value="ERC-721">
                 ERC-721
               </ToggleButton>
-              <ToggleButton
-                onClick={() => setType("ERC-1155")}
-                value="ERC-1155"
-              >
+              <ToggleButton onClick={() => setType("ERC-1155")} value="ERC-1155">
                 ERC-1155
               </ToggleButton>
             </ToggleButtonGroup>
           </div>
         </div>
         {loading ? null : filter === "All" && data !== null ? (
-          <ExploreAll
-            loading={loading}
-            data={data}
-            data_1={data[0]}
-            data_2={data[1]}
-            type={type}
-          />
+          <ExploreAll loading={loading} data={data} data_1={data[0]} data_2={data[1]} type={type} />
         ) : categoryData !== null ? (
           <ExploreCategory
             loading={loading}
@@ -642,24 +630,17 @@ const Home1 = () => {
               aria-label="Platform"
               size="small"
             >
-              <ToggleButton
-                onClick={() => setTypeMint("ERC-721")}
-                value="ERC-721"
-              >
+              <ToggleButton onClick={() => setTypeMint("ERC-721")} value="ERC-721">
                 ERC-721
               </ToggleButton>
-              <ToggleButton
-                onClick={() => setTypeMint("ERC-1155")}
-                value="ERC-1155"
-              >
+              <ToggleButton onClick={() => setTypeMint("ERC-1155")} value="ERC-1155">
                 ERC-1155
               </ToggleButton>
             </ToggleButtonGroup>
           </div>
         </div>
         <div className="max-w-[1400px] mx-auto">
-          {loading ? null : (!loading && lazyData === null) ||
-            lazyData === undefined ? (
+          {loading ? null : (!loading && lazyData === null) || lazyData === undefined ? (
             <div className="flex justify-center mx-auto">
               <CircularStatic />
             </div>
@@ -681,9 +662,7 @@ const Home1 = () => {
                     ))}
                   </>
                 ) : (
-                  <div className="flex items-center justify-center">
-                    No items found
-                  </div>
+                  <div className="flex items-center justify-center">No items found</div>
                 )}
               </div>
             </div>

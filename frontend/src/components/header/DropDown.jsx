@@ -3,7 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 
 export default function DropDown() {
   const [language, setLanguage] = React.useState("English");
-  console.log(language);
+  // console.log(language);
   return (
     <div className="flex items-center justify-center">
       <div className="relative inline-block text-left">

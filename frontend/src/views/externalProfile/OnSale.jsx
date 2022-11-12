@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useMoralis } from "react-moralis";
+import { useParams } from "react-router-dom";
 
 import "reactjs-popup/dist/index.css";
 import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
-import CardsOwned721 from "../../components/cards/CardsOwned721";
+import { useMoralis } from "react-moralis";
+import CardsPrice721 from "../../components/cards/CardsPrice721";
 
 const Moralis = require("moralis-v1");
 
-function Owned({ isMultiple }) {
+function OnSale({ isMultiple }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
+
+  let { ethAddress } = useParams();
 
   function fromBinary(encoded) {
     const binary = atob(encoded);
@@ -29,38 +32,19 @@ function Owned({ isMultiple }) {
     const user = await Moralis.User.current();
 
     const params = {
-      ethAddress: user.get("ethAddress").toString().toLowerCase(),
+      ethAddress: ethAddress.toString().toLowerCase(),
     };
 
     try {
       let prefix = "https://gateway.moralisipfs.com/ipfs/";
       let data = [];
 
-      const result1 = await Moralis.Cloud.run("SM_getUserCreatedItems1155", params);
-
+      const result = await Moralis.Cloud.run("SM_getUserItems", params);
+      //console.log(result);
       const data1 = await Promise.all(
-        result1.map(async (item) => {
-          if (item) {
-            let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
-            const result = await Moralis.Cloud.run("FetchJson", {
-              url: uri,
-            });
-            let decoded_name = fromBinary(result.data.name);
-            let decoded_description = fromBinary(result.data.description);
-            result.data.name = decoded_name;
-            result.data.description = decoded_description;
-            return { ...item.attributes, ...result.data };
-          }
-        })
-      );
-
-      const result = await Moralis.Cloud.run("SM_getUserCreatedItems721", params);
-      // console.log(result);
-      const data2 = await Promise.all(
         result.map(async (item) => {
           if (item) {
-            let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
-            // const result = await fetch(uri);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
@@ -68,13 +52,41 @@ function Owned({ isMultiple }) {
             let decoded_description = fromBinary(result.data.description);
             result.data.name = decoded_name;
             result.data.description = decoded_description;
-            // return { ...item.attributes, ...(await result.json()) };
-            return { ...item.attributes, ...result.data };
+            return { ...item, ...result.data };
           }
         })
       );
-
-      //console.log(data2);
+      const res = await Moralis.Cloud.run("SM_getUserItemsBatch", params);
+      const result2 = await Promise.all(
+        res.map(async (val, i) => {
+          let params = {
+            owner: val.ownerOf.toLowerCase(),
+            uid: val.uid,
+          };
+          const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+          // //console.log(res);
+          return {
+            ...val,
+            sellerUsername: res[0].attributes.ownerObject.attributes.username,
+            sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
+          };
+        })
+      );
+      const data2 = await Promise.all(
+        result2.map(async (item) => {
+          if (item) {
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            const result = await Moralis.Cloud.run("FetchJson", {
+              url: uri,
+            });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
+            return { ...item, ...result.data };
+          }
+        })
+      );
       data.push(data1);
       data.push(data2);
       setLoading(false);
@@ -89,7 +101,7 @@ function Owned({ isMultiple }) {
   useEffect(() => {
     if (isInitialized) {
       getData().then((data) => {
-        console.log(data);
+        //console.log(data);
         setData(data);
       });
     }
@@ -109,17 +121,17 @@ function Owned({ isMultiple }) {
         <>
           {isMultiple ? (
             <>
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-                {data[0].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
+              <div className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] ">
+                {data[1].map((val, i) => (
+                  <CardsPrice721 key={i} val={val} isMultiple={isMultiple} />
                 ))}
               </div>
             </>
           ) : (
             <>
-              <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
-                {data[1].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
+              <div className="grid gap-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-[1350px] ">
+                {data[0].map((val, i) => (
+                  <CardsPrice721 key={i} val={val} isMultiple={isMultiple} />
                 ))}
               </div>
             </>
@@ -130,4 +142,4 @@ function Owned({ isMultiple }) {
   );
 }
 
-export default Owned;
+export default OnSale;

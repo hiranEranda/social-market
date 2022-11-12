@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
+import { useParams } from "react-router-dom";
 
 import "reactjs-popup/dist/index.css";
 import Backdrop from "@mui/material/Backdrop/Backdrop";
@@ -13,6 +14,8 @@ function Owned({ isMultiple }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
+
+  let { ethAddress } = useParams();
 
   function fromBinary(encoded) {
     const binary = atob(encoded);
@@ -29,7 +32,7 @@ function Owned({ isMultiple }) {
     const user = await Moralis.User.current();
 
     const params = {
-      ethAddress: user.get("ethAddress").toString().toLowerCase(),
+      ethAddress: ethAddress.toString().toLowerCase(),
     };
 
     try {
@@ -111,7 +114,7 @@ function Owned({ isMultiple }) {
             <>
               <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
                 {data[0].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
+                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={true} />
                 ))}
               </div>
             </>
@@ -119,7 +122,7 @@ function Owned({ isMultiple }) {
             <>
               <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
                 {data[1].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
+                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={true} />
                 ))}
               </div>
             </>

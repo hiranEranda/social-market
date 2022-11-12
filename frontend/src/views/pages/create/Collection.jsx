@@ -137,6 +137,7 @@ function Collection(props) {
                   }}
                   src={val.attributes.Avatar}
                   alt="avtr"
+                  className="rounded-full"
                 />{" "}
                 {val.attributes.name}
               </a>

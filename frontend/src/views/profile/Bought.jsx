@@ -14,6 +14,15 @@ function Bought({ isMultiple }) {
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
 
+  function fromBinary(encoded) {
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }
+
   const getData = async () => {
     setLoading(true);
     // //console.log("getting data");
@@ -36,16 +45,17 @@ function Bought({ isMultiple }) {
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
             return { ...item, ...result.data };
           }
         })
       );
       //   console.log(data1);
 
-      const result2 = await Moralis.Cloud.run(
-        "SM_getUserBoughtItems1155",
-        params
-      );
+      const result2 = await Moralis.Cloud.run("SM_getUserBoughtItems1155", params);
       const data2 = await Promise.all(
         result2.map(async (item) => {
           if (item) {
@@ -53,6 +63,10 @@ function Bought({ isMultiple }) {
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            let decoded_name = fromBinary(result.data.name);
+            let decoded_description = fromBinary(result.data.description);
+            result.data.name = decoded_name;
+            result.data.description = decoded_description;
             return { ...item, ...result.data };
           }
         })
@@ -83,10 +97,7 @@ function Bought({ isMultiple }) {
   return (
     <div>
       {loading ? (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
+        <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (!loading && data === null) || data === undefined ? (
@@ -100,13 +111,13 @@ function Bought({ isMultiple }) {
           {isMultiple ? (
             <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
               {data[1].map((val, i) => (
-                <CardsOwned721 val={val} isMultiple={isMultiple} />
+                <CardsOwned721 val={val} isMultiple={isMultiple} isExternal={false} />
               ))}
             </div>
           ) : (
             <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
               {data[0].map((val, i) => (
-                <CardsOwned721 val={val} isMultiple={isMultiple} />
+                <CardsOwned721 val={val} isMultiple={isMultiple} isExternal={false} />
               ))}
             </div>
           )}

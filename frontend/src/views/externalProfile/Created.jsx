@@ -4,6 +4,8 @@ import "reactjs-popup/dist/index.css";
 import Backdrop from "@mui/material/Backdrop/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { useMoralis } from "react-moralis";
+import { useParams } from "react-router-dom";
+
 import CardsCreated from "../../components/cards/CardsCreated";
 
 const Moralis = require("moralis-v1");
@@ -13,13 +15,15 @@ function Created({ isMultiple }) {
   const [loading, setLoading] = useState(false);
   const { isInitialized } = useMoralis();
 
+  let { ethAddress } = useParams();
+
   const getData = async () => {
     setLoading(true);
     // //console.log("getting data");
     const user = await Moralis.User.current();
 
     const params = {
-      ethAddress: user.get("ethAddress").toString().toLowerCase(),
+      ethAddress: ethAddress.toString().toLowerCase(),
     };
 
     try {
@@ -47,10 +51,7 @@ function Created({ isMultiple }) {
   return (
     <div>
       {loading ? (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
+        <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (!loading && data === null) || data === undefined ? (
