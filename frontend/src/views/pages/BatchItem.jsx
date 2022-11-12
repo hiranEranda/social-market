@@ -101,8 +101,20 @@ function BatchItem() {
         })
       );
       // //console.log(result);
-
-      const userObject = await Moralis.Cloud.run("SM_getCreator", params);
+      try {
+        var userObject = await Moralis.Cloud.run("SM_getCreator", params);
+      } catch (error) {
+        var userObject = [
+          {
+            attributes: {
+              username: "crypto kid",
+              avatar: {
+                _url: "/images/user.jpeg",
+              },
+            },
+          },
+        ];
+      }
 
       var contractAvatar = await Moralis.Cloud.run("SM_getContractAvatar", params);
 
