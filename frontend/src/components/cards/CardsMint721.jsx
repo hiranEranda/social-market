@@ -45,8 +45,12 @@ function CardsMint721({ val, isMultiple }) {
                     : `/profile/${val.ownerObject.attributes.ethAddress}`
                 }
               >
+                {console.log(val)}
                 <p className="avatars_name txt_xs">
-                  {val === undefined || val === null
+                  {val === undefined ||
+                  val === null ||
+                  val.ownerObject.attributes.username === undefined ||
+                  val.ownerObject.attributes.username === null
                     ? "Loading.."
                     : val.ownerObject.attributes.username.length > 10
                     ? `@${val.ownerObject.attributes.username.substring(0, 10)}....`

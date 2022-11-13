@@ -11,14 +11,7 @@ function App() {
   const [chainId, setChainId] = React.useState(null);
   const [account, setAccount] = React.useState(null);
 
-  const {
-    authenticate,
-    isInitialized,
-    isAuthenticated,
-    enableWeb3,
-    isWeb3EnableLoading,
-    isWeb3Enabled,
-  } = useMoralis();
+  const { authenticate, isInitialized, isAuthenticated, enableWeb3, isWeb3EnableLoading, isWeb3Enabled } = useMoralis();
   const { switchNetwork } = useChain();
 
   React.useEffect(() => {
@@ -60,7 +53,7 @@ function App() {
 
   return (
     <div className="overflow-hidden App">
-      {chainId === process.env.REACT_APP_CHAIN ? (
+      {chainId === process.env.REACT_APP_CHAIN || isWeb3Enabled === false ? (
         <ROUTES />
       ) : (
         <>
@@ -78,12 +71,9 @@ function App() {
           </div>
           <div className="mx-auto py-[250px] bg-[#111111] h-[full]">
             <div className="mx-auto">
-              <h1 className="flex items-center justify-center mb-3 text-5xl text-white md:text-6xl">
-                Wrong network
-              </h1>
+              <h1 className="flex items-center justify-center mb-3 text-5xl text-white md:text-6xl">Wrong network</h1>
               <p className="flex items-center justify-center text-white w-[400px] text-l md:text-xl text-center">
-                Looks like you connected to unsupported network. Change network
-                to Goerli
+                Looks like you connected to unsupported network. Change network to Goerli
               </p>
               <div
                 onClick={() => {
