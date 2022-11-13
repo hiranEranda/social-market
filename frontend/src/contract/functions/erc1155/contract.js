@@ -446,13 +446,26 @@ const addItemToMarket = async (nftId, askingPrice, metadataUrl, amount, address 
 
 const getCreatorAndRoyalty = async (item) => {
   //console.log(item);
+  const user = await Moralis.User.current();
+
   const params = {
     tokenId: parseInt(item.tokenId),
     tokenAddress: item.tokenAddress,
   };
   try {
     const data = await Moralis.Cloud.run("SM_getCreatorAndRoyalty", params);
-    return data[0];
+
+    if (data.length === 0) {
+      let royalty = {
+        attributes: {
+          royalty: 0,
+          ethAddress: user.get("ethAddress"),
+        },
+      };
+      return royalty;
+    } else {
+      return data[0];
+    }
   } catch (error) {
     // //console.log("from getCreatorAndRoyalty");
     // //console.log(error);
