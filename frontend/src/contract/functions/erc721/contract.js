@@ -285,11 +285,7 @@ const erc20Contract = async () => {
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   // Contract Instance
-  const erc20Contract = new ethers.Contract(
-    process.env.REACT_APP_PAYTOKEN_CONTRACT_ADDRESS,
-    erc20abi,
-    signer
-  );
+  const erc20Contract = new ethers.Contract(process.env.REACT_APP_PAYTOKEN_CONTRACT_ADDRESS, erc20abi, signer);
   return erc20Contract;
 };
 
@@ -298,11 +294,7 @@ const tokenContractInstance = async (contractAddress) => {
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
   // Contract Instance
-  const contractInstance = new ethers.Contract(
-    contractAddress,
-    tokenContract_721.abi,
-    signer
-  );
+  const contractInstance = new ethers.Contract(contractAddress, tokenContract_721.abi, signer);
   return contractInstance;
 };
 
@@ -322,9 +314,7 @@ const marketContractInstance = async () => {
 
 const getNameAndSymbol = async (address = null) => {
   let contractAddress = null;
-  address === null
-    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
-    : (contractAddress = address);
+  address === null ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721) : (contractAddress = address);
   try {
     const contract = await tokenContractInstance(contractAddress);
 
@@ -340,9 +330,7 @@ const getNameAndSymbol = async (address = null) => {
 const mintNft = async (metadataUrl, address = null) => {
   // configure the required contract address
   let contractAddress = null;
-  address === null
-    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
-    : (contractAddress = address);
+  address === null ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721) : (contractAddress = address);
 
   try {
     const contract = await tokenContractInstance(contractAddress);
@@ -360,18 +348,10 @@ const mintNft = async (metadataUrl, address = null) => {
 };
 
 // lazy mint function
-const lazyMintNft = async (
-  metadataUrl,
-  address = null,
-  creator,
-  askingPrice,
-  isCustomToken
-) => {
+const lazyMintNft = async (metadataUrl, address = null, creator, askingPrice, isCustomToken) => {
   // configure the required contract address
   let contractAddress = null;
-  address === null
-    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
-    : (contractAddress = address);
+  address === null ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721) : (contractAddress = address);
 
   try {
     const contract = await tokenContractInstance(contractAddress);
@@ -385,12 +365,7 @@ const lazyMintNft = async (
     };
 
     if (!isCustomToken) {
-      var tx = await contract.lazyMint(
-        creator,
-        askingPrice,
-        metadataUrl,
-        overrides
-      );
+      var tx = await contract.lazyMint(creator, askingPrice, metadataUrl, overrides);
       let receipt = await tx.wait(2);
       let sumEvent = receipt.events.pop();
       var hexString = sumEvent.args.tokenId._hex;
@@ -399,10 +374,7 @@ const lazyMintNft = async (
     } else {
       let erc20 = await erc20Contract();
 
-      let ttx = await erc20.approve(
-        process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721,
-        askingPrice
-      );
+      let ttx = await erc20.approve(process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721, askingPrice);
       let res = await ttx.wait(2);
 
       var tx = await contract.lazyMintCustom(
@@ -431,9 +403,7 @@ const lazyMintNft = async (
 const ensureMarketplaceIsApproved = async (tokenId, address = null) => {
   // configure the required contract address
   let contractAddress = null;
-  address === null
-    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
-    : (contractAddress = address);
+  address === null ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721) : (contractAddress = address);
 
   try {
     const contract = await tokenContractInstance(contractAddress);
@@ -446,18 +416,12 @@ const ensureMarketplaceIsApproved = async (tokenId, address = null) => {
       console.log(error);
     }
 
-    if (
-      approvedAddress != process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721
-    ) {
+    if (approvedAddress != process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721) {
       try {
         console.log("methana");
-        var tx = await contract.approve(
-          process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721,
-          tokenId,
-          {
-            from: user.get("ethAddress"),
-          }
-        );
+        var tx = await contract.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721, tokenId, {
+          from: user.get("ethAddress"),
+        });
       } catch (error) {
         console.log(error);
       }
@@ -475,12 +439,7 @@ const changePrice = async (uid, tokenId, tokenAddress, newPrice) => {
   const contract = await marketContractInstance();
   //console.log(contract);
   try {
-    const response = await contract.changePrice(
-      uid,
-      tokenId,
-      tokenAddress,
-      newPrice
-    );
+    const response = await contract.changePrice(uid, tokenId, tokenAddress, newPrice);
     await response.wait(2);
     return { status: true };
   } catch (err) {
@@ -489,18 +448,10 @@ const changePrice = async (uid, tokenId, tokenAddress, newPrice) => {
 };
 
 // add item to marketplace
-const addItemToMarket = async (
-  nftId,
-  askingPrice,
-  collection,
-  nftFileMetadataPath,
-  address = null
-) => {
+const addItemToMarket = async (nftId, askingPrice, collection, nftFileMetadataPath, address = null) => {
   // configure the required contract address
   let contractAddress = null;
-  address === null
-    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
-    : (contractAddress = address);
+  address === null ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721) : (contractAddress = address);
 
   const t = await tokenContractInstance(contractAddress);
   const user = await Moralis.User.current();
@@ -530,14 +481,25 @@ const addItemToMarket = async (
 };
 
 const getCreatorAndRoyalty = async (item) => {
-  // console.log(item);
+  const user = await Moralis.User.current();
+
   const params = {
     tokenId: parseInt(item.tokenId),
     tokenAddress: item.tokenAddress,
   };
   try {
     const data = await Moralis.Cloud.run("SM_getCreatorAndRoyalty", params);
-    return data[0];
+    if (data.length === 0) {
+      let royalty = {
+        attributes: {
+          royalty: 0,
+          ethAddress: user.get("ethAddress"),
+        },
+      };
+      return royalty;
+    } else {
+      return data[0];
+    }
   } catch (error) {
     // //console.log("from getCreatorAndRoyalty");
     // //console.log(error);
@@ -557,12 +519,13 @@ const buyItem = async (item, authenticate) => {
   }
 
   let data = await getCreatorAndRoyalty(item);
-  // console.log(data);
+  console.log(data.attributes.royalty);
 
   if (!user.attributes.accounts.includes(item.ownerOf)) {
     try {
       let royaltyPercentage = data.attributes.royalty;
       let royaltyFee = (parseInt(item.askingPrice) * royaltyPercentage) / 100;
+      console.log(royaltyFee);
 
       if (!item.isCustomToken) {
         console.log("eth");
@@ -571,12 +534,7 @@ const buyItem = async (item, authenticate) => {
           from: user.get("ethAddress"),
           value: item.askingPrice,
         };
-        const response = await contract.buyItem(
-          item.uid,
-          data.attributes.ethAddress,
-          royaltyFee.toString(),
-          overrides
-        );
+        const response = await contract.buyItem(item.uid, data.attributes.ethAddress, royaltyFee.toString(), overrides);
         await response.wait(2);
         return {
           status: true,
@@ -590,10 +548,7 @@ const buyItem = async (item, authenticate) => {
         };
         let erc20 = await erc20Contract();
 
-        let ttx = await erc20.approve(
-          process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721,
-          item.askingPrice
-        );
+        let ttx = await erc20.approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS_721, item.askingPrice);
         let res = await ttx.wait(2);
 
         const response = await contract.buyItemWithTokens(
@@ -627,9 +582,7 @@ const buyItem = async (item, authenticate) => {
 
 const burn = async (address = null, tokenId, params) => {
   let contractAddress = null;
-  address === null
-    ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721)
-    : (contractAddress = address);
+  address === null ? (contractAddress = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS_721) : (contractAddress = address);
   try {
     const contract = await tokenContractInstance(contractAddress);
     //console.log(contract);
