@@ -45,7 +45,7 @@ function CardsMint721({ val, isMultiple }) {
                     : `/profile/${val.ownerObject.attributes.ethAddress}`
                 }
               >
-                {console.log(val)}
+                {/* {console.log(val)} */}
                 <p className="avatars_name txt_xs">
                   {val === undefined ||
                   val === null ||

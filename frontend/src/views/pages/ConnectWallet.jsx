@@ -48,16 +48,9 @@ const ConnectWallet = () => {
     });
     console.log(walletAddress);
   };
-
-  const {
-    authenticate,
-    isAuthenticated,
-    enableWeb3,
-    isWeb3EnableLoading,
-    isWeb3Enabled,
-    account,
-  } = useMoralis();
   const { switchNetwork, chainId } = useChain();
+
+  const { authenticate, isAuthenticated, enableWeb3, isWeb3EnableLoading, isWeb3Enabled, account } = useMoralis();
 
   useEffect(() => {
     if (!isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
@@ -82,17 +75,10 @@ const ConnectWallet = () => {
           <div className="hero__wallets pt-100 pb-50">
             <div className="space-y-20 d-flex flex-column align-items-center">
               <div className="p-4 bg-gray-200 rounded-full logo">
-                <img
-                  src={`images/logo1.png`}
-                  alt="ImgPreview"
-                  className="w-[200px]"
-                />
+                <img src={`images/logo1.png`} alt="ImgPreview" className="w-[200px]" />
               </div>
               <h2 className="text-center">Connect your wallet</h2>
-              <p className="text-center">
-                Connect with one of available wallet providers or create a new
-                wallet.
-              </p>
+              <p className="text-center">Connect with one of available wallet providers or create a new wallet.</p>
             </div>
           </div>
         </div>
@@ -135,10 +121,7 @@ const ConnectWallet = () => {
                     >
                       <div className="logo">
                         <div className="flex justify-center">
-                          <img
-                            src={`img/icons/${wallets[0].title}.svg`}
-                            alt="logo_community"
-                          />
+                          <img src={`img/icons/${wallets[0].title}.svg`} alt="logo_community" />
                         </div>
                       </div>
                       <h5 className="text-center">{wallets[0].title}</h5>
@@ -178,10 +161,7 @@ const ConnectWallet = () => {
                     >
                       <div className="logo">
                         <div className="flex justify-center">
-                          <img
-                            src={`img/icons/${wallets[1].title}.svg`}
-                            alt="logo_community"
-                          />
+                          <img src={`img/icons/${wallets[1].title}.svg`} alt="logo_community" />
                         </div>
                       </div>
                       <h5 className="text-center">{wallets[1].title}</h5>

@@ -15,6 +15,13 @@ function App() {
   const { switchNetwork } = useChain();
 
   React.useEffect(() => {
+    if (!isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
+      if (typeof window.ethereum !== "undefined") {
+        enableWeb3();
+      }
+  }, [isAuthenticated, isWeb3Enabled, isWeb3EnableLoading, enableWeb3]);
+
+  React.useEffect(() => {
     if (isWeb3Enabled) {
       enableWeb3();
     }
@@ -42,14 +49,7 @@ function App() {
       });
       Moralis.enableWeb3();
     }
-
-    return () => {
-      // Return function of a non-async useEffect will clean up on component leaving screen, or from re-reneder to due dependency change
-      // window.ethereum.off("accountsChanged", accountWasChanged);
-      // window.ethereum.off("connect", getAndSetAccount);
-      // window.ethereum.off("disconnect", clearAccount);
-    };
-  }, [isInitialized, chainId]);
+  }, [isInitialized, chainId, isWeb3Enabled]);
 
   return (
     <div className="overflow-hidden App">
