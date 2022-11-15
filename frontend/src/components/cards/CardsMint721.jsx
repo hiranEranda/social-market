@@ -1,14 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEthereum } from "react-icons/fa";
 
+import { ToastContainer, toast } from "react-toastify";
 import "reactjs-popup/dist/index.css";
 import lazyMint721 from "../../contract/functions/erc721/lazymint";
 import lazyMint1155 from "../../contract/functions/erc1155/lazymint";
+import Response from "./Response";
 
 const Moralis = require("moralis-v1");
 
 function CardsMint721({ val, isMultiple }) {
+  const bought = (msg) => toast.success(msg);
+  const boughtError = (msg) => toast.error(msg);
+  let navigate = useNavigate();
+
+  const [loading, setLoading] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [message, setMessage] = React.useState("");
   // console.log(val);
   return (
     <div
@@ -62,12 +72,12 @@ function CardsMint721({ val, isMultiple }) {
           <div className="card_head">
             {isMultiple ? (
               <Link to={`/view-item/lazy1155/${val.id}`}>
-                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
+                <img className="object-contain w-10 h-80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             ) : (
               // <Link to={`#`}>
               <Link to={`/view-item/lazy721/${val.id}`}>
-                <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
+                <img className="object-contain w-10 h-80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             )}
           </div>
@@ -215,9 +225,9 @@ function CardsMint721({ val, isMultiple }) {
                     alert("connect wallet");
                   } else {
                     if (!isMultiple) {
-                      // setOpen(true);
-                      // setTitle("Buy Item");
-                      // setMessage("Sign the transaction to buy item");
+                      setOpen(true);
+                      setTitle("Mint Item");
+                      setMessage("Sign the transaction to mint item");
 
                       let res = await lazyMint721(
                         val.uri,
@@ -227,20 +237,20 @@ function CardsMint721({ val, isMultiple }) {
                         val.owner,
                         val.isCustomToken
                       );
-                      //     if (res.status) {
-                      //       setLoading(false);
-                      //       bought(res.message);
+                      if (res.state) {
+                        setLoading(false);
+                        bought(res.message);
 
-                      //       setTimeout(() => {
-                      //         setOpen(false);
-                      //         setLoading(true);
-                      //         navigate("/profile");
-                      //       }, 1000);
-                      //     } else {
-                      //       setOpen(false);
-                      //       setLoading(true);
-                      //       boughtError(res.message);
-                      //     }
+                        setTimeout(() => {
+                          setOpen(false);
+                          setLoading(true);
+                          navigate("/profile");
+                        }, 1000);
+                      } else {
+                        setOpen(false);
+                        setLoading(true);
+                        boughtError(res.message);
+                      }
                     } else {
                       let res = await lazyMint1155(
                         val.uri,
@@ -250,6 +260,20 @@ function CardsMint721({ val, isMultiple }) {
                         val.owner,
                         val.isCustomToken
                       );
+                      if (res.state) {
+                        setLoading(false);
+                        bought(res.message);
+
+                        setTimeout(() => {
+                          setOpen(false);
+                          setLoading(true);
+                          navigate("/profile");
+                        }, 1000);
+                      } else {
+                        setOpen(false);
+                        setLoading(true);
+                        boughtError(res.message);
+                      }
                     }
                   }
                 }}
@@ -261,6 +285,8 @@ function CardsMint721({ val, isMultiple }) {
           </div>
         </div>
       </div>
+      <Response open={open} loading={loading} title={title} message={message} />
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }

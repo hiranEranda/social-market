@@ -229,7 +229,7 @@ function CardsPrice721({ val, isMultiple }) {
                       setTimeout(() => {
                         setOpen(false);
                         setLoading(true);
-                        // navigate("/profile");
+                        navigate("/profile");
                       }, 1000);
                     } else {
                       setOpen(false);
@@ -247,9 +247,9 @@ function CardsPrice721({ val, isMultiple }) {
         </div>
       </div>
       <Response open={open} loading={loading} title={title} message={message} />
+      <ToastContainer position="bottom-right" />
     </div>
     // ))}
-    // <ToastContainer position="bottom-right" />
     // </div>
   );
 }
