@@ -72,12 +72,16 @@ function CardsMint721({ val, isMultiple }) {
           <div className="card_head">
             {isMultiple ? (
               <Link to={`/view-item/lazy1155/${val.id}`}>
-                <img className="object-contain w-10 h-80" src={`${val.image}`} alt={"nftImage"} />
+                <div className="w-10">
+                  <img className="object-cover w-10 h-80" src={`${val.image}`} alt={"nftImage"} />
+                </div>
               </Link>
             ) : (
               // <Link to={`#`}>
               <Link to={`/view-item/lazy721/${val.id}`}>
-                <img className="object-contain w-10 h-80" src={`${val.image}`} alt={"nftImage"} />
+                {/* <div className="w-[12rem]"> */}
+                <img className="object-cover w-10 h-80" src={`${val.image}`} alt={"nftImage"} />
+                {/* </div> */}
               </Link>
             )}
           </div>

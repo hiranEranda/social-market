@@ -185,7 +185,7 @@ function SingleItem() {
             <div className="px-4 border-gray-400 rounded-2xl border-1 max-w-[560px] md:max-w-[760px] lg:max-w-[1400px]">
               <div className="grid gap-4 p-3 lg:grid-cols-2">
                 <div className="pt-3">
-                  <img className="flex mx-auto rounded-xl max-h-[700px]" src={data[0].image} alt="" />
+                  <img className="flex mx-auto rounded-xl max-h-[700px]  min-h-[400px]" src={data[0].image} alt="" />
                   <div className="flex items-center justify-center px-4 py-2 mt-4 bg-yellow-500 h-[40px] lg:w-[200px] rounded-full gap-4">
                     <AiFillInstagram className="text-xl text-white" />
                     <BsFacebook className="text-xl text-white" />
