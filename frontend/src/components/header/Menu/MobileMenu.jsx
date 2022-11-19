@@ -20,9 +20,7 @@ function MobileMenu() {
   let navigate = useNavigate();
   const { user, isAuthenticated, authenticate, logout } = useMoralis();
   const wallet = (flag) => {
-    flag
-      ? toast.success("Wallet connected successfully")
-      : toast.error("Try again");
+    flag ? toast.success("Wallet connected successfully") : toast.error("Try again");
   };
 
   return (
@@ -45,7 +43,7 @@ function MobileMenu() {
             </ul>
           </li>
           <li className="has_popup2">
-            <Link className="color_black is_new hovered" to="#">
+            <Link className="color_black is_new hovered" to="/create">
               Creator Center <i className="ri-more-2-fill" />
             </Link>
             <ul className="space-y-20 menu__popup2">
@@ -75,9 +73,7 @@ function MobileMenu() {
             </button>
           </div>
 
-          {!isAuthenticated ||
-          !user ||
-          user.attributes.username === undefined ? (
+          {!isAuthenticated || !user || user.attributes.username === undefined ? (
             <button
               className="btn btn-sm btn-grad"
               onClick={async () => {
@@ -92,17 +88,11 @@ function MobileMenu() {
               <div className="d-inline">
                 <Avatar
                   alt="avatar"
-                  src={
-                    user && !user.attributes.avatar
-                      ? "/images/avatar.png"
-                      : user.attributes.avatar._url
-                  }
+                  src={user && !user.attributes.avatar ? "/images/avatar.png" : user.attributes.avatar._url}
                   sx={{ width: 50, height: 50 }}
                 />
               </div>
-              <div className="ml-3 d-inline">
-                {`${user.attributes.username.substring(0, 10)}`}
-              </div>
+              <div className="ml-3 d-inline">{`${user.attributes.username.substring(0, 10)}`}</div>
             </li>
           )}
         </div>
