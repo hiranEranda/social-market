@@ -38,9 +38,7 @@ const Header = () => {
   };
 
   const wallet = (flag) => {
-    flag
-      ? toast.success("Wallet connected successfully")
-      : toast.error("Try again");
+    flag ? toast.success("Wallet connected successfully") : toast.error("Try again");
   };
 
   let navigate = useNavigate();
@@ -57,7 +55,7 @@ const Header = () => {
       Moralis.User.logOut().then(() => {
         const currentUser = Moralis.User.current(); // this will now be null
         if (currentUser === null) {
-          navigate(`/connect-wallet`);
+          window.location.href = `/connect-wallet`;
         }
       });
     });
@@ -152,9 +150,7 @@ const Header = () => {
             {/* //////////////////////////////////////////////////////// */}
 
             <div className="header__btns w-[200px] ">
-              {!isAuthenticated ||
-              !user ||
-              user.attributes.username === undefined ? (
+              {!isAuthenticated || !user || user.attributes.username === undefined ? (
                 <button
                   className="flex py-[10px] px-[15px] bg-black text-white rounded-3xl border-2 border-yellow-500 items-center"
                   onClick={() => navigate("/connect-wallet")}
@@ -168,38 +164,22 @@ const Header = () => {
                     <Avatar
                       onClick={() => window.location.reload()}
                       alt="avatar"
-                      src={
-                        user && !user.attributes.avatar
-                          ? "/images/avatar.png"
-                          : user.attributes.avatar._url
-                      }
+                      src={user && !user.attributes.avatar ? "/images/avatar.png" : user.attributes.avatar._url}
                       style={{ cursor: "pointer", border: "1px solid yellow" }}
                       sx={{ width: 40, height: 40 }}
                     />
-                    <ul
-                      style={{ width: "180px" }}
-                      className="mt-3 border menu__popup2 border-dark"
-                    >
+                    <ul style={{ width: "180px" }} className="mt-3 border menu__popup2 border-dark">
                       <ProfileMenu />
                     </ul>
                   </div>
-                  <div className="ml-3 text-white d-inline">
-                    {user.attributes.username.substring(0, 10)}
-                  </div>
+                  <div className="ml-3 text-white d-inline">{user.attributes.username.substring(0, 10)}</div>
                 </li>
               )}
             </div>
-            <div
-              className="header__burger js-header-burger"
-              onClick={toggleClass}
-            />
+            <div className="header__burger js-header-burger" onClick={toggleClass} />
 
             {/* ///////////////////////////////////////////////////////// */}
-            <div
-              className={`header__mobile js-header-mobile  ${
-                isActive ? "visible" : null
-              } `}
-            >
+            <div className={`header__mobile js-header-mobile  ${isActive ? "visible" : null} `}>
               <MobileMenu />
             </div>
           </div>
