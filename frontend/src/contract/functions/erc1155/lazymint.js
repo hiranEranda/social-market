@@ -2,14 +2,7 @@ const Moralis = require("moralis-v1");
 const contract = require("./contract");
 // create an item functions
 
-const lazyMint = async (
-  nftFileMetadataPath,
-  collectionAddress,
-  askingPrice,
-  id,
-  owner,
-  isCustomToken
-) => {
+const lazyMint = async (nftFileMetadataPath, collectionAddress, askingPrice, id, owner, isCustomToken) => {
   try {
     var nftId = await contract.lazyMint(
       askingPrice,
@@ -67,6 +60,7 @@ const lazyMint = async (
     return { state: true, message: "Minting complete" };
   } catch (error) {
     console.log(error);
+    return { state: false, message: "Transaction failed" };
   }
 };
 export default lazyMint;
