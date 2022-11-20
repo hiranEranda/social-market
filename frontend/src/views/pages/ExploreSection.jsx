@@ -221,6 +221,7 @@ function ExploreSection({ val, isMultiple }) {
                         setOpen(true);
                         setTitle("Buy Item");
                         setMessage("Sign the transaction to buy item");
+
                         if (isMultiple) {
                           var res = await contract1155.buyItem(val, authenticate);
                         } else {

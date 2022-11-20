@@ -203,6 +203,7 @@ function CardsOwned721({ val, isMultiple, isExternal, type }) {
                   >
                     <Form className="">
                       <div className="space-y-10 form-group ">
+                        {console.log(val.isCustomToken)}
                         <div className="space-y-10 ">
                           <span className="nameInput">List Price</span>
                           <Tooltip title={tooltip}>
@@ -210,7 +211,11 @@ function CardsOwned721({ val, isMultiple, isExternal, type }) {
                           </Tooltip>
 
                           <div className="d-flex align-items-center">
-                            <FaEthereum size={20} />
+                            {val.isCustomToken ? (
+                              <img className="w-[20px] mr-2" src="/images/smkt.jpeg" alt="" />
+                            ) : (
+                              <FaEthereum size={20} />
+                            )}
 
                             <Field
                               name="price"

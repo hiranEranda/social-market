@@ -591,6 +591,7 @@ const buyItem = async (item, authenticate) => {
 
           SM_bought1155.set("tokenId", item.tokenId);
           SM_bought1155.set("tokenAddress", item.tokenAddress);
+          SM_bought1155.set("isCustomToken", item.isCustomToken);
           SM_bought1155.set("owner", user.get("ethAddress").toLowerCase());
           SM_bought1155.set("ownerObject", userObject);
           SM_bought1155.set("amount", buyer.amount.toString());
@@ -607,6 +608,7 @@ const buyItem = async (item, authenticate) => {
           const SM_bought1155 = new SM_Bought1155();
 
           SM_bought1155.set("tokenId", item.tokenId);
+          SM_bought1155.set("isCustomToken", item.isCustomToken);
           SM_bought1155.set("tokenAddress", item.tokenAddress);
           SM_bought1155.set("owner", user.get("ethAddress").toLowerCase());
           SM_bought1155.set("ownerObject", userObject);

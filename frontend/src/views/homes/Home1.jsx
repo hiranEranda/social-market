@@ -62,6 +62,7 @@ const Home1 = () => {
       let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
+      console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {

@@ -41,7 +41,6 @@ const ItemInfoBatch = () => {
   });
 
   function fromBinary(encoded) {
-    console.log(encoded);
     const binary = atob(encoded);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < bytes.length; i++) {
@@ -122,12 +121,26 @@ const ItemInfoBatch = () => {
         result = await Promise.all(
           res.map(async (val, i) => {
             const params = {
-              owner: val.ownerOf.toLowerCase(),
+              owner: owner[0].owner.toLowerCase(),
               uid: val.uid,
             };
             console.log(params);
 
-            const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+            // const res = await Moralis.Cloud.run("SM_getUserDetails", params);
+            var res = [
+              {
+                attributes: {
+                  ownerObject: {
+                    attributes: {
+                      username: "crypto kid",
+                      avatar: {
+                        _url: "/images/user.jpeg",
+                      },
+                    },
+                  },
+                },
+              },
+            ];
             console.log(res);
             return {
               ...val,
