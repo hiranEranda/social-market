@@ -62,7 +62,6 @@ const Home1 = () => {
       let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getItemsSingle");
-      // console.log(result1);
       const data1 = await Promise.all(
         result1.map(async (item) => {
           if (item) {
@@ -75,6 +74,7 @@ const Home1 = () => {
             query.equalTo("tokenId", item.tokenId);
             query.equalTo("tokenAddress", item.tokenAddress);
             const obj = await query.first();
+            console.log(obj.attributes.isCustomToken);
             const isCustomToken = {
               isCustomToken: obj.attributes.isCustomToken,
             };
@@ -137,7 +137,7 @@ const Home1 = () => {
           }
         })
       );
-      //  //console.log(data2);
+      console.log(data2);
       data.push(data1);
       data.push(data2);
 
@@ -238,6 +238,7 @@ const Home1 = () => {
         result1.map(async (item) => {
           if (item) {
             const id = { id: item.id };
+
             let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
             // const result = await fetch(uri);
             const result = await Moralis.Cloud.run("FetchJson", { url: uri });

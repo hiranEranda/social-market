@@ -2,10 +2,7 @@ const Moralis = require("moralis-v1");
 const contract = require("./contract");
 // create an item functions
 
-const lazyMint = async (nftFileMetadataPath, collectionAddress, askingPrice, id, owner, isCustomToken) => {
-  //   console.log(collectionAddress);
-
-  // return 0;
+const lazyMint = async (values, nftFileMetadataPath, collectionAddress, askingPrice, id, owner, isCustomToken) => {
   try {
     var nftId = await contract.lazyMintNft(
       nftFileMetadataPath,
@@ -14,6 +11,23 @@ const lazyMint = async (nftFileMetadataPath, collectionAddress, askingPrice, id,
       askingPrice,
       isCustomToken
     );
+    const params = {
+      userAddress: values.owner.toLowerCase().toString(),
+      tokenAddress: values.tokenAddress.toLowerCase().toString(),
+      title: values.name,
+      category: values.category,
+      description: values.description,
+      nftFilePath: nftFileMetadataPath,
+      nftId: nftId,
+      // createdId: ids.createdId,
+      askingPrice: values.askingPrice,
+      type: "erc721",
+      royalty: parseFloat(values.royalty),
+      isLazy: values.isLazy,
+      isCustomToken: isCustomToken,
+    };
+    console.log(params);
+
     const user = await Moralis.User.current();
 
     var params2 = {
@@ -23,9 +37,13 @@ const lazyMint = async (nftFileMetadataPath, collectionAddress, askingPrice, id,
       // createdId: ids.createdId.toString(),
       uri: nftFileMetadataPath,
       askingPrice: askingPrice,
+      isLazy: true,
+      isCustomToken: isCustomToken,
+      creator: values.owner.toLowerCase().toString(),
     };
 
     try {
+      await Moralis.Cloud.run("SM_setCreators", params);
       await Moralis.Cloud.run("SM_initNftTables721", params2);
     } catch (error) {
       console.log(error.message);

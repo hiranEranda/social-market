@@ -246,6 +246,7 @@ function SingleItemMint() {
                           console.log(id);
                           try {
                             let res = await lazyMint721(
+                              data[0],
                               data[0].uri,
                               data[0].tokenAddress,
                               data[0].askingPrice,

@@ -253,6 +253,7 @@ function BatchItemMint() {
                           setMessage("Sign the transaction to mint item");
                           try {
                             let res = await lazyMint1155(
+                              data[0],
                               data[0].uri,
                               data[0].tokenAddress,
                               data[0].askingPrice,

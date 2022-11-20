@@ -90,15 +90,13 @@ const create = async (
     if (params.nftId !== undefined) {
       setLoading2(false);
 
-      await Moralis.Cloud.run("SM_setCreators", params);
-
       if (nftId === null) {
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
           creator: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
           tokenId: nftId,
-          // createdId: ids.createdId.toString(),
+          royalty: parseFloat(values.royalty),
           uri: nftFileMetadataPath,
           isLazy: isLazy,
           isCustomToken: isCustomToken,
@@ -111,16 +109,16 @@ const create = async (
           creator: user.get("ethAddress").toString(),
           tokenAddress: collectionAddress.toLowerCase(),
           tokenId: nftId.toString(),
-          // createdId: ids.createdId.toString(),
+          royalty: parseFloat(values.royalty),
           uri: nftFileMetadataPath,
           isLazy: isLazy,
           isCustomToken: isCustomToken,
-
           askingPrice: askingPrice,
         };
       }
       try {
         if (!isLazy) {
+          await Moralis.Cloud.run("SM_setCreators", params);
           await Moralis.Cloud.run("SM_initNftTables721", params2);
         } else {
           await Moralis.Cloud.run("SM_initLazyNftTables721", params2);

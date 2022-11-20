@@ -32,6 +32,16 @@ const ItemInfo = () => {
 
   let { tokenId, tokenAddress, created, removed, bought } = useParams();
 
+  function fromBinary(encoded) {
+    console.log(encoded);
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }
+
   const getData = async () => {
     setLoading(true);
     try {
@@ -113,12 +123,14 @@ const ItemInfo = () => {
             if (item) {
               //  //console.log(item);
               let uri = prefix + item.attributes.uri.substring(34, item.attributes.uri.length);
-              var res = await fetch(uri);
-              res = await res.json();
-              //  //console.log(res);
+              const res = await Moralis.Cloud.run("FetchJson", {
+                url: uri,
+              });
+
+              console.log(res);
               return {
                 ...item.attributes,
-                ...res,
+                ...res.data,
                 userObject,
                 contractDetails,
                 contractAvatar,
@@ -132,12 +144,17 @@ const ItemInfo = () => {
             if (item) {
               //  //console.log(item);
               let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
-              var res = await fetch(uri);
-              res = await res.json();
-              //  //console.log(res);
+              const res = await Moralis.Cloud.run("FetchJson", {
+                url: uri,
+              });
+              let decoded_name = fromBinary(res.data.name);
+              let decoded_description = fromBinary(res.data.description);
+              res.data.name = decoded_name;
+              res.data.description = decoded_description;
+              console.log(res);
               return {
                 ...item,
-                ...res,
+                ...res.data,
                 userObject,
                 contractDetails,
                 contractAvatar,

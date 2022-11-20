@@ -111,7 +111,7 @@ function Owned({ isMultiple }) {
             <>
               <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
                 {data[0].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
+                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} type={"minted"} />
                 ))}
               </div>
             </>
@@ -119,7 +119,7 @@ function Owned({ isMultiple }) {
             <>
               <div className="grid gap-4 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[1350px] ">
                 {data[1].map((val, i) => (
-                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} />
+                  <CardsOwned721 key={i} val={val} isMultiple={isMultiple} isExternal={false} type={"minted"} />
                 ))}
               </div>
             </>

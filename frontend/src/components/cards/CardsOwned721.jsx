@@ -14,7 +14,7 @@ const Moralis = require("moralis-v1");
 const contract721 = require("../../contract/functions/erc721/contract");
 const contract1155 = require("../../contract/functions/erc1155/contract");
 
-function CardsOwned721({ val, isMultiple, isExternal }) {
+function CardsOwned721({ val, isMultiple, isExternal, type }) {
   let tooltip = "Here type the tooltip message";
 
   const added = (msg) => toast.success(msg);
@@ -169,9 +169,15 @@ function CardsOwned721({ val, isMultiple, isExternal }) {
             <div className="card_head">
               <Link
                 to={
-                  isMultiple
+                  isMultiple && type === "bought"
                     ? `/item-info-batch/assets/${val.tokenId}/${val.tokenAddress}/${val.uid}/${false}`
-                    : `/item-info/assets/${val.tokenId}/${val.tokenAddress}/${false}/${false}/${true}`
+                    : !isMultiple && type === "bought"
+                    ? `/item-info/assets/${val.tokenId}/${val.tokenAddress}/${false}/${false}/${true}`
+                    : isMultiple && type === "minted"
+                    ? `/item-info-batch/assets/${val.tokenId}/${val.tokenAddress}/${val.uid}/${true}`
+                    : !isMultiple && type === "minted"
+                    ? `/item-info/assets/${val.tokenId}/${val.tokenAddress}/${true}/${false}/${false}`
+                    : null
                 }
               >
                 <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />

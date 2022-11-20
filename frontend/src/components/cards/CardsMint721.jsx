@@ -232,6 +232,7 @@ function CardsMint721({ val, isMultiple }) {
                       setMessage("Sign the transaction to mint item");
 
                       let res = await lazyMint721(
+                        val,
                         val.uri,
                         val.tokenAddress,
                         val.askingPrice,
@@ -246,7 +247,7 @@ function CardsMint721({ val, isMultiple }) {
                         setTimeout(() => {
                           setOpen(false);
                           setLoading(true);
-                          navigate("/profile");
+                          // navigate("/profile");
                         }, 1000);
                       } else {
                         setOpen(false);
@@ -259,6 +260,7 @@ function CardsMint721({ val, isMultiple }) {
                       setMessage("Sign the transaction to mint item");
 
                       let res = await lazyMint1155(
+                        val,
                         val.uri,
                         val.tokenAddress,
                         val.askingPrice,

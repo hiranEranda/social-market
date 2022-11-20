@@ -489,6 +489,7 @@ const getCreatorAndRoyalty = async (item) => {
   };
   try {
     const data = await Moralis.Cloud.run("SM_getCreatorAndRoyalty", params);
+    console.log(data);
     if (data.length === 0) {
       let royalty = {
         attributes: {
