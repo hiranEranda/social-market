@@ -17,7 +17,12 @@ const create = async (
   let collection = values.collection;
   let list_price = values.price;
 
-  const askingPrice = Moralis.Units.ETH(list_price);
+  try {
+    var askingPrice = Moralis.Units.ETH(list_price);
+  } catch (error) {
+    console.log(error.message);
+    return { state: false, message: "Invalid decimal value. Min: 0.0000001" };
+  }
 
   const data = image;
   const nftFile = new Moralis.File(data.name, data);
@@ -59,10 +64,7 @@ const create = async (
     setLoading1(false);
     //console.log(collectionAddress);
     if (!isLazy) {
-      var nftId = await contract.mintNft(
-        nftFileMetadataPath,
-        collectionAddress
-      );
+      var nftId = await contract.mintNft(nftFileMetadataPath, collectionAddress);
     } else {
       var nftId = null;
     }

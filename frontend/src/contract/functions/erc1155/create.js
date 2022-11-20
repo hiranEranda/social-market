@@ -15,9 +15,16 @@ const create = async (
 ) => {
   // //console.log(values);
   let list_price = values.price;
-  const askingPrice = Moralis.Units.ETH(list_price);
+
+  try {
+    var askingPrice = Moralis.Units.ETH(list_price);
+  } catch (error) {
+    return { state: false, message: "Invalid decimal value. Min: 0.0000001" };
+  }
+
   const data = image;
   const nftFile = new Moralis.File(data.name, data);
+
   try {
     await nftFile.saveIPFS();
   } catch (error) {
