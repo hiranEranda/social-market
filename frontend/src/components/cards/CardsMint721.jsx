@@ -254,6 +254,10 @@ function CardsMint721({ val, isMultiple }) {
                         boughtError(res.message);
                       }
                     } else {
+                      setOpen(true);
+                      setTitle("Mint Item");
+                      setMessage("Sign the transaction to mint item");
+
                       let res = await lazyMint1155(
                         val.uri,
                         val.tokenAddress,
