@@ -234,7 +234,7 @@ function ExploreSection({ val, isMultiple }) {
                           setTimeout(() => {
                             setOpen(false);
                             setLoading(true);
-                            // navigate("/profile");
+                            navigate("/profile");
                           }, 1000);
                         } else {
                           setOpen(false);

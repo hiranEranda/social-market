@@ -17,6 +17,8 @@ import SingleItemMint from "../views/pages/SingleItemMint";
 import BatchItemMint from "../views/pages/BatchItemMint";
 import Marketplace from "../views/pages/Marketplace";
 import ExternalProfile from "../views/pages/ExternalProfile";
+import ItemInfo from "../views/pages/ItemInfo";
+import ItemInfoBatch from "../views/pages/ItemInfoBatch";
 
 const ROUTES = () => {
   return (
@@ -28,6 +30,8 @@ const ROUTES = () => {
           <Route path="/view-item/lazy721/:objectId" element={<SingleItemMint />} />
           <Route path="/view-item/lazy1155/:objectId" element={<BatchItemMint />} />
           <Route path="/view-item/:tokenAddress/:tokenId/:uid" element={<BatchItem />} />
+          <Route path="/item-info/assets/:tokenId/:tokenAddress/:created/:removed/:bought" element={<ItemInfo />} />
+          <Route path="/item-info-batch/assets/:tokenId/:tokenAddress/:uid/:created" element={<ItemInfoBatch />} />
 
           <Route path="/profile/:ethAddress" element={<ExternalProfile />} />
           <Route path="/profile" element={<Profile />} />

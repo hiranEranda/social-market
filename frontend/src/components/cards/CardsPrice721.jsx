@@ -220,7 +220,11 @@ function CardsPrice721({ val, isMultiple }) {
                     setTitle("Buy Item");
                     setMessage("Sign the transaction to buy item");
 
-                    let res = await contract721.buyItem(val, authenticate);
+                    if (isMultiple) {
+                      var res = await contract1155.buyItem(val, authenticate);
+                    } else {
+                      var res = await contract721.buyItem(val, authenticate);
+                    }
 
                     if (res.status) {
                       setLoading(false);

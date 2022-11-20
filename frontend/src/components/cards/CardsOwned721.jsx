@@ -167,7 +167,13 @@ function CardsOwned721({ val, isMultiple, isExternal }) {
                   </div> */}
             </div>
             <div className="card_head">
-              <Link to={`/Item-info/assets/${val.tokenId}/${val.tokenAddress}/${true}/${false}/${false}`}>
+              <Link
+                to={
+                  isMultiple
+                    ? `/item-info-batch/assets/${val.tokenId}/${val.tokenAddress}/${val.uid}/${false}`
+                    : `/item-info/assets/${val.tokenId}/${val.tokenAddress}/${false}/${false}/${true}`
+                }
+              >
                 <img width="10" height="80" src={`${val.image}`} alt={"nftImage"} />
               </Link>
             </div>

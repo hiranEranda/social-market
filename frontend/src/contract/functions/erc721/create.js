@@ -91,6 +91,7 @@ const create = async (
       setLoading2(false);
 
       await Moralis.Cloud.run("SM_setCreators", params);
+
       if (nftId === null) {
         var params2 = {
           ownerOf: user.get("ethAddress").toString(),
