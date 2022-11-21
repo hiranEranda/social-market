@@ -22,8 +22,7 @@ import Response from "./Response1";
 
 export default function FormDialog(props) {
   let contractAddress = null;
-  const deployed = () =>
-    toast.success("Your Contract is deployed to: " + contractAddress);
+  const deployed = () => toast.success("Your Contract is deployed to: " + contractAddress);
   const deployError = (msg) => toast.error(msg);
 
   const [backDrop, setBackDrop] = useState(false);
@@ -92,8 +91,8 @@ export default function FormDialog(props) {
       setOpen(false);
       try {
         // //console.log("deploying 1155");
-        contractAddress = await deploy1155(picture, values);
         _setOpen(true);
+        contractAddress = await deploy1155(picture, values);
         setBackDrop(false);
         setLoading(false);
         deployed();
@@ -120,33 +119,17 @@ export default function FormDialog(props) {
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .typeError("Must be string values")
-      .required("Display name is required"),
-    symbol: Yup.string()
-      .typeError("Must be string values")
-      .required("Symbol is required")
-      .min(3)
-      .max(5),
-    description: Yup.string()
-      .typeError("Must be string values")
-      .required("Description is required"),
+    name: Yup.string().typeError("Must be string values").required("Display name is required"),
+    symbol: Yup.string().typeError("Must be string values").required("Symbol is required").min(3).max(5),
+    description: Yup.string().typeError("Must be string values").required("Description is required"),
   });
 
   return (
     <div>
       <ToastContainer position="bottom-right" />
-      <Response
-        open={_open}
-        loading={loading}
-        title={"Deploy contract"}
-        message={"Contract is being deployed"}
-      />
+      <Response open={_open} loading={loading} title={"Deploy contract"} message={"Contract is being deployed"} />
       {backDrop ? (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
+        <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : null}
@@ -170,9 +153,7 @@ export default function FormDialog(props) {
       </a>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          <p className="inline mb-2 text-black border-b-2 border-black">
-            Collection
-          </p>
+          <p className="inline mb-2 text-black border-b-2 border-black">Collection</p>
         </DialogTitle>
         <DialogContent>
           <div className="container pt-20 d-flex align-items-center justify-content-center">
@@ -192,44 +173,21 @@ export default function FormDialog(props) {
             />
           </div>
 
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleDeploy}
-          >
+          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleDeploy}>
             <Form>
               <div className="mt-3">Name</div>
-              <Field
-                name="name"
-                type="text"
-                className="form-control"
-                placeholder="Display Name"
-              />
+              <Field name="name" type="text" className="form-control" placeholder="Display Name" />
               <ErrorMessage name="name" component={TextError} />
               <div className="mt-3">Symbol</div>
-              <Field
-                name="symbol"
-                type="text"
-                className="form-control"
-                placeholder="Symbol"
-              />
+              <Field name="symbol" type="text" className="form-control" placeholder="Symbol" />
               <ErrorMessage name="symbol" component={TextError} />
               <div className="mt-3"> Description</div>
-              <Field
-                name="description"
-                type="text"
-                className="form-control"
-                placeholder="Description"
-              />
+              <Field name="description" type="text" className="form-control" placeholder="Description" />
               <ErrorMessage name="description" component={TextError} />
               <button className="mt-3 btn btn-grad" type="submit">
                 Deploy
               </button>
-              <button
-                type="button"
-                className="mt-3 ml-2 btn btn-grad"
-                onClick={handleClose}
-              >
+              <button type="button" className="mt-3 ml-2 btn btn-grad" onClick={handleClose}>
                 Cancel
               </button>
             </Form>

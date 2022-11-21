@@ -3,8 +3,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import { BsFacebook } from "react-icons/bs";
-import { AiFillInstagram } from "react-icons/ai";
+import { BsTelegram } from "react-icons/bs";
 import { AiFillTwitterCircle } from "react-icons/ai";
+import { FacebookShareButton, TelegramShareButton, TwitterShareButton } from "react-share";
 import { useMoralis } from "react-moralis";
 import { FaEthereum } from "react-icons/fa";
 
@@ -202,9 +203,29 @@ function BatchItem() {
                 <div className="pt-3">
                   <img className="flex mx-auto rounded-xl max-h-[700px]  min-h-[400px]" src={data[0].image} alt="" />
                   <div className="flex items-center justify-center px-4 py-2 mt-4 bg-yellow-500 h-[40px] lg:w-[200px] rounded-full gap-4">
-                    <AiFillInstagram className="text-xl text-white" />
-                    <BsFacebook className="text-xl text-white" />
-                    <AiFillTwitterCircle className="text-xl text-white" />
+                    <FacebookShareButton
+                      quote={`Look what I found on Social Market.. #${data[0].tokenId} ${data[0].name} collectible`}
+                      hashtag={"nft"}
+                      url={window.location.href}
+                      onClick={() => console.log(window.location.href)}
+                    >
+                      <BsFacebook className="text-xl text-white" />
+                    </FacebookShareButton>
+                    <TelegramShareButton
+                      title={`Look what I found on Social Market.. #${data[0].tokenId} ${data[0].name} collectible`}
+                      url={window.location.href}
+                      onClick={() => console.log(window.location.href)}
+                    >
+                      <BsTelegram className="text-xl text-white cursor-pointer" />
+                    </TelegramShareButton>
+                    <TwitterShareButton
+                      title={`Look what I found on Social Market.. #${data[0].tokenId} ${data[0].name} collectible `}
+                      via={"socialMarket"}
+                      url={window.location.href}
+                      onClick={() => console.log(window.location.href)}
+                    >
+                      <AiFillTwitterCircle className="text-xl text-white" />
+                    </TwitterShareButton>
                   </div>
                 </div>
                 <div className="mt-3 md:pl-4">
