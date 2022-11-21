@@ -96,7 +96,7 @@ function CardsPrice721({ val, isMultiple }) {
                   </span>
                 </p>
               </div>
-
+              {/* {console.log(val)} */}
               {val.isCustomToken ? (
                 <img className="w-[20px] mr-2" src="/images/smkt.jpeg" alt="" />
               ) : (

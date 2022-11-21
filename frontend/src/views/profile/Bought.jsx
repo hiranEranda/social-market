@@ -37,6 +37,7 @@ function Bought({ isMultiple }) {
       let data = [];
 
       const result1 = await Moralis.Cloud.run("SM_getUserBoughtItems", params);
+      console.log(result1);
 
       const data1 = await Promise.all(
         result1.map(async (item) => {
@@ -45,6 +46,8 @@ function Bought({ isMultiple }) {
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            console.log(item);
+
             let decoded_name = fromBinary(result.data.name);
             let decoded_description = fromBinary(result.data.description);
             result.data.name = decoded_name;
@@ -63,6 +66,7 @@ function Bought({ isMultiple }) {
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+            console.log(item);
             let decoded_name = fromBinary(result.data.name);
             let decoded_description = fromBinary(result.data.description);
             result.data.name = decoded_name;

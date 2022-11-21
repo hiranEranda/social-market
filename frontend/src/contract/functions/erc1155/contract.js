@@ -588,6 +588,7 @@ const buyItem = async (item, authenticate) => {
           // create new record in SM_Bought1155 table for buyer
           const SM_Bought1155 = Moralis.Object.extend("SM_Bought1155");
           const SM_bought1155 = new SM_Bought1155();
+          console.log(item.isCustomToken);
 
           SM_bought1155.set("tokenId", item.tokenId);
           SM_bought1155.set("tokenAddress", item.tokenAddress);
@@ -600,9 +601,13 @@ const buyItem = async (item, authenticate) => {
           SM_bought1155.set("uid", item.uid);
           await SM_bought1155.save();
         } else if (obj4) {
+          console.log(item.isCustomToken);
+
           obj4.set("amount", buyer.amount.toString());
           await obj4.save();
         } else {
+          console.log(item.isCustomToken);
+
           // create new record in NFTOwners1155 table for buyer
           const SM_Bought1155 = Moralis.Object.extend("SM_Bought1155");
           const SM_bought1155 = new SM_Bought1155();

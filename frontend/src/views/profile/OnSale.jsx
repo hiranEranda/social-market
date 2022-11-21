@@ -42,16 +42,23 @@ function OnSale({ isMultiple }) {
       const data1 = await Promise.all(
         result.map(async (item) => {
           if (item) {
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
+
+            const query = new Moralis.Query("SM_NFTOwners721");
+            query.equalTo("tokenId", item.tokenId);
+            query.equalTo("tokenAddress", item.tokenAddress);
+            const obj = await query.first();
+
+            const isCustomToken = { isCustomToken: obj.attributes.isCustomToken };
+
             let decoded_name = fromBinary(result.data.name);
             let decoded_description = fromBinary(result.data.description);
             result.data.name = decoded_name;
             result.data.description = decoded_description;
-            return { ...item, ...result.data };
+            return { ...item, ...result.data, ...isCustomToken };
           }
         })
       );
@@ -62,9 +69,17 @@ function OnSale({ isMultiple }) {
             owner: val.ownerOf.toLowerCase(),
             uid: val.uid,
           };
+          const query = new Moralis.Query("SM_NFTOwners1155");
+          query.equalTo("tokenId", val.tokenId);
+          query.equalTo("tokenAddress", val.tokenAddress);
+          query.equalTo("uid", val.uid);
+          const obj = await query.first();
+
+          const isCustomToken = { isCustomToken: obj.attributes.isCustomToken };
+
           const res = await Moralis.Cloud.run("SM_getUserDetails", params);
-          // //console.log(res);
           return {
+            ...isCustomToken,
             ...val,
             sellerUsername: res[0].attributes.ownerObject.attributes.username,
             sellerAvatar: res[0].attributes.ownerObject.attributes.avatar,
@@ -74,8 +89,7 @@ function OnSale({ isMultiple }) {
       const data2 = await Promise.all(
         result2.map(async (item) => {
           if (item) {
-            let uri =
-              prefix + item.tokenUri.substring(34, item.tokenUri.length);
+            let uri = prefix + item.tokenUri.substring(34, item.tokenUri.length);
             const result = await Moralis.Cloud.run("FetchJson", {
               url: uri,
             });
@@ -110,10 +124,7 @@ function OnSale({ isMultiple }) {
   return (
     <>
       {loading ? (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open
-        >
+        <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (!loading && data === null) || data === undefined ? (
